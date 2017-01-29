@@ -129,6 +129,7 @@ Plugin 'craigemery/vim-autotag'
 Plugin 'ujihisa/unite-colorscheme'
 Plugin 'xolox/vim-session'
 Plugin 'xolox/vim-misc'
+Plugin 'wincent/command-t'
 
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
@@ -161,7 +162,8 @@ filetype plugin indent on    " required
 " Put your non-Plugin stuff after this line
 nmap <F8> :TagbarToggle<CR>
 nnoremap <leader>. :CtrlPTag<cr>
-nmap <leader>w <C-P><C-\>w
+"nmap <leader>w <C-P><C-\>w
+nmap <leader>w :CtrlPMixed<cr><C-\>w
 
 " Map <C-L> (redraw screen) to also turn off search highlighting until the
 " " next search
@@ -273,9 +275,9 @@ let g:UltiSnipsEditSplit="vertical"
 
 "NERTtree mappings
 " Toggle NERDTree
-nmap <silent> <leader>k :NERDTreeToggle<cr>
+nmap <silent> <leader>n :NERDTreeToggle<cr>
 " expand to the path of the file in the current buffer
-nmap <silent> <leader>y :NERDTreeFind<cr>
+nmap <silent> <leader>N :NERDTreeFind<cr>
 
 let NERDTreeShowHidden=1
 let NERDTreeDirArrowExpandable = '▷'
@@ -284,3 +286,14 @@ let NERDTreeDirArrowCollapsible = '▼'
 "silent! map <F3> :NERDTreeFind<CR>
 "let g:NERDTreeMapActivateNode="<F3>"
 "let g:NERDTreeMapPreview="<F4>"
+
+" session management
+let g:session_autosave='yes'
+let g:session_autoload='yes'
+let g:session_default_to_last='1'
+let g:session_autosave_to = 'default'
+
+"CtrlP
+let g:ctrlp_working_path_mode = ""
+let g:ctrlp_max_files=0
+let g:ctrlp_max_depth=40
