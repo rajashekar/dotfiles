@@ -50,7 +50,7 @@ set expandtab
 set scrolloff=3 
 " command bar height
 set cmdheight=1
-" current buffer can be put into background
+" current buffer can be put into background without closing
 set hidden
 " don't redraw while executing macros
 set nolazyredraw
@@ -170,6 +170,7 @@ let g:unite_enable_smart_case = 1
 let g:unite_enable_start_insert = 1
 let g:unite_source_history_yank_enable = 1
 let g:unite_prompt = ' ▸▸ '
+let g:unite_source_rec_max_cache_files = 99999
 if executable('ag')
   let g:unite_source_grep_command = 'ag'
   let g:unite_source_grep_default_opts = '-i --smart-case --nogroup --nocolor --ignore-dir={.git, .cabal-sandbox, .stack-work}'
@@ -184,8 +185,12 @@ endif
 " use -no-split to not to show quick view
 " find file recuresively 
 nnoremap <space>a :<C-u>Unite -buffer-name=files -winheight=10 -input= -start-insert file_rec/async:!<cr>
+" find file recuresively cursor under the word
+nnoremap <space>A :<C-u>UniteWithInput -buffer-name=fileswithInput -winheight=10 -start-insert file_rec/async<cr><C-r><C-w><cr>
 " search all tags
 nnoremap <space>t :<C-u>Unite -buffer-name=tags -winheight=10 -input= -start-insert tag<cr>
+" search all tags cursor under the word
+nnoremap <space>T :<C-u>UniteWithInput -buffer-name=tagswithInput -winheight=10 -start-insert tag<cr><C-r><C-w><cr>
 " browse files 
 nnoremap <space>f :<C-u>Unite -buffer-name=files -start-insert file<cr>
 " get recent files
@@ -194,6 +199,8 @@ nnoremap <space>r :<C-u>Unite -buffer-name=mru -winheight=10 -input= -start-inse
 nnoremap <space>o :<C-u>Unite -buffer-name=outline -input= -start-insert outline<cr>
 " get all buffers
 nnoremap <space>b :<C-u>Unite -buffer-name=buffer -winheight=10 -input= buffer<cr>
+" get all bookmarks
+nnoremap <space>m :<C-u>Unite -buffer-name=mappings -winheight=10 -input= mapping<cr>
 " get all yanks and history
 nnoremap <space>y :<C-u>Unite -buffer-name=yank -winheight=10 -input= history/yank<cr>
 " get all jump locations
@@ -219,9 +226,10 @@ function! s:unite_settings()
     imap <buffer> <C-j>   <Plug>(unite_select_next_line)
     imap <buffer> <C-k>   <Plug>(unite_select_previous_line)
     nmap <silent><buffer><expr> Enter unite#do_action('switch')
-    nmap <silent><buffer><expr> <C-t> unite#do_action('tabswitch')
-    nmap <silent><buffer><expr> <C-h> unite#do_action('splitswitch')
-    nmap <silent><buffer><expr> <C-v> unite#do_action('vsplitswitch')
+    nnoremap <silent><nowait><buffer><expr> d unite#smart_map('d', unite#do_action('delete'))
+    nnoremap <silent><nowait><buffer><expr> h unite#smart_map('h', unite#do_action('splitswitch'))
+    nnoremap <silent><nowait><buffer><expr> v unite#smart_map('h', unite#do_action('vsplitswitch'))
+    nnoremap <silent><nowait><buffer><expr> t unite#smart_map('h', unite#do_action('tabswitch'))
     nnoremap <buffer> <space>q :UniteClose<CR>
 endfunction
 
