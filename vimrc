@@ -80,20 +80,23 @@ let sh_fold_enabled=1                 " sh
 let vimsyn_folding='af'               " Vim script
 let xml_syntax_folding=1              " XML
 autocmd BufRead,BufNewFile *.cql set filetype=cql
-let g:airline_theme='wombat'
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#left_sep = ' '
-let g:airline#extensions#tabline#left_alt_sep = '|'
-let g:table_mode_corner_corner="+"
-let g:table_mode_header_fillchar="="
 
-" air-line
-let g:airline_powerline_fonts = 1
+"Map <C-L> (redraw screen) to also turn off search highlighting until the next search
+nnoremap <C-L> :nohl<CR><C-L>
+" custom command to indent json
+com! FormatJSON %!python -m json.tool
+" custom command to show unprintable characters
+" AirlineToggleWhitespace
 
-if !exists('g:airline_symbols')
-    let g:airline_symbols = {}
-endif
+" Set list characters - Can be toggled with 'col'
+" set listchars=tab:•\ ,trail:•,extends:»,precedes:« " Unprintable chars mapping
+set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮,nbsp:+
+set listchars+=trail:-
+set showbreak=↪
+com! ShowSpecial set list
 
+
+"Vundle settings
 filetype off                  " required
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -108,9 +111,7 @@ Plugin 'scrooloose/nerdcommenter'
 Plugin 'tpope/vim-fugitive'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
-Plugin 'easymotion/vim-easymotion'
 Plugin 'tpope/vim-surround'
-Plugin 'majutsushi/tagbar'
 Plugin 'geoffharcourt/vim-matchit'
 Plugin 'elzr/vim-json'
 Plugin 'tsukkee/unite-tag'
@@ -129,7 +130,6 @@ Plugin 'craigemery/vim-autotag'
 Plugin 'ujihisa/unite-colorscheme'
 Plugin 'xolox/vim-session'
 Plugin 'xolox/vim-misc'
-Plugin 'wincent/command-t'
 
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
@@ -160,25 +160,6 @@ filetype plugin indent on    " required
 "
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
-nmap <F8> :TagbarToggle<CR>
-nnoremap <leader>. :CtrlPTag<cr>
-"nmap <leader>w <C-P><C-\>w
-nmap <leader>w :CtrlPMixed<cr><C-\>w
-
-" Map <C-L> (redraw screen) to also turn off search highlighting until the
-" " next search
-nnoremap <C-L> :nohl<CR><C-L>
-" custom command to indent json
-com! FormatJSON %!python -m json.tool
-" custom command to show unprintable characters
-" AirlineToggleWhitespace
-
-" Set list characters - Can be toggled with 'col'
-" set listchars=tab:•\ ,trail:•,extends:»,precedes:« " Unprintable chars mapping
-set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮,nbsp:+
-set listchars+=trail:-
-set showbreak=↪
-com! ShowSpecial set list
 
 " Unite
 call unite#filters#matcher_default#use(['matcher_fuzzy'])
@@ -229,8 +210,6 @@ nnoremap <space>u :UniteResume<cr>
 " cscope call reference mappings
 nnoremap <space>g : Unite cscope/find_this_symbol<cr><C-r><C-w><cr>
 nnoremap <space>h : Unite cscope/functions_calling<cr><C-r><C-w><cr>
-
-
 " Custom mappings for the unite buffer
 autocmd FileType unite call s:unite_settings()
 function! s:unite_settings()
@@ -297,3 +276,18 @@ let g:session_autosave_to = 'default'
 let g:ctrlp_working_path_mode = ""
 let g:ctrlp_max_files=0
 let g:ctrlp_max_depth=40
+nnoremap <leader>. :CtrlPTag<cr>
+"nmap <leader>w <C-P><C-\>w
+nmap <leader>w :CtrlPMixed<cr><C-\>w
+
+" air-line settings
+let g:airline_theme='wombat'
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
+let g:table_mode_corner_corner="+"
+let g:table_mode_header_fillchar="="
+let g:airline_powerline_fonts = 1
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
