@@ -11,6 +11,7 @@ set nocompatible
 set number
 " to auto indent
 set autoindent
+set smartindent
 " dont wrap large lines
 set nowrap
 " enable increment search
@@ -41,11 +42,6 @@ set laststatus=2
 set cmdheight=2
 " set paste toggle
 set pastetoggle=<leader>v
-" Indentation settings for using 4 spaces instead of tabs.
-" " Do not change 'tabstop' from its default value of 8 with this setup.
-set shiftwidth=4
-set softtabstop=4
-set expandtab
 " lines of text around cursor
 set scrolloff=3 
 " command bar height
@@ -56,12 +52,30 @@ set hidden
 set nolazyredraw
 " switch between current and last buffer
 nmap <space>. <c-^>
+" don't show which mode disabled for PowerLine
 set noshowmode
+" faster redrawing
+set ttyfast
+" show matching braces
+set showmatch
+" how many tenths of a second to blink
+set mat=2
+" error bells
+set noerrorbells
+set visualbell
+set t_vb=
+set tm=500
+" Tab control
+set noexpandtab " tabs ftw
+set smarttab " tab respects 'tabstop', 'shiftwidth', and 'softtabstop'
+set tabstop=4 " the visible width of tabs
+set softtabstop=4 " edit as if the tabs are 4 characters wide
+set shiftwidth=4 " number of spaces to use for indent and unindent
+set shiftround " round indent to a multiple of 'shiftwidth'
+" detect when a file is changed
+set autoread
+
 execute pathogen#infect()
-" Default to soft tabs, 2 spaces
-set expandtab
-set sw=2
-set sts=2
 " Except Markdown
 autocmd FileType mkd set sw=4
 autocmd FileType mkd set sts=4
@@ -130,6 +144,9 @@ Plugin 'craigemery/vim-autotag'
 Plugin 'ujihisa/unite-colorscheme'
 Plugin 'xolox/vim-session'
 Plugin 'xolox/vim-misc'
+Plugin 'sheerun/vim-polyglot'
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'Yggdroot/indentLine'
 
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
@@ -187,6 +204,12 @@ endif
 nnoremap <space>a :<C-u>Unite -buffer-name=files -winheight=10 -input= -start-insert file_rec/async:!<cr>
 " find file recuresively cursor under the word
 nnoremap <space>A :<C-u>UniteWithInput -buffer-name=fileswithInput -winheight=10 -start-insert file_rec/async<cr><C-r><C-w><cr>
+" find lines in file
+nnoremap <space>l :<C-u>Unite -buffer-name=currentFile -winheight=10 -input= -start-insert line<cr>
+" find lines in file under the cursor
+nnoremap <space>L :<C-u>UniteWithInput -buffer-name=currentFile -winheight=10 -start-insert line<cr><C-r><C-w><cr>
+" recent directories
+nnoremap <space>d :<C-u>Unite -buffer-name=directories -winheight=10 -start-insert directory_mru directory_rec/async<cr>
 " search all tags
 nnoremap <space>t :<C-u>Unite -buffer-name=tags -winheight=10 -input= -start-insert tag<cr>
 " search all tags cursor under the word
@@ -199,7 +222,7 @@ nnoremap <space>r :<C-u>Unite -buffer-name=mru -winheight=10 -input= -start-inse
 nnoremap <space>o :<C-u>Unite -buffer-name=outline -input= -start-insert outline<cr>
 " get all buffers
 nnoremap <space>b :<C-u>Unite -buffer-name=buffer -winheight=10 -input= buffer<cr>
-" get all bookmarks
+" get all key mappings 
 nnoremap <space>m :<C-u>Unite -buffer-name=mappings -winheight=10 -input= mapping<cr>
 " get all yanks and history
 nnoremap <space>y :<C-u>Unite -buffer-name=yank -winheight=10 -input= history/yank<cr>
@@ -225,11 +248,16 @@ function! s:unite_settings()
     " Enable navigation with control-j and control-k in insert mode
     imap <buffer> <C-j>   <Plug>(unite_select_next_line)
     imap <buffer> <C-k>   <Plug>(unite_select_previous_line)
+    nmap <buffer> <tab> <Plug>(unite_loop_cursor_down)
+    nmap <buffer> <s-tab> <Plug>(unite_loop_cursor_up)
+    imap <buffer> <C-a> <Plug>(unite_choose_action)
     nmap <silent><buffer><expr> Enter unite#do_action('switch')
+    nmap <buffer> <C-s>      <Plug>(unite_redraw)
     nnoremap <silent><nowait><buffer><expr> d unite#smart_map('d', unite#do_action('delete'))
     nnoremap <silent><nowait><buffer><expr> h unite#smart_map('h', unite#do_action('splitswitch'))
     nnoremap <silent><nowait><buffer><expr> v unite#smart_map('h', unite#do_action('vsplitswitch'))
     nnoremap <silent><nowait><buffer><expr> t unite#smart_map('h', unite#do_action('tabswitch'))
+    nnoremap <silent><nowait><buffer><expr> c unite#smart_map('c', unite#do_action('cd'))
     nnoremap <buffer> <space>q :UniteClose<CR>
 endfunction
 
@@ -299,3 +327,9 @@ let g:airline_powerline_fonts = 1
 if !exists('g:airline_symbols')
     let g:airline_symbols = {}
 endif
+
+" toggle cursor line
+nnoremap <leader>i :set cursorline!<cr>
+
+" to write as root
+noremap <leader>W :w !sudo tee % > /dev/null
