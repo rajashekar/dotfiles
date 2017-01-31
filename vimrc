@@ -121,31 +121,35 @@ call vundle#begin()
 
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'tpope/vim-fugitive'
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-Plugin 'tpope/vim-surround'
-Plugin 'geoffharcourt/vim-matchit'
-Plugin 'elzr/vim-json'
-Plugin 'tsukkee/unite-tag'
-Plugin 'tsukkee/unite-help'
-Plugin 'Shougo/unite.vim'
-Plugin 'Shougo/unite-outline'
-Plugin 'Shougo/vimproc.vim'
-Plugin 'Shougo/neomru.vim'
-Plugin 'Shougo/neoyank.vim'
-Plugin 'Shougo/unite-session'
-Plugin 'mileszs/ack.vim'
-Plugin 'SirVer/ultisnips'
-Plugin 'honza/vim-snippets'
+Plugin 'altercation/vim-colors-solarized'
 Plugin 'amitab/vim-unite-cscope'
 Plugin 'craigemery/vim-autotag'
-Plugin 'ujihisa/unite-colorscheme'
-Plugin 'xolox/vim-session'
-Plugin 'xolox/vim-misc'
+Plugin 'elzr/vim-json'
+Plugin 'geoffharcourt/vim-matchit'
+Plugin 'honza/vim-snippets'
+Plugin 'kien/ctrlp.vim'
+Plugin 'mileszs/ack.vim'
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'scrooloose/nerdtree'
 Plugin 'sheerun/vim-polyglot'
-Plugin 'altercation/vim-colors-solarized'
+Plugin 'Shougo/neomru.vim'
+Plugin 'Shougo/neoyank.vim'
+Plugin 'Shougo/unite-outline'
+Plugin 'Shougo/unite-session'
+Plugin 'Shougo/unite.vim'
+Plugin 'Shougo/vimproc.vim'
+Plugin 'SirVer/ultisnips'
+Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-surround'
+Plugin 'tsukkee/unite-help'
+Plugin 'tsukkee/unite-tag'
+Plugin 'ujihisa/unite-colorscheme'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+Plugin 'vim-syntastic/syntastic'
+Plugin 'xolox/vim-misc'
+Plugin 'xolox/vim-session'
 Plugin 'Yggdroot/indentLine'
 
 " The following are examples of different formats supported.
@@ -333,3 +337,9 @@ nnoremap <leader>i :set cursorline!<cr>
 
 " to write as root
 noremap <leader>W :w !sudo tee % > /dev/null
+" <Leader>q: Quit all, very useful in vimdiff
+nnoremap <Leader>q :qa<cr>
+" _ : Quick horizontal splits
+nnoremap _ :sp<cr>
+" | : Quick vertical splits
+nnoremap <bar> :vsp<cr>
