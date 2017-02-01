@@ -294,9 +294,9 @@ let g:UltiSnipsEditSplit="vertical"
 
 "NERTtree mappings
 " Toggle NERDTree
-nmap <silent> <leader>n :NERDTreeToggle<cr>
+nmap <silent> <leader>t :NERDTreeToggle<cr>
 " expand to the path of the file in the current buffer
-nmap <silent> <leader>N :NERDTreeFind<cr>
+nmap <silent> <leader>T :NERDTreeFind<cr>
 
 let NERDTreeShowHidden=1
 let NERDTreeDirArrowExpandable = '▷'
@@ -343,3 +343,9 @@ nnoremap <Leader>q :qa<cr>
 nnoremap _ :sp<cr>
 " | : Quick vertical splits
 nnoremap <bar> :vsp<cr>
+
+" gui settings
+if has("gui_running") 
+  set guifont=Meslo\ LG\ S\ DZ\ Regular\ for\ Powerline:h14
+  au GUIEnter * set fullscreen
+endif
