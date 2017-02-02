@@ -121,39 +121,59 @@ call vundle#begin()
 
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
-Plugin 'Raimondi/delimitMate'
+" git
+Plugin 'airblade/vim-gitgutter'
+Plugin 'tpope/vim-fugitive'
+Plugin 'Xuyuanp/nerdtree-git-plugin'
+
+" color schemes
+Plugin 'altercation/vim-colors-solarized'
+
+" unite
 Plugin 'Shougo/neomru.vim'
 Plugin 'Shougo/neoyank.vim'
 Plugin 'Shougo/unite-outline'
 Plugin 'Shougo/unite-session'
 Plugin 'Shougo/unite.vim'
 Plugin 'Shougo/vimproc.vim'
-Plugin 'SirVer/ultisnips'
-Plugin 'Valloric/YouCompleteMe'
-Plugin 'Yggdroot/indentLine'
-Plugin 'airblade/vim-gitgutter'
-Plugin 'altercation/vim-colors-solarized'
-Plugin 'amitab/vim-unite-cscope'
-Plugin 'craigemery/vim-autotag'
-Plugin 'easymotion/vim-easymotion'
-Plugin 'elzr/vim-json'
-Plugin 'geoffharcourt/vim-matchit'
-Plugin 'honza/vim-snippets'
-Plugin 'kien/ctrlp.vim'
-Plugin 'mileszs/ack.vim'
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'scrooloose/nerdtree'
-Plugin 'sheerun/vim-polyglot'
-Plugin 'tpope/vim-fugitive'
-Plugin 'tpope/vim-surround'
 Plugin 'tsukkee/unite-help'
 Plugin 'tsukkee/unite-tag'
 Plugin 'ujihisa/unite-colorscheme'
+
+" ctags cscope
+Plugin 'amitab/vim-unite-cscope'
+Plugin 'craigemery/vim-autotag'
+
+" motions
+Plugin 'easymotion/vim-easymotion'
+Plugin 'geoffharcourt/vim-matchit'
+Plugin 'elzr/vim-json'
+Plugin 'honza/vim-snippets'
+Plugin 'Raimondi/delimitMate'
+Plugin 'tpope/vim-repeat'
+Plugin 'tpope/vim-surround'
+
+" fuzzy finders
+Plugin 'ctrlpvim/ctrlp.vim'
+Plugin 'mileszs/ack.vim'
+
+" file and folder
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'scrooloose/nerdtree'
+
+" autocomplete
+Plugin 'sheerun/vim-polyglot'
+Plugin 'SirVer/ultisnips'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'vim-syntastic/syntastic'
+
+" sytax
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
-Plugin 'vim-syntastic/syntastic'
 Plugin 'xolox/vim-misc'
 Plugin 'xolox/vim-session'
+Plugin 'Yggdroot/indentLine'
+Plugin 'ryanoasis/vim-devicons'
 
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
@@ -355,8 +375,8 @@ nnoremap <bar> :vsp<cr>
 
 " gui settings
 if has("gui_running") 
-  set guifont=Meslo\ LG\ S\ DZ\ Regular\ for\ Powerline:h14
-  au GUIEnter * set fullscreen
+  "set guifont=Meslo\ LG\ S\ DZ\ Regular\ for\ Powerline:h14
+  set guifont=Droid\ Sans\ Mono\ for\ Powerline\ Nerd\ Font\ Complete:h14
 endif
 
 "Easy motions 
