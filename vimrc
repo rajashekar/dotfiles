@@ -121,9 +121,21 @@ call vundle#begin()
 
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
+Plugin 'Raimondi/delimitMate'
+Plugin 'Shougo/neomru.vim'
+Plugin 'Shougo/neoyank.vim'
+Plugin 'Shougo/unite-outline'
+Plugin 'Shougo/unite-session'
+Plugin 'Shougo/unite.vim'
+Plugin 'Shougo/vimproc.vim'
+Plugin 'SirVer/ultisnips'
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'Yggdroot/indentLine'
+Plugin 'airblade/vim-gitgutter'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'amitab/vim-unite-cscope'
 Plugin 'craigemery/vim-autotag'
+Plugin 'easymotion/vim-easymotion'
 Plugin 'elzr/vim-json'
 Plugin 'geoffharcourt/vim-matchit'
 Plugin 'honza/vim-snippets'
@@ -132,25 +144,16 @@ Plugin 'mileszs/ack.vim'
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'scrooloose/nerdtree'
 Plugin 'sheerun/vim-polyglot'
-Plugin 'Shougo/neomru.vim'
-Plugin 'Shougo/neoyank.vim'
-Plugin 'Shougo/unite-outline'
-Plugin 'Shougo/unite-session'
-Plugin 'Shougo/unite.vim'
-Plugin 'Shougo/vimproc.vim'
-Plugin 'SirVer/ultisnips'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-surround'
 Plugin 'tsukkee/unite-help'
 Plugin 'tsukkee/unite-tag'
 Plugin 'ujihisa/unite-colorscheme'
-Plugin 'Valloric/YouCompleteMe'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 Plugin 'vim-syntastic/syntastic'
 Plugin 'xolox/vim-misc'
 Plugin 'xolox/vim-session'
-Plugin 'Yggdroot/indentLine'
 
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
@@ -196,7 +199,8 @@ if executable('ag')
   let g:unite_source_grep_command = 'ag'
   let g:unite_source_grep_default_opts = '-i --smart-case --nogroup --nocolor --ignore-dir={.git, .cabal-sandbox, .stack-work}'
   let g:unite_source_grep_recursive_opt = ''
-  let g:unite_source_rec_async_command ='ag --follow --nocolor --nogroup --hidden -g ""'
+  "let g:unite_source_rec_async_command ='ag --follow --nocolor --nogroup --hidden -g ""'
+  let g:unite_source_rec_async_command = ['ag', '--follow', '--nocolor', '--nogroup','--hidden', '-g', '']
 elseif executable('ack')
   let g:unite_source_grep_command = 'ack'
   let g:unite_source_grep_default_opts ='-i --smart-case --nogroup --nocolor --ignore-dir=''.git, .cabal-sandbox, .stack-work'''
@@ -257,7 +261,8 @@ function! s:unite_settings()
     imap <buffer> <C-a> <Plug>(unite_choose_action)
     nmap <silent><buffer><expr> Enter unite#do_action('switch')
     nmap <buffer> <C-s>      <Plug>(unite_redraw)
-    nnoremap <silent><nowait><buffer><expr> d unite#smart_map('d', unite#do_action('delete'))
+    nnoremap <silent><nowait><buffer><expr> r unite#smart_map('r', unite#do_action('delete'))
+    nnoremap <silent><nowait><buffer><expr> d unite#smart_map('d', unite#do_action('diff'))
     nnoremap <silent><nowait><buffer><expr> h unite#smart_map('h', unite#do_action('splitswitch'))
     nnoremap <silent><nowait><buffer><expr> v unite#smart_map('h', unite#do_action('vsplitswitch'))
     nnoremap <silent><nowait><buffer><expr> t unite#smart_map('h', unite#do_action('tabswitch'))
@@ -319,6 +324,10 @@ let g:ctrlp_max_depth=40
 nnoremap <leader>. :CtrlPTag<cr>
 "nmap <leader>w <C-P><C-\>w
 nmap <leader>w :CtrlPMixed<cr><C-\>w
+if executable('ag')
+  let g:ctrlp_user_command = 'ag --nocolor -g "" %s'
+  let g:ctrlp_use_caching = 0
+endif
 
 " air-line settings
 let g:airline_theme='wombat'
@@ -349,3 +358,8 @@ if has("gui_running")
   set guifont=Meslo\ LG\ S\ DZ\ Regular\ for\ Powerline:h14
   au GUIEnter * set fullscreen
 endif
+
+"Easy motions 
+let g:EasyMotion_do_mapping = 0 " Disable default mappings
+nmap s <Plug>(easymotion-overwin-f2)
+let g:EasyMotion_smartcase = 1
