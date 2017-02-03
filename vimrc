@@ -108,6 +108,7 @@ set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮,nbsp:+
 set listchars+=trail:-
 set showbreak=↪
 com! ShowSpecial set list
+nnoremap <leader>l :set list!<cr>
 
 
 "Vundle settings
@@ -124,6 +125,7 @@ Plugin 'VundleVim/Vundle.vim'
 " git
 Plugin 'airblade/vim-gitgutter'
 Plugin 'tpope/vim-fugitive'
+Plugin 'tpope/vim-rhubarb'
 Plugin 'Xuyuanp/nerdtree-git-plugin'
 
 " color schemes
@@ -152,6 +154,7 @@ Plugin 'honza/vim-snippets'
 Plugin 'Raimondi/delimitMate'
 Plugin 'tpope/vim-repeat'
 Plugin 'tpope/vim-surround'
+Plugin 'tpope/vim-unimpaired'
 
 " fuzzy finders
 Plugin 'ctrlpvim/ctrlp.vim'
@@ -363,7 +366,6 @@ endif
 
 " toggle cursor line
 nnoremap <leader>i :set cursorline!<cr>
-
 " to write as root
 noremap <leader>W :w !sudo tee % > /dev/null
 " <Leader>q: Quit all, very useful in vimdiff
@@ -372,14 +374,22 @@ nnoremap <Leader>q :qa<cr>
 nnoremap _ :sp<cr>
 " | : Quick vertical splits
 nnoremap <bar> :vsp<cr>
+" buffer delete
+nnoremap <leader>d :bd<cr>
+" move to current directory
+nnoremap gc :lcd %:p:h<cr>
 
 " gui settings
 if has("gui_running") 
   "set guifont=Meslo\ LG\ S\ DZ\ Regular\ for\ Powerline:h14
-  set guifont=Droid\ Sans\ Mono\ for\ Powerline\ Nerd\ Font\ Complete:h14
+  set guifont=Droid\ Sans\ Mono\ for\ Powerline\ Plus\ Nerd\ File\ Types:h14
 endif
 
 "Easy motions 
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
 nmap s <Plug>(easymotion-overwin-f2)
 let g:EasyMotion_smartcase = 1
+
+"git
+let g:fugitive_github_domains      = ['https://gecgithub01.walmart.com']
+let g:github_enterprise_urls       = ['https://gecgithub01.walmart.com']
