@@ -149,7 +149,6 @@ Plugin 'craigemery/vim-autotag'
 " motions
 Plugin 'easymotion/vim-easymotion'
 Plugin 'geoffharcourt/vim-matchit'
-Plugin 'elzr/vim-json'
 Plugin 'honza/vim-snippets'
 Plugin 'Raimondi/delimitMate'
 Plugin 'tpope/vim-repeat'
@@ -177,6 +176,7 @@ Plugin 'xolox/vim-misc'
 Plugin 'xolox/vim-session'
 Plugin 'Yggdroot/indentLine'
 Plugin 'ryanoasis/vim-devicons'
+Plugin 'elzr/vim-json'
 
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
@@ -375,14 +375,20 @@ nnoremap _ :sp<cr>
 " | : Quick vertical splits
 nnoremap <bar> :vsp<cr>
 " buffer delete
-nnoremap <leader>d :bd<cr>
+nnoremap <leader>d :bd!<cr>
+nnoremap <leader>D :%bd!<cr>
 " move to current directory
 nnoremap gc :lcd %:p:h<cr>
 
 " gui settings
 if has("gui_running") 
   "set guifont=Meslo\ LG\ S\ DZ\ Regular\ for\ Powerline:h14
-  set guifont=Droid\ Sans\ Mono\ for\ Powerline\ Plus\ Nerd\ File\ Types:h14
+  "set guifont=Droid\ Sans\ Mono\ for\ Powerline\ Plus\ Nerd\ File\ Types:h14
+  set guifont=Meslo\ LG\ S\ DZ\ Regular\ for\ Powerline\ Nerd\ Font\ Complete\ Mono:h14
+  set guioptions-=m  "remove menu bar
+  set guioptions-=T  "remove toolbar
+  set guioptions-=r  "remove right-hand scroll bar
+  set guioptions-=L  "remove left-hand scroll bar
 endif
 
 "Easy motions 
