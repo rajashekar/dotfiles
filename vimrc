@@ -5,6 +5,15 @@ syntax on
 " select color scheme
 colorscheme solarized
 set background=dark
+" toggle backgroud
+function! BgToggleSol()
+  if &background == "light"
+    execute ":set background=dark"
+  else
+    execute ":set background=light"
+  endif
+endfunction
+nnoremap <F2> :call BgToggleSol()<cr>
 " be iMproved, required
 set nocompatible              
 " to show numbers
@@ -126,7 +135,6 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'tpope/vim-fugitive'
 Plugin 'tpope/vim-rhubarb'
-Plugin 'Xuyuanp/nerdtree-git-plugin'
 
 " color schemes
 Plugin 'altercation/vim-colors-solarized'
@@ -141,6 +149,7 @@ Plugin 'Shougo/vimproc.vim'
 Plugin 'tsukkee/unite-help'
 Plugin 'tsukkee/unite-tag'
 Plugin 'ujihisa/unite-colorscheme'
+Plugin 'osyo-manga/unite-quickfix'
 
 " ctags cscope
 Plugin 'amitab/vim-unite-cscope'
@@ -162,6 +171,7 @@ Plugin 'mileszs/ack.vim'
 " file and folder
 Plugin 'scrooloose/nerdcommenter'
 Plugin 'scrooloose/nerdtree'
+Plugin 'Xuyuanp/nerdtree-git-plugin'
 
 " autocomplete
 Plugin 'sheerun/vim-polyglot'
@@ -265,6 +275,8 @@ nnoremap <C-h>  :<C-u>Unite -buffer-name=help -start-insert help<CR>
 nnoremap <space>/ :Unite -no-empty -no-resize grep:.<cr>
 " search word under cursor
 nnoremap <space>w :Unite -start-insert -no-quit -buffer-name=ag grep:.<cr><C-r><C-w><cr>
+" Unite quick fix
+nnoremap <space>q :<C-u>Unite -buffer-name=quickfix -winheight=10 -input= -start-insert quickfix<cr>
 " get buffers quick match
 " nnoremap <space>b :Unite -quick-match buffer<cr>
 nnoremap <space>u :UniteResume<cr>
@@ -286,9 +298,9 @@ function! s:unite_settings()
     nmap <buffer> <C-s>      <Plug>(unite_redraw)
     nnoremap <silent><nowait><buffer><expr> r unite#smart_map('r', unite#do_action('delete'))
     nnoremap <silent><nowait><buffer><expr> d unite#smart_map('d', unite#do_action('diff'))
-    nnoremap <silent><nowait><buffer><expr> h unite#smart_map('h', unite#do_action('splitswitch'))
-    nnoremap <silent><nowait><buffer><expr> v unite#smart_map('h', unite#do_action('vsplitswitch'))
-    nnoremap <silent><nowait><buffer><expr> t unite#smart_map('h', unite#do_action('tabswitch'))
+    nnoremap <silent><nowait><buffer><expr> h unite#smart_map('h', unite#do_action('split'))
+    nnoremap <silent><nowait><buffer><expr> v unite#smart_map('v', unite#do_action('vsplit'))
+    nnoremap <silent><nowait><buffer><expr> t unite#smart_map('t', unite#do_action('tabswitch'))
     nnoremap <silent><nowait><buffer><expr> c unite#smart_map('c', unite#do_action('cd'))
     nnoremap <buffer> <space>q :UniteClose<CR>
 endfunction
@@ -329,6 +341,7 @@ nmap <silent> <leader>T :NERDTreeFind<cr>
 let NERDTreeShowHidden=1
 let NERDTreeDirArrowExpandable = '▷'
 let NERDTreeDirArrowCollapsible = '▼'
+let NERDTreeShowExecutableFlag = 0
 "silent! nmap <F2> :NERDTreeToggle<CR>
 "silent! map <F3> :NERDTreeFind<CR>
 "let g:NERDTreeMapActivateNode="<F3>"
@@ -371,12 +384,15 @@ noremap <leader>W :w !sudo tee % > /dev/null
 " <Leader>q: Quit all, very useful in vimdiff
 nnoremap <Leader>q :qa<cr>
 " _ : Quick horizontal splits
-nnoremap _ :sp<cr>
+nnoremap _ :new<cr>
 " | : Quick vertical splits
-nnoremap <bar> :vsp<cr>
+nnoremap <bar> :vnew<cr>
 " buffer delete
 nnoremap <leader>d :bd!<cr>
 nnoremap <leader>D :%bd!<cr>
+" compare split windows
+nnoremap <leader>c :windo diffthis<cr>
+nnoremap <leader>C :windo diffoff<cr>
 " move to current directory
 nnoremap gc :lcd %:p:h<cr>
 
@@ -399,3 +415,7 @@ let g:EasyMotion_smartcase = 1
 "git
 let g:fugitive_github_domains      = ['https://gecgithub01.walmart.com']
 let g:github_enterprise_urls       = ['https://gecgithub01.walmart.com']
+autocmd User fugitive 
+  \ if fugitive#buffer().type() =~# '^\%(tree\|blob\)$' |
+  \   nnoremap <buffer> .. :edit %:h<CR> |
+  \ endif
