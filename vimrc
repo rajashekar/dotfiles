@@ -5,15 +5,6 @@ syntax on
 " select color scheme
 colorscheme solarized
 set background=dark
-" toggle backgroud
-function! BgToggleSol()
-  if &background == "light"
-    execute ":set background=dark"
-  else
-    execute ":set background=light"
-  endif
-endfunction
-nnoremap <F2> :call BgToggleSol()<cr>
 " be iMproved, required
 set nocompatible              
 " to show numbers
@@ -419,3 +410,12 @@ autocmd User fugitive
   \ if fugitive#buffer().type() =~# '^\%(tree\|blob\)$' |
   \   nnoremap <buffer> .. :edit %:h<CR> |
   \ endif
+" toggle background
+function! BgToggleSol()
+  if &background == "light"
+    execute ":set background=dark"
+  else
+    execute ":set background=light"
+  endif
+endfunction
+nnoremap <F2> :call BgToggleSol()<cr>
