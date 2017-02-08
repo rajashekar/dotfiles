@@ -154,6 +154,7 @@ Plugin 'Raimondi/delimitMate'
 Plugin 'tpope/vim-repeat'
 Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-unimpaired'
+Plugin 'tpope/vim-markdown'
 
 " fuzzy finders
 Plugin 'ctrlpvim/ctrlp.vim'
@@ -178,6 +179,15 @@ Plugin 'xolox/vim-session'
 Plugin 'Yggdroot/indentLine'
 Plugin 'ryanoasis/vim-devicons'
 Plugin 'elzr/vim-json'
+
+"note taking
+Plugin 'neilagabriel/vim-geeknote'
+
+"Presenting
+Plugin 'sotte/presenting.vim'
+Plugin 'godlygeek/tabular'
+Plugin 'dhruvasagar/vim-table-mode'
+Plugin 'vim-scripts/DrawIt'
 
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
@@ -378,6 +388,7 @@ nnoremap <Leader>q :qa<cr>
 nnoremap _ :new<cr>
 " | : Quick vertical splits
 nnoremap <bar> :vnew<cr>
+nnoremap <leader>e : enew<cr>
 " buffer delete
 nnoremap <leader>d :bd!<cr>
 nnoremap <leader>D :%bd!<cr>
@@ -419,3 +430,6 @@ function! BgToggleSol()
   endif
 endfunction
 nnoremap <F2> :call BgToggleSol()<cr>
+
+"geek note
+nnoremap <F8> :Geeknote<cr>
