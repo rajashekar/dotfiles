@@ -1,10 +1,10 @@
+source ~/.config/nvim/plugins.vim
 " set title
 set title
 " for syntax
 syntax on
 " select color scheme
-colorscheme solarized
-set background=dark
+colorscheme onedark 
 " be iMproved, required
 set nocompatible              
 " to show numbers
@@ -77,7 +77,6 @@ set autoread
 " mapping leader
 let mapleader=","
 
-execute pathogen#infect()
 " Except Markdown
 autocmd FileType mkd set sw=4
 autocmd FileType mkd set sts=4
@@ -112,117 +111,106 @@ set showbreak=↪
 com! ShowSpecial set list
 nnoremap <leader>l :set list!<cr>
 
+" airline options
+let g:airline_powerline_fonts=1
+let g:airline_left_sep=''
+let g:airline_right_sep=''
+let g:airline_theme='onedark'
+let g:airline#extensions#tabline#enabled = 1 " enable airline tabline
+let g:airline#extensions#tabline#tab_min_count = 2 " only show tabline if tabs are being used (more than 1 tab open)
+let g:airline#extensions#tabline#show_buffers = 0 " do not show open buffers in tabline
+let g:airline#extensions#tabline#show_splits = 0
 
-"Vundle settings
-filetype off                  " required
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-set runtimepath^=~/.vim/bundle/ctrlp.vim
-call vundle#begin()
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
+"Ggrep custom command
+command -nargs=+ Ggr execute 'silent Ggrep!' <q-args> | cw | redraw!
 
-" let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
-" git
-Plugin 'airblade/vim-gitgutter'
-Plugin 'tpope/vim-fugitive'
-Plugin 'tpope/vim-rhubarb'
+" Ack
+cnoreabbrev Ack Ack!
+nnoremap <Leader>a :Ack!<Space>
+" using silver searcher for ack
+let g:ackprg = 'ag --nogroup --nocolor --column'
 
-" color schemes
-Plugin 'altercation/vim-colors-solarized'
+" java decompiler
+augr class
+  au!
+  au bufreadpost,filereadpost *.class %!jad -noctor -lnc -ff -i -p %
+  au bufreadpost,filereadpost *.class set readonly
+  au bufreadpost,filereadpost *.class set ft=java
+  au bufreadpost,filereadpost *.class normal gg=G
+  au bufreadpost,filereadpost *.class set nomodified
+augr END
 
-" unite
-Plugin 'Shougo/neomru.vim'
-Plugin 'Shougo/neoyank.vim'
-Plugin 'Shougo/unite-outline'
-Plugin 'Shougo/unite-session'
-Plugin 'Shougo/unite.vim'
-Plugin 'Shougo/vimproc.vim'
-Plugin 'tsukkee/unite-help'
-Plugin 'tsukkee/unite-tag'
-Plugin 'ujihisa/unite-colorscheme'
-Plugin 'osyo-manga/unite-quickfix'
-
-" ctags cscope
-Plugin 'amitab/vim-unite-cscope'
-Plugin 'craigemery/vim-autotag'
-
-" motions
-Plugin 'easymotion/vim-easymotion'
-Plugin 'geoffharcourt/vim-matchit'
-Plugin 'honza/vim-snippets'
-Plugin 'Raimondi/delimitMate'
-Plugin 'tpope/vim-repeat'
-Plugin 'tpope/vim-surround'
-Plugin 'tpope/vim-unimpaired'
-Plugin 'tpope/vim-markdown'
-Plugin 'tpope/vim-rsi'
-
-" fuzzy finders
-Plugin 'ctrlpvim/ctrlp.vim'
-Plugin 'mileszs/ack.vim'
-
-" file and folder
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'scrooloose/nerdtree'
-Plugin 'Xuyuanp/nerdtree-git-plugin'
-
-" autocomplete
-Plugin 'sheerun/vim-polyglot'
-Plugin 'SirVer/ultisnips'
-Plugin 'Valloric/YouCompleteMe'
-Plugin 'vim-syntastic/syntastic'
-
-" sytax
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-Plugin 'xolox/vim-misc'
-Plugin 'xolox/vim-session'
-Plugin 'Yggdroot/indentLine'
-Plugin 'ryanoasis/vim-devicons'
-Plugin 'elzr/vim-json'
-
-"note taking
-Plugin 'neilagabriel/vim-geeknote'
-
-"Presenting
-Plugin 'sotte/presenting.vim'
-Plugin 'godlygeek/tabular'
-Plugin 'dhruvasagar/vim-table-mode'
-Plugin 'vim-scripts/DrawIt'
-
-" The following are examples of different formats supported.
-" Keep Plugin commands between vundle#begin/end.
-" plugin on GitHub repo
-" plugin from http://vim-scripts.org/vim/scripts.html
-" Plugin 'L9'
-" Git plugin not hosted on GitHub
-" git repos on your local machine (i.e. when working on your own plugin)
-" Plugin 'file:///home/gmarik/path/to/plugin'
-" The sparkup vim script is in a subdirectory of this repo called vim.
-" Pass the path to set the runtimepath properly.
-" Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
-" Install L9 and avoid a Naming conflict if you've already installed a
-" different version somewhere else.
-" Plugin 'ascenator/L9', {'name': 'newL9'}
-
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
-" To ignore plugin indent changes, instead use:
-"filetype plugin on
+" UltiSnips Trigger configuration. 
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 "
-" Brief help
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
-"
-" see :h vundle for more details or wiki for FAQ
-" Put your non-Plugin stuff after this line
+"If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="vertical"
 
-" Unite
+"NERTtree mappings
+" Toggle NERDTree
+nmap <silent> <leader>t :NERDTreeToggle<cr>
+" expand to the path of the file in the current buffer
+nmap <silent> <leader>T :NERDTreeFind<cr>
+
+let NERDTreeShowHidden=1
+let NERDTreeDirArrowExpandable = '▷'
+let NERDTreeDirArrowCollapsible = '▼'
+let NERDTreeShowExecutableFlag = 0
+
+" session management
+let g:session_autosave='yes'
+let g:session_autoload='yes'
+let g:session_default_to_last='1'
+let g:session_autosave_to = 'default'
+let g:session_directory = '~/.config/nvim/sessions'
+
+" toggle cursor line
+nnoremap <leader>i :set cursorline!<cr>
+" to write as root
+noremap <leader>W :w !sudo tee % > /dev/null
+" <Leader>q: Quit all, very useful in vimdiff
+nnoremap <Leader>q :qa<cr>
+" _ : Quick horizontal splits
+nnoremap _ :new<cr>
+" | : Quick vertical splits
+nnoremap <bar> :vnew<cr>
+nnoremap <leader>e : enew<cr>
+" buffer delete
+nnoremap <leader>d :bd!<cr>
+nnoremap <leader>D :%bd!<cr>
+" compare split windows
+nnoremap <leader>c :windo diffthis<cr>
+nnoremap <leader>C :windo diffoff<cr>
+" move to current directory
+nnoremap gc :lcd %:p:h<cr>
+"Easy motions 
+let g:EasyMotion_do_mapping = 0 " Disable default mappings
+nmap s <Plug>(easymotion-overwin-f2)
+let g:EasyMotion_smartcase = 1
+
+"git
+let g:fugitive_github_domains      = ['https://gecgithub01.walmart.com']
+let g:github_enterprise_urls       = ['https://gecgithub01.walmart.com']
+autocmd User fugitive 
+  \ if fugitive#buffer().type() =~# '^\%(tree\|blob\)$' |
+  \   nnoremap <buffer> .. :edit %:h<CR> |
+  \ endif
+
+"geek note
+nnoremap <F8> :Geeknote<cr>
+" disable meta keys for RSI
+let g:rsi_no_meta=1
+let g:python3_host_prog='/usr/local/bin/python3'
+let g:deoplete#enable_at_startup=1
+
+" Denite Settings
+call unite#custom#profile('default', 'context', {
+	\   'winheight': 40,
+	\   'direction': 'top',
+    \   'no-resize': 1
+	\ })
 call unite#filters#matcher_default#use(['matcher_fuzzy'])
 call unite#filters#sorter_default#use(['sorter_rank'])
 "let g:unite_split_rule = 'botright'
@@ -272,13 +260,13 @@ nnoremap <space>m :<C-u>Unite -buffer-name=mappings -winheight=10 -input= mappin
 " get all yanks and history
 nnoremap <space>y :<C-u>Unite -buffer-name=yank -winheight=10 -input= history/yank<cr>
 " get all jump locations
-nnoremap <space>j :<C-u>Unite -buffer-name=jump jump<cr>
+nnoremap <space>j :<C-u>Unite -buffer-name=jump -winheight=10 -input= jump<cr>
 " search help files
-nnoremap <C-h>  :<C-u>Unite -buffer-name=help -start-insert help<CR>
+nnoremap <C-h>  :<C-u>Unite -buffer-name=help -winheight=10 -input= -start-insert help<CR>
 " search text in all files
 nnoremap <space>/ :Unite -no-empty -no-resize grep:.<cr>
 " search word under cursor
-nnoremap <space>w :Unite -start-insert -no-quit -buffer-name=ag grep:.<cr><C-r><C-w><cr>
+nnoremap <space>w :Unite --winheight=10 -input= start-insert -no-quit -buffer-name=ag grep:.<cr><C-r><C-w><cr>
 " Unite quick fix
 nnoremap <space>q :<C-u>Unite -buffer-name=quickfix -winheight=10 -input= -start-insert quickfix<cr>
 " get buffers quick match
@@ -287,7 +275,7 @@ nnoremap <space>u :UniteResume<cr>
 " cscope call reference mappings
 nnoremap <space>g : Unite cscope/find_this_symbol<cr><C-r><C-w><cr>
 nnoremap <space>h : Unite cscope/functions_calling<cr><C-r><C-w><cr>
-" Custom mappings for the unite buffer
+set showtabline=0
 autocmd FileType unite call s:unite_settings()
 function! s:unite_settings()
   " Play nice with supertab
@@ -309,132 +297,15 @@ function! s:unite_settings()
     nnoremap <buffer> <space>q :UniteClose<CR>
 endfunction
 
-"Ggrep custom command
-command -nargs=+ Ggr execute 'silent Ggrep!' <q-args> | cw | redraw!
+call unite#custom#profile('default', 'context', {
+	\   'winheight': 40,
+	\   'direction': 'botright',
+	\   'no-resize': 1
+	\ })
 
-" Ack
-cnoreabbrev Ack Ack!
-nnoremap <Leader>a :Ack!<Space>
-" using silver searcher for ack
-let g:ackprg = 'ag --nogroup --nocolor --column'
-
-" java decompiler
-augr class
-  au!
-  au bufreadpost,filereadpost *.class %!jad -noctor -lnc -ff -i -p %
-  au bufreadpost,filereadpost *.class set readonly
-  au bufreadpost,filereadpost *.class set ft=java
-  au bufreadpost,filereadpost *.class normal gg=G
-  au bufreadpost,filereadpost *.class set nomodified
-augr END
-
-" UltiSnips Trigger configuration. 
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
-"
-"If you want :UltiSnipsEdit to split your window.
-let g:UltiSnipsEditSplit="vertical"
-
-"NERTtree mappings
-" Toggle NERDTree
-nmap <silent> <leader>t :NERDTreeToggle<cr>
-" expand to the path of the file in the current buffer
-nmap <silent> <leader>T :NERDTreeFind<cr>
-
-let NERDTreeShowHidden=1
-let NERDTreeDirArrowExpandable = '▷'
-let NERDTreeDirArrowCollapsible = '▼'
-let NERDTreeShowExecutableFlag = 0
-"silent! nmap <F2> :NERDTreeToggle<CR>
-"silent! map <F3> :NERDTreeFind<CR>
-"let g:NERDTreeMapActivateNode="<F3>"
-"let g:NERDTreeMapPreview="<F4>"
-
-" session management
-let g:session_autosave='yes'
-let g:session_autoload='yes'
-let g:session_default_to_last='1'
-let g:session_autosave_to = 'default'
-
-"CtrlP
-let g:ctrlp_working_path_mode = ""
-let g:ctrlp_max_files=0
-let g:ctrlp_max_depth=40
-nnoremap <leader>. :CtrlPTag<cr>
-"nmap <leader>w <C-P><C-\>w
-nmap <leader>w :CtrlPMixed<cr><C-\>w
-if executable('ag')
-  let g:ctrlp_user_command = 'ag --nocolor -g "" %s'
-  let g:ctrlp_use_caching = 0
-endif
-
-" air-line settings
-let g:airline_theme='wombat'
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#left_sep = ' '
-let g:airline#extensions#tabline#left_alt_sep = '|'
-let g:table_mode_corner_corner="+"
-let g:table_mode_header_fillchar="="
-let g:airline_powerline_fonts = 1
-if !exists('g:airline_symbols')
-    let g:airline_symbols = {}
-endif
-
-" toggle cursor line
-nnoremap <leader>i :set cursorline!<cr>
-" to write as root
-noremap <leader>W :w !sudo tee % > /dev/null
-" <Leader>q: Quit all, very useful in vimdiff
-nnoremap <Leader>q :qa<cr>
-" _ : Quick horizontal splits
-nnoremap _ :new<cr>
-" | : Quick vertical splits
-nnoremap <bar> :vnew<cr>
-nnoremap <leader>e : enew<cr>
-" buffer delete
-nnoremap <leader>d :bd!<cr>
-nnoremap <leader>D :%bd!<cr>
-" compare split windows
-nnoremap <leader>c :windo diffthis<cr>
-nnoremap <leader>C :windo diffoff<cr>
-" move to current directory
-nnoremap gc :lcd %:p:h<cr>
-
-" gui settings
-if has("gui_running") 
-  "set guifont=Meslo\ LG\ S\ DZ\ Regular\ for\ Powerline:h14
-  "set guifont=Droid\ Sans\ Mono\ for\ Powerline\ Plus\ Nerd\ File\ Types:h14
-  set guifont=Meslo\ LG\ S\ DZ\ Regular\ for\ Powerline\ Nerd\ Font\ Complete\ Mono:h14
-  set guioptions-=m  "remove menu bar
-  set guioptions-=T  "remove toolbar
-  set guioptions-=r  "remove right-hand scroll bar
-  set guioptions-=L  "remove left-hand scroll bar
-endif
-
-"Easy motions 
-let g:EasyMotion_do_mapping = 0 " Disable default mappings
-nmap s <Plug>(easymotion-overwin-f2)
-let g:EasyMotion_smartcase = 1
-
-"git
-let g:fugitive_github_domains      = ['https://gecgithub01.walmart.com']
-let g:github_enterprise_urls       = ['https://gecgithub01.walmart.com']
-autocmd User fugitive 
-  \ if fugitive#buffer().type() =~# '^\%(tree\|blob\)$' |
-  \   nnoremap <buffer> .. :edit %:h<CR> |
-  \ endif
-" toggle background
-function! BgToggleSol()
-  if &background == "light"
-    execute ":set background=dark"
-  else
-    execute ":set background=light"
-  endif
-endfunction
-nnoremap <F2> :call BgToggleSol()<cr>
-
-"geek note
-nnoremap <F8> :Geeknote<cr>
-" disable meta keys for RSI
-let g:rsi_no_meta = 1
+call denite#custom#option('default', 'prompt', '❯')
+call denite#custom#source(
+	\ 'file_rec', 'vars', {
+	\   'command': [
+    \      'ag', '--follow','--nogroup','--hidden', '-g', '', '--ignore', '.git', '--ignore', '*.png'
+	\   ] })
