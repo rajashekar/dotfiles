@@ -16,7 +16,6 @@ endif
 
 call plug#begin('~/.config/nvim/plugged')
 " colorschemes
-" Plug 'dracula/vim'
 Plug 'joshdick/onedark.vim'
 Plug 'altercation/vim-colors-solarized'
 

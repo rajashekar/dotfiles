@@ -73,6 +73,10 @@ set shiftround " round indent to a multiple of 'shiftwidth'
 set autoread
 " mapping leader
 let mapleader=","
+" required for tmux
+set term=screen-256color
+" matchit fix
+runtime macros/matchit.vim
 
 execute pathogen#infect()
 " Except Markdown
@@ -131,6 +135,7 @@ Plugin 'altercation/vim-colors-solarized'
 Plugin 'joshdick/onedark.vim'
 Plugin 'alessandroyorba/sidonia'
 Plugin 'tomasr/molokai'
+Plugin 'dracula/vim'
 
 " unite
 Plugin 'Shougo/neomru.vim'
