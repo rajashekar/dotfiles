@@ -2,9 +2,6 @@
 set title
 " for syntax
 syntax on
-" select color scheme
-colorscheme solarized
-set background=dark
 " be iMproved, required
 set nocompatible              
 " to show numbers
@@ -131,6 +128,9 @@ Plugin 'tpope/vim-rhubarb'
 
 " color schemes
 Plugin 'altercation/vim-colors-solarized'
+Plugin 'joshdick/onedark.vim'
+Plugin 'alessandroyorba/sidonia'
+Plugin 'tomasr/molokai'
 
 " unite
 Plugin 'Shougo/neomru.vim'
@@ -209,6 +209,20 @@ Plugin 'vim-scripts/DrawIt'
 
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
+
+" select color scheme
+colorscheme onedark 
+
+"colorscheme sidonia
+"set termguicolors
+
+"colorscheme molokai
+"let g:molokai_original = 1
+"let g:rehash256 = 1
+
+"colorscheme solarized
+"set background=dark
+
 filetype plugin indent on    " required
 " To ignore plugin indent changes, instead use:
 "filetype plugin on
@@ -269,6 +283,8 @@ nnoremap <space>o :<C-u>Unite -buffer-name=outline -input= -start-insert outline
 nnoremap <space>b :<C-u>Unite -buffer-name=buffer -winheight=10 -input= buffer<cr>
 " get all key mappings 
 nnoremap <space>m :<C-u>Unite -buffer-name=mappings -winheight=10 -input= mapping<cr>
+" get colorscheme
+nnoremap <space>c :<C-u>Unite -buffer-name=mappings -winheight=10 -input= colorscheme<cr>
 " get all yanks and history
 nnoremap <space>y :<C-u>Unite -buffer-name=yank -winheight=10 -input= history/yank<cr>
 " get all jump locations
@@ -381,6 +397,7 @@ if !exists('g:airline_symbols')
     let g:airline_symbols = {}
 endif
 
+set cursorline
 " toggle cursor line
 nnoremap <leader>i :set cursorline!<cr>
 " to write as root

@@ -4,7 +4,7 @@ set title
 " for syntax
 syntax on
 " select color scheme
-colorscheme onedark 
+colorscheme onedark
 " be iMproved, required
 set nocompatible              
 " to show numbers
@@ -49,6 +49,7 @@ set cmdheight=1
 " current buffer can be put into background without closing
 set hidden
 " don't redraw while executing macros
+" in neovim this is causing slow scrolling
 set nolazyredraw
 " switch between current and last buffer
 nmap <space>. <c-^>
@@ -111,15 +112,17 @@ set showbreak=↪
 com! ShowSpecial set list
 nnoremap <leader>l :set list!<cr>
 
-" airline options
-let g:airline_powerline_fonts=1
-let g:airline_left_sep=''
-let g:airline_right_sep=''
-let g:airline_theme='onedark'
-let g:airline#extensions#tabline#enabled = 1 " enable airline tabline
-let g:airline#extensions#tabline#tab_min_count = 2 " only show tabline if tabs are being used (more than 1 tab open)
-let g:airline#extensions#tabline#show_buffers = 0 " do not show open buffers in tabline
-let g:airline#extensions#tabline#show_splits = 0
+" air-line settings
+let g:airline_theme='wombat'
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
+let g:table_mode_corner_corner="+"
+let g:table_mode_header_fillchar="="
+let g:airline_powerline_fonts = 1
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
 
 "Ggrep custom command
 command -nargs=+ Ggr execute 'silent Ggrep!' <q-args> | cw | redraw!
@@ -166,6 +169,7 @@ let g:session_default_to_last='1'
 let g:session_autosave_to = 'default'
 let g:session_directory = '~/.config/nvim/sessions'
 
+set cursorline
 " toggle cursor line
 nnoremap <leader>i :set cursorline!<cr>
 " to write as root

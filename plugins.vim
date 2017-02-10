@@ -18,6 +18,8 @@ call plug#begin('~/.config/nvim/plugged')
 " colorschemes
 " Plug 'dracula/vim'
 Plug 'joshdick/onedark.vim'
+Plug 'altercation/vim-colors-solarized'
+
 Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] } | Plug 'Xuyuanp/nerdtree-git-plugin' | Plug 'ryanoasis/vim-devicons' " file drawer
 Plug 'Shougo/denite.nvim'
 Plug 'Shougo/deoplete.nvim'
