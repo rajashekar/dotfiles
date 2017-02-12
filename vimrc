@@ -136,6 +136,7 @@ Plugin 'joshdick/onedark.vim'
 Plugin 'alessandroyorba/sidonia'
 Plugin 'tomasr/molokai'
 Plugin 'dracula/vim'
+Plugin 'rakr/vim-one'
 
 " unite
 Plugin 'Shougo/neomru.vim'

@@ -210,6 +210,30 @@ let g:python3_host_prog='/usr/local/bin/python3'
 let g:deoplete#enable_at_startup=1
 
 " Denite Settings
+call denite#custom#option('default', 'highlight-matched-char', '')
+call denite#custom#option('default', 'highlight-matched-range', '')
+hi deniteMatched guibg=None
+hi deniteMatchedChar guibg=None
+call denite#custom#option('default', 'prompt', '❯')
+call denite#custom#source(
+	\ 'file_rec', 'vars', {
+	\   'command': [
+    \      'ag', '--follow','--nogroup','--hidden', '-g', '', '--ignore', '.git', '--ignore', '*.png'
+	\   ] })
+call denite#custom#map(
+    \ 'insert',
+    \ '<C-n>',
+    \ '<denite:move_to_next_line>',
+    \ 'noremap'
+    \)
+call denite#custom#map(
+    \ 'insert',
+    \ '<C-p>',
+    \ '<denite:move_to_previous_line>',
+    \ 'noremap'
+    \)
+
+"Unite settings
 call unite#custom#profile('default', 'context', {
 	\   'winheight': 40,
 	\   'direction': 'top',
@@ -238,9 +262,11 @@ elseif executable('ack')
 endif
 " use -no-split to not to show quick view
 " find file recuresively 
-nnoremap <space>a :<C-u>Unite -buffer-name=files -winheight=10 -input= -start-insert file_rec/async:!<cr>
+nnoremap <silent> <space>a :Denite file_rec<CR>
+nnoremap <silent> <space>A :DeniteCursorWord file_rec<CR>
+"nnoremap <space>a :<C-u>Unite -buffer-name=files -winheight=10 -input= -start-insert file_rec/async:!<cr>
 " find file recuresively cursor under the word
-nnoremap <space>A :<C-u>UniteWithInput -buffer-name=fileswithInput -winheight=10 -start-insert file_rec/async<cr><C-r><C-w><cr>
+"nnoremap <space>A :<C-u>Denite -buffer-name=fileswithInput -winheight=10 -start-insert file_rec/async<cr><C-r><C-w><cr>
 " find lines in file
 nnoremap <space>l :<C-u>Unite -buffer-name=currentFile -winheight=10 -input= -start-insert line<cr>
 " find lines in file under the cursor
@@ -307,9 +333,3 @@ call unite#custom#profile('default', 'context', {
 	\   'no-resize': 1
 	\ })
 
-call denite#custom#option('default', 'prompt', '❯')
-call denite#custom#source(
-	\ 'file_rec', 'vars', {
-	\   'command': [
-    \      'ag', '--follow','--nogroup','--hidden', '-g', '', '--ignore', '.git', '--ignore', '*.png'
-	\   ] })

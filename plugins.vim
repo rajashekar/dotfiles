@@ -20,6 +20,7 @@ Plug 'joshdick/onedark.vim'
 Plug 'altercation/vim-colors-solarized'
 
 Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] } | Plug 'Xuyuanp/nerdtree-git-plugin' | Plug 'ryanoasis/vim-devicons' " file drawer
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
 Plug 'Shougo/denite.nvim'
 Plug 'Shougo/deoplete.nvim'
 Plug 'Shougo/neomru.vim'
