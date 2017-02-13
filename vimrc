@@ -164,6 +164,7 @@ Plugin 'tpope/vim-surround'
 Plugin 'tpope/vim-unimpaired'
 Plugin 'tpope/vim-markdown'
 Plugin 'tpope/vim-rsi'
+Plugin 'AndrewRadev/splitjoin.vim'
 
 " fuzzy finders
 Plugin 'ctrlpvim/ctrlp.vim'
@@ -197,6 +198,10 @@ Plugin 'sotte/presenting.vim'
 Plugin 'godlygeek/tabular'
 Plugin 'dhruvasagar/vim-table-mode'
 Plugin 'vim-scripts/DrawIt'
+
+"tmux
+Plugin 'benmills/vimux'
+Plugin 'christoomey/vim-tmux-navigator'
 
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
@@ -461,3 +466,41 @@ nnoremap <F2> :call BgToggleSol()<cr>
 nnoremap <F8> :Geeknote<cr>
 " disable meta keys for RSI
 let g:rsi_no_meta = 1
+
+"Souround settings
+" ,# Surround a word with #{ruby interpolation}
+map ,# ysiw#
+vmap ,# c#{<C-R>"}<ESC>
+
+" ," Surround a word with "quotes"
+map ," ysiw"
+vmap ," c"<C-R>""<ESC>
+
+" ,' Surround a word with 'single quotes'
+map ,' ysiw'
+vmap ,' c'<C-R>"'<ESC>
+
+" ,) or ,( Surround a word with (parens)
+" The difference is in whether a space is put in
+map ,( ysiw(
+map ,) ysiw)
+vmap ,( c( <C-R>" )<ESC>
+vmap ,) c(<C-R>")<ESC>
+
+" ,[ Surround a word with [brackets]
+map ,] ysiw]
+map ,[ ysiw[
+vmap ,[ c[ <C-R>" ]<ESC>
+vmap ,] c[<C-R>"]<ESC>
+
+" ,{ Surround a word with {braces}
+map ,} ysiw}
+map ,{ ysiw{
+vmap ,} c{ <C-R>" }<ESC>
+vmap ,{ c{<C-R>"}<ESC>
+
+map ,` ysiw`
+
+" vimux settings
+map <leader>vp :VimuxPromptCommand<cr>
+map <leader>vc :VimuxCloseRunner<cr> 

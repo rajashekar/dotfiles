@@ -71,4 +71,8 @@ Plug 'Yggdroot/indentLine'
 Plug 'godlygeek/tabular'
 Plug 'dhruvasagar/vim-table-mode'
 Plug 'vim-scripts/DrawIt'
+Plug 'AndrewRadev/splitjoin.vim'
+
+Plug 'benmills/vimux'
+Plug 'christoomey/vim-tmux-navigator'
 call plug#end()
