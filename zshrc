@@ -98,7 +98,6 @@ PATH=/Users/rchint1/Documents/jad:/usr/local/bin:$PATH
 alias start-eclipse='open /Users/rchint1/Documents/Eclipse.app'
 alias start-canary="/Applications/Google\ Chrome\ Canary.app/Contents/MacOS/Google\ Chrome\ Canary --ignore-certificate-errors &> /dev/null &"
 alias start-chrome="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --ignore-certificate-errors &> /dev/null &"
-alias makecscope="find . -name *.java > cscope.files && cscope -b"
 alias webshare='python -m SimpleHTTPServer'
 # tmux aliases
 alias ta='tmux attach'
@@ -119,6 +118,9 @@ zplug load --verbose
 bindkey '^ ' autosuggest-accept
 
 # custom functions
+function mcscope() {
+	find . -name '*.java' -exec echo \"{}\" \;> cscope.files && cscope -b
+}
 # unjar and decompile class files
 unjar () { 
   mkdir -p /tmp/unjar/$1 ; 
