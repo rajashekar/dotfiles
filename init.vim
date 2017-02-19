@@ -1,3 +1,4 @@
+" manage plugins by vim-plug
 source ~/.config/nvim/plugins.vim
 " set title
 set title
@@ -98,7 +99,7 @@ let xml_syntax_folding=1              " XML
 autocmd BufRead,BufNewFile *.cql set filetype=cql
 
 "Map <C-L> (redraw screen) to also turn off search highlighting until the next search
-nnoremap <C-L> :nohl<CR><C-L>
+nnoremap <leader>l :nohl<CR>
 " custom command to indent json
 com! FormatJSON %!python -m json.tool
 " custom command to show unprintable characters
