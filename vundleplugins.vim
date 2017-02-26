@@ -64,6 +64,7 @@ Plugin 'sheerun/vim-polyglot'
 Plugin 'SirVer/ultisnips'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'vim-syntastic/syntastic'
+Plugin 'ervandew/supertab'
 
 " sytax
 Plugin 'vim-airline/vim-airline'

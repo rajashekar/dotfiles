@@ -77,6 +77,7 @@ for config ($ZSH/**/*.zsh) source $config
 # else
 #   export EDITOR='mvim'
 # fi
+export EDITOR='vi'
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -152,3 +153,7 @@ zle -N ctrlp
 bindkey "^p" ctrlp
 bindkey "^R" history-incremental-pattern-search-backward
 bindkey "^S" history-incremental-pattern-search-forward
+# for regex completion
+zstyle ':completion:*' completer _expand _complete _match _prefix 
+# fix for slow paste
+zstyle ':bracketed-paste-magic' active-widgets '.self-*' 

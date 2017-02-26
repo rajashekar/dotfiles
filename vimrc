@@ -37,7 +37,7 @@ set mouse=a
 " Always display the status line, even if only one window is displayed
 set laststatus=2
 " Set the command window height to 2 lines, to avoid many cases of having to
-" " "press <Enter> to continue"
+" press <Enter> to continue"
 set cmdheight=2
 " set paste toggle
 set pastetoggle=<leader>v
@@ -250,12 +250,19 @@ augr class
 augr END
 
 " UltiSnips Trigger configuration. 
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+"let g:UltiSnipsExpandTrigger="<tab>"
+"let g:UltiSnipsJumpForwardTrigger="<c-b>"
+"let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+let g:ycm_key_list_select_completion=['<C-n>', '<Down>']
+let g:ycm_key_list_previous_completion=['<C-p>', '<Up>']
+
+let g:UltiSnipsExpandTrigger="<Tab>"
+let g:UltiSnipsJumpForwardTrigger="<Tab>"                                           
+let g:UltiSnipsJumpBackwardTrigger="<S-Tab>"
 "
 "If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
+let g:UltiSnipsSnippetDirectories = ['~/.vim/UltiSnips', 'UltiSnips']
 
 "NERTtree mappings
 " Toggle NERDTree
@@ -396,3 +403,8 @@ map ,` ysiw`
 " vimux settings
 map <leader>vp :VimuxPromptCommand<cr>
 map <leader>vc :VimuxCloseRunner<cr> 
+
+" remove lines 
+nnoremap <leader>G :g//d<CR>
+nnoremap <leader>V :v//d<CR>
+nnoremap <leader>S :%s/<CR>
