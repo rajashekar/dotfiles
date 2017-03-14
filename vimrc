@@ -140,6 +140,7 @@ filetype plugin indent on    " required
 "
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
+"
 
 " Unite
 call unite#filters#matcher_default#use(['matcher_fuzzy'])
@@ -153,10 +154,10 @@ let g:unite_prompt = ' ▸▸ '
 let g:unite_source_rec_max_cache_files = 99999
 if executable('ag')
   let g:unite_source_grep_command = 'ag'
-  let g:unite_source_grep_default_opts = '-i --smart-case --nogroup --nocolor --ignore-dir={.git, .cabal-sandbox, .stack-work}'
+  let g:unite_source_grep_default_opts = '-i --smart-case --nogroup --nocolor --ignore-dir={.git, .cabal-sandbox, .stack-work }'
   let g:unite_source_grep_recursive_opt = ''
-  "let g:unite_source_rec_async_command ='ag --follow --nocolor --nogroup --hidden -g ""'
-  let g:unite_source_rec_async_command = ['ag', '--follow', '--nocolor', '--nogroup','--hidden', '-g', '']
+  "let g:unite_source_rec_async_command = ['ag', '--follow', '--nocolor', '--nogroup','--hidden','--ignore "**.jar"','-g','']
+  let g:unite_source_rec_async_command = 'ag --follow --nocolor --nogroup --hidden --ignore "**.jar" -g ""'
 elseif executable('ack')
   let g:unite_source_grep_command = 'ack'
   let g:unite_source_grep_default_opts ='-i --smart-case --nogroup --nocolor --ignore-dir=''.git, .cabal-sandbox, .stack-work'''
@@ -353,6 +354,10 @@ autocmd User fugitive
   \ if fugitive#buffer().type() =~# '^\%(tree\|blob\)$' |
   \   nnoremap <buffer> .. :edit %:h<CR> |
   \ endif
+nnoremap <leader>gl :Glog -10 -- %<CR>
+nnoremap <leader>gs :Gstatus<CR>
+nnoremap <leader>gb :Gblame<CR>
+
 " toggle background
 function! BgToggleSol()
   if &background == "light"
@@ -407,4 +412,7 @@ map <leader>vc :VimuxCloseRunner<cr>
 " remove lines 
 nnoremap <leader>G :g//d<CR>
 nnoremap <leader>V :v//d<CR>
-nnoremap <leader>S :%s/<CR>
+nnoremap <leader>S :%s///g<CR>
+
+" copy current relative file path
+nnoremap <leader>cf :let @*=expand("%")<CR>
