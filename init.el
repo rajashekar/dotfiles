@@ -1,14 +1,28 @@
-;; disable messaging on scratch pad
-(setq initial-scratch-message "")
-;; get rid of bells
-(setq visible-bell nil)             
-(setq ring-bell-function 'ignore)
-;; to show cursor
-(global-hl-line-mode 1) 
-;; to show line numbers
-(global-linum-mode t) 
-;; no wrap
-(set-default 'truncate-lines t) 
+;; Essential settings.
+(setq initial-scratch-message "") ;; disable messaging on scratch pad
+(setq visible-bell nil) ;; get rid of bells
+(setq ring-bell-function 'ignore) ;; get rid of bells
+
+(global-hl-line-mode 1) ;; to show cursor
+(global-linum-mode t) ;; to show line numbers
+(column-number-mode t) ;; show column number
+
+(set-default 'truncate-lines t) ;; no wrap
+
+;;(menu-bar-mode -1) ;; disable menu for GUI
+(tool-bar-mode -1) ;; disable tool bar
+(show-paren-mode 1) ;; show matching parenthesis 
+(winner-mode t) ;; quickly move between buffers
+
+;; disable splash screen
+(setq inhibit-splash-screen t
+      inhibit-startup-message t
+      inhibit-startup-echo-area-message t)
+
+;; disable scroll bar
+(when (boundp 'scroll-bar-mode)
+  (scroll-bar-mode -1))
+
 ;; Leave this here, or package.el will just add it again.
 (package-initialize)
 ;; start package 
@@ -21,7 +35,7 @@
 (add-to-list 'package-archives '("melpa-stable" . "http://stable.melpa.org/packages/"))
 (package-initialize)
 
-;; added by emacs
+;; added by emacs - START
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -30,7 +44,7 @@
  '(neo-window-fixed-size nil)
  '(package-selected-packages
    (quote
-    (multi-term java-imports java-snippets javadoc-lookup jdecomp jdee jtags thread-dump web-beautify colemak-evil helm-ag projectile helm-fuzzy-find magit all-the-icons neotree airline-themes zenburn-theme helm use-package evil-visual-mark-mode)))
+    (evil-magit switch-window exec-path-from-shell ggtags which-key ace-jump-mode multiple-cursors material-theme json-mode atom-dark-theme ctags-update org helm-ls-git multi-term java-imports java-snippets javadoc-lookup jdecomp jtags thread-dump web-beautify colemak-evil helm-ag projectile helm-fuzzy-find magit all-the-icons neotree airline-themes zenburn-theme helm use-package evil-visual-mark-mode)))
  '(projectile-enable-caching t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -38,6 +52,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(default ((t (:inherit nil :stipple nil : background "#3F3F3F" :foreground "#DCDCCC" : inverse-video nil :box nil :strike-through nil : overline nil :underline nil :slant normal : weight normal :height 140 :width normal : foundry "nil" :family "Meslo LG S DZ for Powerline")))))
+;; added by emacs - END
 
 ;; evil mode to get VIM bindings
 (require 'evil)
@@ -50,20 +65,6 @@
 (eval-when-compile
   (require 'use-package))
 
-;; Essential settings.
-;; disable splash screen
-(setq inhibit-splash-screen t
-      inhibit-startup-message t
-      inhibit-startup-echo-area-message t)
-;; disable menu for GUI
-(menu-bar-mode -1)
-;; disable tool bar
-(tool-bar-mode -1)
-;; disable scroll bar
-(when (boundp 'scroll-bar-mode)
-  (scroll-bar-mode -1))
-;; show matching parenthesis 
-(show-paren-mode 1)
 (setq visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
 (setq-default left-fringe-width nil)
 (setq-default indicate-empty-lines t)
@@ -73,20 +74,22 @@
 (setq large-file-warning-threshold nil)
 (setq split-width-threshold nil)
 (setq custom-safe-themes t)
-(column-number-mode t)
 (setq tab-width 4)
 
-(use-package helm
-  :ensure t
-  :diminish helm-mode
-  :commands helm-mode
-  :config
-  (helm-mode 1)
-  (setq helm-buffers-fuzzy-matching t)
-  (setq helm-autoresize-mode t)
-  (setq helm-buffer-max-length 40)
-  (define-key helm-map (kbd "S-SPC") 'helm-toggle-visible-mark)
-  (define-key helm-find-files-map (kbd "C-k") 'helm-find-files-up-one-level))
+;; helm settings
+(helm-mode 1)
+(require 'helm-fuzzy-find)
+(require 'helm-config)
+(require 'helm-ls-git)
+(global-set-key (kbd "M-x") 'helm-M-x)
+(global-set-key (kbd "C-x r b") #'helm-filtered-bookmarks)
+(global-set-key (kbd "C-x C-f") #'helm-find-files)
+(global-set-key (kbd "C-x C-d") 'helm-browse-project)
+(global-set-key (kbd "C-x b") 'helm-mini)
+(global-set-key (kbd "C-x C-r") 'helm-recentf)
+(global-set-key (kbd "C-c h o") 'helm-occur)
+(global-set-key (kbd "M-y") 'helm-show-kill-ring)
+(global-set-key (kbd "C-c h g") 'helm-google-suggest)
 
 (use-package dired
   :config
@@ -111,11 +114,15 @@
 
 (global-set-key (kbd "C-c h") 'helm-command-prefix)
 
-;; To have Zenburn theme
-(load-theme 'zenburn t)
+;; Theme
+(load-theme 'material t)
+;;(load-theme 'zenburn t)
+;;(load-theme 'wombat t)
+
 ;; airline themes
 (require 'airline-themes)
-(load-theme 'airline-light)
+;;(load-theme 'airline-light)
+(load-theme 'airline-wombat)
 (setq powerline-utf-8-separator-left        #xe0b0
       powerline-utf-8-separator-right       #xe0b2
       airline-utf-glyph-separator-left      #xe0b0
@@ -142,7 +149,6 @@
 
 ;; magit settings
 (global-set-key (kbd "C-x g") 'magit-status)
-(require 'helm-fuzzy-find)
 
 ;; Projectile settings
 (projectile-global-mode)
@@ -151,7 +157,86 @@
 
 ;;autocomplete settings
 (require 'auto-complete)
+(require 'auto-complete-config)
+(ac-config-default)
 
 ;; shell settings
 (require 'multi-term)
 (setq multi-term-program "/bin/zsh")
+
+;; org mode settings
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cc" 'org-capture)
+(global-set-key "\C-cb" 'org-iswitchb)
+
+;; Java settings
+(global-set-key (kbd "C-h j") 'javadoc-lookup)
+
+;; ditaa mode
+(org-babel-do-load-languages
+ 'org-babel-load-languages '(
+        (python . t)
+        (ditaa . t))
+)
+(eval-after-load "artist"
+   '(define-key artist-mode-map [(down-mouse-3)] 'artist-mouse-choose-operation)
+   )
+(setq org-ditaa-jar-path "/Users/rchint1/Documents/ditaa/ditaa0_9.jar")
+
+
+;; multiple cursors
+(require 'multiple-cursors)
+(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+(global-set-key (kbd "C->") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+
+;; jump mode
+(autoload
+  'ace-jump-mode
+  "ace-jump-mode"
+  "Emacs quick move minor mode"
+  t)
+;; you can select the key you prefer to
+(define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
+
+;; which key
+(require 'which-key)
+(which-key-mode)
+
+;; gtags settings
+(use-package ggtags
+  :init
+  (setenv "GTAGSLABEL" "ctags")
+  (push "GTAGS not found" debug-ignored-errors)
+
+  :ensure t
+  :config
+  (define-key ggtags-mode-map (kbd "C-c g d") 'ggtags-find-definition)
+  (define-key ggtags-mode-map (kbd "C-c g s") 'ggtags-find-other-symbol)
+  (define-key ggtags-mode-map (kbd "C-c g h") 'ggtags-view-tag-history)
+  (define-key ggtags-mode-map (kbd "C-c g r") 'ggtags-find-reference)
+  (define-key ggtags-mode-map (kbd "C-c g f") 'ggtags-find-file)
+  (define-key ggtags-mode-map (kbd "C-c g c") 'ggtags-create-tags)
+  (define-key ggtags-mode-map (kbd "C-c g u") 'ggtags-update-tags))
+(add-hook 'c-mode-common-hook
+          (lambda ()
+            (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
+              (ggtags-mode 1))))
+(with-eval-after-load 'ggtags
+    (evil-make-overriding-map ggtags-mode-map)
+
+    ;; force update evil keymaps after ggtags-mode loaded
+    (add-hook 'ggtags-mode-hook #'evil-normalize-keymaps))
+
+;; to have PATH varaibles in UI
+(exec-path-from-shell-initialize)
+
+;; undo tree mode
+(global-undo-tree-mode) 
+(global-set-key (kbd "M-/") 'undo-tree-visualize)
+
+;; switch window
+(require 'switch-window)
+(global-set-key (kbd "C-M-z") 'switch-window)
