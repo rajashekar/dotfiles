@@ -10,7 +10,9 @@
 (set-default 'truncate-lines t) ;; no wrap
 
 ;;(menu-bar-mode -1) ;; disable menu for GUI
-(tool-bar-mode -1) ;; disable tool bar
+;; (tool-bar-mode -1) ;; disable tool bar
+;; turn off toolbar
+(if window-system (tool-bar-mode 0))
 (show-paren-mode 1) ;; show matching parenthesis 
 (winner-mode t) ;; quickly move between buffers
 
@@ -77,19 +79,20 @@
 (setq tab-width 4)
 
 ;; helm settings
-(helm-mode 1)
 (require 'helm-fuzzy-find)
 (require 'helm-config)
 (require 'helm-ls-git)
 (global-set-key (kbd "M-x") 'helm-M-x)
-(global-set-key (kbd "C-x r b") #'helm-filtered-bookmarks)
-(global-set-key (kbd "C-x C-f") #'helm-find-files)
+(global-set-key (kbd "C-x r b") 'helm-filtered-bookmarks)
+(global-set-key (kbd "C-x C-f") 'helm-find-files)
 (global-set-key (kbd "C-x C-d") 'helm-browse-project)
 (global-set-key (kbd "C-x b") 'helm-mini)
 (global-set-key (kbd "C-x C-r") 'helm-recentf)
-(global-set-key (kbd "C-c h o") 'helm-occur)
 (global-set-key (kbd "M-y") 'helm-show-kill-ring)
+(global-set-key (kbd "C-c h") 'helm-command-prefix)
+(global-set-key (kbd "C-c h o") 'helm-occur)
 (global-set-key (kbd "C-c h g") 'helm-google-suggest)
+(helm-mode 1)
 
 (use-package dired
   :config
@@ -112,7 +115,6 @@
   (define-key dired-mode-map (kbd "/")   'evil-search-forward)
   (define-key dired-mode-map (kbd "?")   'evil-search-backward))
 
-(global-set-key (kbd "C-c h") 'helm-command-prefix)
 
 ;; Theme
 (load-theme 'material t)
