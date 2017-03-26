@@ -46,7 +46,7 @@
 		javadoc-lookup jdecomp jtags thread-dump web-beautify 
 		colemak-evil helm-ag projectile helm-fuzzy-find magit 
 		all-the-icons neotree airline-themes zenburn-theme helm 
-		evil-visual-mark-mode helm-projectile auto-complete
+		evil-visual-mark-mode helm-projectile auto-complete dakrone-theme
 		)
 )
 
@@ -70,7 +70,7 @@
  '(neo-window-fixed-size nil)
  '(package-selected-packages
    (quote
-    (evil-magit switch-window exec-path-from-shell ggtags which-key ace-jump-mode multiple-cursors material-theme json-mode atom-dark-theme ctags-update org helm-ls-git multi-term java-imports java-snippets javadoc-lookup jdecomp jtags thread-dump web-beautify colemak-evil helm-ag projectile helm-fuzzy-find magit all-the-icons neotree airline-themes zenburn-theme helm use-package evil-visual-mark-mode)))
+    (dakrone dakrone-theme evil-magit switch-window exec-path-from-shell ggtags which-key ace-jump-mode multiple-cursors material-theme json-mode atom-dark-theme ctags-update org helm-ls-git multi-term java-imports java-snippets javadoc-lookup jdecomp jtags thread-dump web-beautify colemak-evil helm-ag projectile helm-fuzzy-find magit all-the-icons neotree airline-themes zenburn-theme helm use-package evil-visual-mark-mode)))
  '(projectile-enable-caching t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -142,6 +142,7 @@
 
 ;; Theme
 (load-theme 'material t)
+;;(load-theme 'dakrone t)
 ;;(load-theme 'zenburn t)
 ;;(load-theme 'wombat t)
 
@@ -196,6 +197,7 @@
 (global-set-key "\C-ca" 'org-agenda)
 (global-set-key "\C-cc" 'org-capture)
 (global-set-key "\C-cb" 'org-iswitchb)
+(add-hook 'org-mode-hook (lambda () (linum-mode 0)))
 
 ;; Java settings
 (global-set-key (kbd "C-h j") 'javadoc-lookup)
