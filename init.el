@@ -39,7 +39,8 @@
 ; list the packages you want
 (setq package-list
     '(
-	        git-gutter org-bullets evil-magit switch-window exec-path-from-shell 
+                eshell-git-prompt git-gutter org-bullets evil-magit
+                switch-window exec-path-from-shell 
 		ggtags which-key ace-jump-mode multiple-cursors 
 		material-theme json-mode atom-dark-theme ctags-update 
 		org helm-ls-git multi-term java-imports java-snippets 
@@ -70,7 +71,7 @@
  '(neo-window-fixed-size nil)
  '(package-selected-packages
    (quote
-    (git-gutter ox-reveal org-bullets evil-magit switch-window exec-path-from-shell ggtags which-key ace-jump-mode multiple-cursors material-theme json-mode atom-dark-theme ctags-update org helm-ls-git multi-term java-imports java-snippets javadoc-lookup jdecomp jtags thread-dump web-beautify colemak-evil helm-ag projectile helm-fuzzy-find magit all-the-icons neotree airline-themes zenburn-theme helm use-package evil-visual-mark-mode)))
+    (eshell-git-prompt git-gutter ox-reveal org-bullets evil-magit switch-window exec-path-from-shell ggtags which-key ace-jump-mode multiple-cursors material-theme json-mode atom-dark-theme ctags-update org helm-ls-git multi-term java-imports java-snippets javadoc-lookup jdecomp jtags thread-dump web-beautify colemak-evil helm-ag projectile helm-fuzzy-find magit all-the-icons neotree airline-themes zenburn-theme helm use-package evil-visual-mark-mode)))
  '(projectile-enable-caching t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -341,3 +342,6 @@
 (global-set-key (kbd "C-x v r") 'git-gutter:revert-hunk)
 ;; Mark current hunk
 (global-set-key (kbd "C-x v SPC") #'git-gutter:mark-hunk)
+
+;; eshell settings
+(eshell-git-prompt-use-theme 'powerline)
