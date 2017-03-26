@@ -39,7 +39,7 @@
 ; list the packages you want
 (setq package-list
     '(
-	    switch-window exec-path-from-shell 
+	    org-bullets evil-magit switch-window exec-path-from-shell 
 		ggtags which-key ace-jump-mode multiple-cursors 
 		material-theme json-mode atom-dark-theme ctags-update 
 		org helm-ls-git multi-term java-imports java-snippets 
