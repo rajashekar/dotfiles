@@ -35,7 +35,31 @@
 (add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/"))
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/"))
 (add-to-list 'package-archives '("melpa-stable" . "http://stable.melpa.org/packages/"))
+
+; list the packages you want
+(setq package-list
+    '(
+	    switch-window exec-path-from-shell 
+		ggtags which-key ace-jump-mode multiple-cursors 
+		material-theme json-mode atom-dark-theme ctags-update 
+		org helm-ls-git multi-term java-imports java-snippets 
+		javadoc-lookup jdecomp jtags thread-dump web-beautify 
+		colemak-evil helm-ag projectile helm-fuzzy-find magit 
+		all-the-icons neotree airline-themes zenburn-theme helm 
+		evil-visual-mark-mode helm-projectile auto-complete
+		)
+)
+
 (package-initialize)
+
+; fetch the list of packages available 
+(unless package-archive-contents
+    (package-refresh-contents))
+
+; install the missing packages
+(dolist (package package-list)
+    (unless (package-installed-p package)
+	      (package-install package)))
 
 ;; added by emacs - START
 (custom-set-variables
@@ -152,6 +176,7 @@
 (global-set-key (kbd "C-x g") 'magit-status)
 
 ;; Projectile settings
+(require 'helm-projectile)
 (projectile-global-mode)
 (setq projectile-completion-system 'helm)
 (helm-projectile-on)
