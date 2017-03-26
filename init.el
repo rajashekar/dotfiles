@@ -39,7 +39,7 @@
 ; list the packages you want
 (setq package-list
     '(
-	    org-bullets evil-magit switch-window exec-path-from-shell 
+	        git-gutter org-bullets evil-magit switch-window exec-path-from-shell 
 		ggtags which-key ace-jump-mode multiple-cursors 
 		material-theme json-mode atom-dark-theme ctags-update 
 		org helm-ls-git multi-term java-imports java-snippets 
@@ -70,7 +70,7 @@
  '(neo-window-fixed-size nil)
  '(package-selected-packages
    (quote
-    (org-bullets evil-magit switch-window exec-path-from-shell ggtags which-key ace-jump-mode multiple-cursors material-theme json-mode atom-dark-theme ctags-update org helm-ls-git multi-term java-imports java-snippets javadoc-lookup jdecomp jtags thread-dump web-beautify colemak-evil helm-ag projectile helm-fuzzy-find magit all-the-icons neotree airline-themes zenburn-theme helm use-package evil-visual-mark-mode)))
+    (git-gutter ox-reveal org-bullets evil-magit switch-window exec-path-from-shell ggtags which-key ace-jump-mode multiple-cursors material-theme json-mode atom-dark-theme ctags-update org helm-ls-git multi-term java-imports java-snippets javadoc-lookup jdecomp jtags thread-dump web-beautify colemak-evil helm-ag projectile helm-fuzzy-find magit all-the-icons neotree airline-themes zenburn-theme helm use-package evil-visual-mark-mode)))
  '(projectile-enable-caching t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -198,9 +198,14 @@
 (global-set-key "\C-cc" 'org-capture)
 (global-set-key "\C-cb" 'org-iswitchb)
 (add-hook 'org-mode-hook (lambda () (linum-mode 0)))
+;; org mode bullets
 (require 'org-bullets)
 (setq org-bullets-face-name (quote org-bullet-face))
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+;; org mode presentations
+(require 'ox-reveal)
+;;(setq org-reveal-root "file:///~/Documents/reveal.js")
+(setq org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
 
 ;; utf-8 settings
 ;; disable CJK coding/encoding (Chinese/Japanese/Korean characters)
@@ -322,3 +327,17 @@
       (if this-win-2nd (other-window 1))))))
 
 (global-set-key (kbd "C-x |") 'toggle-window-split)
+
+;; git gutter
+(global-git-gutter-mode +1)
+(global-set-key (kbd "C-x C-g") 'git-gutter)
+(global-set-key (kbd "C-x v =") 'git-gutter:popup-hunk)
+;; Jump to next/previous hunk
+(global-set-key (kbd "C-x p") 'git-gutter:previous-hunk)
+(global-set-key (kbd "C-x n") 'git-gutter:next-hunk)
+;; Stage current hunk
+(global-set-key (kbd "C-x v s") 'git-gutter:stage-hunk)
+;; Revert current hunk
+(global-set-key (kbd "C-x v r") 'git-gutter:revert-hunk)
+;; Mark current hunk
+(global-set-key (kbd "C-x v SPC") #'git-gutter:mark-hunk)
