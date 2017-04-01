@@ -39,16 +39,17 @@
 ; list the packages you want
 (setq package-list
     '(
-                eshell-git-prompt git-gutter org-bullets evil-magit
-                switch-window exec-path-from-shell 
-		ggtags which-key ace-jump-mode multiple-cursors 
-		material-theme json-mode atom-dark-theme ctags-update 
-		org helm-ls-git multi-term java-imports java-snippets 
-		javadoc-lookup jdecomp jtags thread-dump web-beautify 
-		colemak-evil helm-ag projectile helm-fuzzy-find magit 
-		all-the-icons neotree airline-themes zenburn-theme helm 
-		evil-visual-mark-mode helm-projectile auto-complete dakrone-theme
-		)
+        git-timemachine web-mode ivy swiper-helm counsel swiper
+        eshell-git-prompt git-gutter ox-reveal org-bullets evil-magit
+        switch-window exec-path-from-shell 
+	ggtags which-key ace-jump-mode multiple-cursors 
+	material-theme json-mode atom-dark-theme ctags-update 
+	org helm-ls-git multi-term java-imports java-snippets 
+	javadoc-lookup jdecomp jtags thread-dump web-beautify 
+	colemak-evil helm-ag projectile helm-fuzzy-find magit 
+	all-the-icons neotree airline-themes zenburn-theme helm 
+	evil-visual-mark-mode helm-projectile auto-complete dakrone-theme
+      )
 )
 
 (package-initialize)
@@ -71,7 +72,7 @@
  '(neo-window-fixed-size nil)
  '(package-selected-packages
    (quote
-    (eshell-git-prompt git-gutter ox-reveal org-bullets evil-magit switch-window exec-path-from-shell ggtags which-key ace-jump-mode multiple-cursors material-theme json-mode atom-dark-theme ctags-update org helm-ls-git multi-term java-imports java-snippets javadoc-lookup jdecomp jtags thread-dump web-beautify colemak-evil helm-ag projectile helm-fuzzy-find magit all-the-icons neotree airline-themes zenburn-theme helm use-package evil-visual-mark-mode)))
+    (git-timemachine web-mode ivy swiper-helm counsel swiper eshell-git-prompt git-gutter ox-reveal org-bullets evil-magit switch-window exec-path-from-shell ggtags which-key ace-jump-mode multiple-cursors material-theme json-mode atom-dark-theme ctags-update org helm-ls-git multi-term java-imports java-snippets javadoc-lookup jdecomp jtags thread-dump web-beautify colemak-evil helm-ag projectile helm-fuzzy-find magit all-the-icons neotree airline-themes zenburn-theme helm use-package evil-visual-mark-mode)))
  '(projectile-enable-caching t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -259,7 +260,8 @@
   "Emacs quick move minor mode"
   t)
 ;; you can select the key you prefer to
-(define-key global-map (kbd "C-c SPC") 'ace-jump-mode)
+;;If you use evil
+(define-key evil-normal-state-map (kbd "SPC") 'ace-jump-mode)
 
 ;; which key
 (require 'which-key)
@@ -345,3 +347,31 @@
 
 ;; eshell settings
 (eshell-git-prompt-use-theme 'powerline)
+
+;; Ivy, Counsel, Swiper
+(ivy-mode 1)
+(setq ivy-use-virtual-buffers t)
+(global-set-key "\C-s" 'swiper)
+(global-set-key (kbd "C-c C-r") 'ivy-resume)
+(global-set-key (kbd "<f6>") 'ivy-resume)
+(global-set-key (kbd "M-x") 'counsel-M-x)
+(global-set-key (kbd "C-x C-f") 'counsel-find-file)
+(global-set-key (kbd "<f1> f") 'counsel-describe-function)
+(global-set-key (kbd "<f1> v") 'counsel-describe-variable)
+(global-set-key (kbd "<f1> l") 'counsel-load-library)
+(global-set-key (kbd "<f2> i") 'counsel-info-lookup-symbol)
+(global-set-key (kbd "<f2> u") 'counsel-unicode-char)
+(global-set-key (kbd "C-c C-g") 'counsel-git)
+(global-set-key (kbd "C-c j") 'counsel-git-grep)
+(global-set-key (kbd "C-c k") 'counsel-ag)
+(global-set-key (kbd "C-x l") 'counsel-locate)
+
+;; web mode
+(add-to-list 'auto-mode-alist '("\\.jsp\\'" . web-mode))
+
+;; disable evil on git time machine
+(eval-after-load 'git-timemachine
+  '(progn
+     (evil-make-overriding-map git-timemachine-mode-map 'normal)
+     ;; force update evil keymaps after git-timemachine-mode loaded
+     (add-hook 'git-timemachine-mode-hook #'evil-normalize-keymaps)))
