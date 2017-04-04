@@ -12,6 +12,7 @@ Plugin 'VundleVim/Vundle.vim'
 " git
 Plugin 'airblade/vim-gitgutter'
 Plugin 'tpope/vim-fugitive'
+Plugin 'junegunn/gv.vim'
 Plugin 'tpope/vim-rhubarb'
 
 " color schemes
@@ -23,6 +24,7 @@ Plugin 'dracula/vim'
 Plugin 'rakr/vim-one'
 
 " unite
+Plugin 'Shougo/denite.nvim'
 Plugin 'Shougo/neomru.vim'
 Plugin 'Shougo/neoyank.vim'
 Plugin 'Shougo/unite-outline'

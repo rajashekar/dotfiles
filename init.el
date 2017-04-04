@@ -43,9 +43,9 @@
         eshell-git-prompt git-gutter ox-reveal org-bullets evil-magit
         switch-window exec-path-from-shell 
 	ggtags which-key ace-jump-mode multiple-cursors 
-	material-theme json-mode atom-dark-theme ctags-update 
+	material-theme json-mode atom-dark-theme 
 	org helm-ls-git multi-term java-imports java-snippets 
-	javadoc-lookup jdecomp jtags thread-dump web-beautify 
+	javadoc-lookup jdecomp thread-dump web-beautify 
 	colemak-evil helm-ag projectile helm-fuzzy-find magit 
 	all-the-icons neotree airline-themes zenburn-theme helm 
 	evil-visual-mark-mode helm-projectile auto-complete dakrone-theme
@@ -72,7 +72,7 @@
  '(neo-window-fixed-size nil)
  '(package-selected-packages
    (quote
-    (git-timemachine web-mode ivy swiper-helm counsel swiper eshell-git-prompt git-gutter ox-reveal org-bullets evil-magit switch-window exec-path-from-shell ggtags which-key ace-jump-mode multiple-cursors material-theme json-mode atom-dark-theme ctags-update org helm-ls-git multi-term java-imports java-snippets javadoc-lookup jdecomp jtags thread-dump web-beautify colemak-evil helm-ag projectile helm-fuzzy-find magit all-the-icons neotree airline-themes zenburn-theme helm use-package evil-visual-mark-mode)))
+    (git-timemachine web-mode ivy swiper-helm counsel swiper eshell-git-prompt git-gutter ox-reveal org-bullets evil-magit switch-window exec-path-from-shell ggtags which-key ace-jump-mode multiple-cursors material-theme json-mode atom-dark-theme org helm-ls-git multi-term java-imports java-snippets javadoc-lookup jdecomp thread-dump web-beautify colemak-evil helm-ag projectile helm-fuzzy-find magit all-the-icons neotree airline-themes zenburn-theme helm use-package evil-visual-mark-mode)))
  '(projectile-enable-caching t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
