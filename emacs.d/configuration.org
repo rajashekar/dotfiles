@@ -73,7 +73,6 @@
 #+END_SRC
 * Evil Mode
 #+BEGIN_SRC emacs-lisp
-;; evil mode to get VIM bindings
 (require 'evil)
 (evil-mode 1)
 
@@ -83,10 +82,11 @@
      (evil-make-overriding-map git-timemachine-mode-map 'normal)
      ;; force update evil keymaps after git-timemachine-mode loaded
      (add-hook 'git-timemachine-mode-hook #'evil-normalize-keymaps)))
+
+;;(global-evil-surround-mode 1)
 #+END_SRC
 * Helm Mode 
 #+BEGIN_SRC emacs-lisp
-;; helm settings
 (require 'helm-fuzzy-find)
 (require 'helm-config)
 (require 'helm-ls-git)
@@ -104,28 +104,33 @@
 #+END_SRC
 * Dired Mode
 #+BEGIN_SRC emacs-lisp
-(use-package dired
-  :config
-  (require 'dired-x)
-  (setq dired-omit-files "^\\.?#\\|^\\.[^.].*")
-  (defun air-dired-buffer-dir-or-home ()
-    "Open dired to the current buffer's dir, or $HOME."
-    (interactive)
-    (let ((cwd (or (file-name-directory (or (buffer-file-name) ""))
-                   (expand-file-name "~"))))
-      (dired cwd)))
-  (add-hook 'dired-mode-hook (lambda ()
-                               (dired-omit-mode t)))
-  (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file)
-  (define-key dired-mode-map (kbd "^")   (lambda () (interactive) (find-alternate-file "..")))
-  (define-key dired-mode-map (kbd "C-.") 'dired-omit-mode)
-  (define-key dired-mode-map (kbd "c")   'find-file)
-  (define-key dired-mode-map (kbd "/")   'evil-search-forward)
-  (define-key dired-mode-map (kbd "?")   'evil-search-backward))
+(require 'dired-x)
+(require 'dired+)
+(require 'dired-open)
+
+(setq dired-open-extensions
+      '(("pdf" . "evince")
+        ("mkv" . "vlc")
+        ("mp4" . "vlc")
+        ("avi" . "vlc")))
+
+(setq-default dired-listing-switches "-lhvA")
+
+;; Use “j” and “k” to move around in dired.
+(evil-define-key 'normal dired-mode-map (kbd "j") 'dired-next-line)
+(evil-define-key 'normal dired-mode-map (kbd "k") 'dired-previous-line)
+
+;; Kill buffers of files/directories that are deleted in dired.
+(setq dired-clean-up-buffers-too t)
+
+;;Always copy directories recursively instead of asking every time.
+(setq dired-recursive-copies 'always)
+
+;;Ask before recursively deleting a directory, though.
+(setq dired-recursive-deletes 'top)
 #+END_SRC
 * Neo Tree
 #+BEGIN_SRC emacs-lisp
-;; neo tree settings
 (require 'neotree)
 (global-set-key "\C-xt" 'neotree-toggle)
 (global-set-key "\C-xT" 'neotree-find)
@@ -135,14 +140,12 @@
 #+END_SRC
 * Recentf
 #+BEGIN_SRC emacs-lisp
-;; recent file settings
 (require 'recentf)
 (recentf-mode 1)
 (setq recentf-auto-cleanup 'never)
 #+END_SRC
 * Projectile
 #+BEGIN_SRC emacs-lisp
-;; Projectile settings
 (require 'helm-projectile)
 (projectile-global-mode)
 (setq projectile-completion-system 'helm)
@@ -168,24 +171,67 @@
 
 ;; eshell settings
 (eshell-git-prompt-use-theme 'powerline)
+
+;; multi term
+(global-set-key (kbd "C-c s") 'multi-term)
+(setq multi-term-program-switches "--login")
 #+END_SRC
 * Org Mode
-#+BEGIN_SRC emacs-lisp
-;; org mode settings
-(global-set-key "\C-cl" 'org-store-link)
-(global-set-key "\C-ca" 'org-agenda)
-(global-set-key "\C-cc" 'org-capture)
-(global-set-key "\C-cb" 'org-iswitchb)
-(add-hook 'org-mode-hook (lambda () (linum-mode 0)))
-;; org mode bullets
-(require 'org-bullets)
-(setq org-bullets-face-name (quote org-bullet-face))
-(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
-;; org mode presentations
-(require 'ox-reveal)
-;;(setq org-reveal-root "file:///~/Documents/reveal.js")
-(setq org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
-#+END_SRC
+** org mode settings
+   #+BEGIN_SRC emacs-lisp
+    (global-set-key "\C-cl" 'org-store-link)
+    (global-set-key "\C-ca" 'org-agenda)
+    (global-set-key "\C-cc" 'org-capture)
+    (global-set-key "\C-cb" 'org-iswitchb)
+    (add-hook 'org-mode-hook (lambda () (linum-mode 0)))
+
+    ;; instead of ellipses
+    (setq org-ellipsis "⤵")
+
+    ;;Use syntax highlighting in source blocks while editing.
+    (setq org-src-fontify-natively t)
+
+    ;; Make TAB act as if it were issued in a buffer of the language’s major mode.
+    (setq org-src-tab-acts-natively t)
+
+    (setq org-src-window-setup 'current-window)
+
+    (add-hook 'org-capture-mode-hook 'evil-insert-state)
+    
+    ;; Don’t ask before evaluating code blocks.
+    (setq org-confirm-babel-evaluate nil)
+
+    ;;Translate regular ol’ straight quotes to typographically-correct curly quotes when exporting.
+    (setq org-export-with-smart-quotes t)
+
+    ;; Don’t include a footer with my contact and publishing information at the bottom of every exported HTML document.
+    (setq org-html-postamble nil)
+
+    ;; Exporting to PDF 
+    (setq org-latex-pdf-process
+      '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+        "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
+        "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
+    
+    ;; Include the minted package in all of my LaTeX exports.
+    (add-to-list 'org-latex-packages-alist '("" "minted"))
+    (setq org-latex-listings 'minted)   
+   #+END_SRC
+** org bullets
+   #+BEGIN_SRC emacs-lisp
+    (require 'org-bullets)
+    (setq org-bullets-face-name (quote org-bullet-face))
+    (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+   #+END_SRC
+** org mode presentations
+   #+BEGIN_SRC emacs-lisp
+    (require 'ox-reveal)
+    ;;(setq org-reveal-root "file:///~/Documents/reveal.js")
+    (setq org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
+    ;; Allow export to markdown and beamer (for presentations).
+    (require 'ox-md)
+    (require 'ox-beamer)
+   #+END_SRC
 * UTF-8
 #+BEGIN_SRC emacs-lisp
 ;; utf-8 settings
@@ -212,28 +258,20 @@
 #+END_SRC
 * GTAGS
 #+BEGIN_SRC emacs-lisp
-;; gtags settings
-(use-package ggtags
-  :init
-  (setenv "GTAGSLABEL" "ctags")
-  (push "GTAGS not found" debug-ignored-errors)
-
-  :ensure t
-  :config
-  (define-key ggtags-mode-map (kbd "C-c g d") 'ggtags-find-definition)
-  (define-key ggtags-mode-map (kbd "C-c g s") 'ggtags-find-other-symbol)
-  (define-key ggtags-mode-map (kbd "C-c g h") 'ggtags-view-tag-history)
-  (define-key ggtags-mode-map (kbd "C-c g r") 'ggtags-find-reference)
-  (define-key ggtags-mode-map (kbd "C-c g f") 'ggtags-find-file)
-  (define-key ggtags-mode-map (kbd "C-c g c") 'ggtags-create-tags)
-  (define-key ggtags-mode-map (kbd "C-c g u") 'ggtags-update-tags))
 (add-hook 'c-mode-common-hook
           (lambda ()
             (when (derived-mode-p 'c-mode 'c++-mode 'java-mode)
-              (ggtags-mode 1))))
+                (ggtags-mode 1)
+                (define-key ggtags-mode-map (kbd "C-c g d") 'ggtags-find-definition)
+                (define-key ggtags-mode-map (kbd "C-c g s") 'ggtags-find-other-symbol)
+                (define-key ggtags-mode-map (kbd "C-c g h") 'ggtags-view-tag-history)
+                (define-key ggtags-mode-map (kbd "C-c g r") 'ggtags-find-reference)
+                (define-key ggtags-mode-map (kbd "C-c g f") 'ggtags-find-file)
+                (define-key ggtags-mode-map (kbd "C-c g c") 'ggtags-create-tags)
+                (define-key ggtags-mode-map (kbd "C-c g u") 'ggtags-update-tags))))
+
 (with-eval-after-load 'ggtags
     (evil-make-overriding-map ggtags-mode-map)
-
     ;; force update evil keymaps after ggtags-mode loaded
     (add-hook 'ggtags-mode-hook #'evil-normalize-keymaps))
 #+END_SRC
@@ -330,7 +368,20 @@
             (clipboard-kill-region (point-min) (point-max)))
         (message filename))))
    #+END_SRC
+** Utility functions
+   #+BEGIN_SRC emacs-lisp
+    (defun raj/generate-scratch-buffer ()
+    "Create and switch to a temporary scratch buffer with a random name."
+    (interactive)
+    (switch-to-buffer (make-temp-name "scratch-")))
+    (global-set-key (kbd "C-x e") 'raj/generate-scratch-buffer)
 
+    (defun raj/kill-current-buffer ()
+    "Kill the current buffer without prompting."
+    (interactive)
+    (kill-buffer (current-buffer)))
+    (global-set-key (kbd "C-x k") 'raj/kill-current-buffer)
+   #+END_SRC
 * Other modes
 ** Winner
    #+BEGIN_SRC emacs-lisp
@@ -388,5 +439,23 @@
    #+END_SRC
 ** Web Mode
    #+BEGIN_SRC emacs-lisp
+    (add-hook 'web-mode-hook
+          (lambda ()
+            (rainbow-mode)
+            (rspec-mode)
+            (setq web-mode-markup-indent-offset 2)))
     (add-to-list 'auto-mode-alist '("\\.jsp\\'" . web-mode))
    #+END_SRC
+** Wgrep
+   #+BEGIN_SRC emacs-lisp
+    (eval-after-load 'grep
+    '(define-key grep-mode-map
+        (kbd "C-x C-q") 'wgrep-change-to-wgrep-mode))
+
+    (eval-after-load 'wgrep
+    '(define-key grep-mode-map
+        (kbd "C-c C-c") 'wgrep-finish-edit))
+
+    (setq wgrep-auto-save-buffer t)
+   #+END_SRC
+
