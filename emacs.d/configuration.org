@@ -216,6 +216,57 @@
     ;; Include the minted package in all of my LaTeX exports.
     (add-to-list 'org-latex-packages-alist '("" "minted"))
     (setq org-latex-listings 'minted)   
+
+    ;; log time when task is done
+    (setq org-log-done 'time)
+
+    (setq org-directory "~/org")
+
+    (defun org-file-path (filename)
+    "Return the absolute address of an org file, given its relative name."
+    (concat (file-name-as-directory org-directory) filename))
+
+    (setq org-index-file (org-file-path "index.org"))
+    (setq org-archive-location
+    (concat (org-file-path "archive.org") "::* From %s"))
+    (setq org-agenda-files (list org-index-file))
+
+    (defun raj/mark-done-and-archive ()
+    "Mark the state of an org-mode item as DONE and archive it."
+    (interactive)
+    (org-todo 'done)
+    (org-archive-subtree))
+
+    (define-key org-mode-map (kbd "C-c t") 'raj/mark-done-and-archive)
+
+    (setq org-capture-templates
+    '(("b" "Blog idea"
+        entry
+        (file (org-file-path "blog-ideas.org"))
+        "* TODO %?\n")
+
+    ("g" "Groceries"
+        checkitem
+        (file (org-file-path "groceries.org")))
+
+    ("l" "Today I Learned..."
+        entry
+        (file+datetree (org-file-path "til.org"))
+        "* %?\n")
+
+    ("w" "Work log..."
+        entry
+        (file+datetree (org-file-path "work.org"))
+        "* %?\n")
+
+    ("r" "Reading"
+        checkitem
+        (file+headline (org-file-path "to-read.org") "List [/]"))
+
+    ("t" "Todo"
+        entry
+        (file+headline org-index-file "Tasks")
+        "* TODO %?\n")))
    #+END_SRC
 ** org bullets
    #+BEGIN_SRC emacs-lisp
@@ -324,6 +375,38 @@
 (global-set-key (kbd "C-c j") 'counsel-git-grep)
 (global-set-key (kbd "C-c k") 'counsel-ag)
 (global-set-key (kbd "C-x l") 'counsel-locate)
+#+END_SRC
+* Engine Mode
+#+BEGIN_SRC emacs-lisp
+(require 'engine-mode)
+
+(defengine duckduckgo
+  "https://duckduckgo.com/?q=%s"
+  :keybinding "d")
+
+(defengine github
+  "https://github.com/search?ref=simplesearch&q=%s"
+  :keybinding "g")
+
+(defengine google
+  "http://www.google.com/search?ie=utf-8&oe=utf-8&q=%s"
+  :keybinding "o")
+
+(defengine rfcs
+  "http://pretty-rfc.herokuapp.com/search?q=%s")
+
+(defengine stack-overflow
+  "https://stackoverflow.com/search?q=%s"
+  :keybinding "s")
+
+(defengine wikipedia
+  "http://www.wikipedia.org/search-redirect.php?language=en&go=Go&search=%s"
+  :keybinding "w")
+
+(defengine wiktionary
+  "https://www.wikipedia.org/search-redirect.php?family=wiktionary&language=en&go=Go&search=%s")
+
+(engine-mode t)
 #+END_SRC
 * Custom 
 ** Change windows settings
@@ -457,5 +540,10 @@
         (kbd "C-c C-c") 'wgrep-finish-edit))
 
     (setq wgrep-auto-save-buffer t)
+   #+END_SRC
+
+** Company
+   #+BEGIN_SRC emacs-lisp
+    (add-hook 'after-init-hook 'global-company-mode)
    #+END_SRC
 
