@@ -1,6 +1,7 @@
 (source gnu)
 (source melpa)
 
+(depends-on "ag")
 (depends-on "ace-jump-mode")
 (depends-on "airline-themes")
 (depends-on "all-the-icons")
@@ -55,6 +56,7 @@
 (depends-on "neotree")
 (depends-on "org-bullets")
 (depends-on "ox-reveal")
+(depends-on "ox-twbs")
 (depends-on "package-build")
 (depends-on "pallet")
 (depends-on "pcache")

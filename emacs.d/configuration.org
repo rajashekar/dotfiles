@@ -104,30 +104,30 @@
 #+END_SRC
 * Dired Mode
 #+BEGIN_SRC emacs-lisp
-(require 'dired-x)
-(require 'dired+)
-(require 'dired-open)
+  (require 'dired-x)
+  (require 'dired+)
+  (require 'dired-open)
 
-(setq dired-open-extensions
-      '(("pdf" . "evince")
-        ("mkv" . "vlc")
-        ("mp4" . "vlc")
-        ("avi" . "vlc")))
+  (setq dired-open-extensions
+        '(("pdf" . "evince")
+          ("mkv" . "vlc")
+          ("mp4" . "vlc")
+          ("avi" . "vlc")))
 
-(setq-default dired-listing-switches "-lhvA")
+  (setq-default dired-listing-switches "-lhvA")
 
-;; Use “j” and “k” to move around in dired.
-(evil-define-key 'normal dired-mode-map (kbd "j") 'dired-next-line)
-(evil-define-key 'normal dired-mode-map (kbd "k") 'dired-previous-line)
+  ;; Use “j” and “k” to move around in dired.
+  (evil-define-key 'normal dired-mode-map (kbd "j") 'dired-next-line)
+  (evil-define-key 'normal dired-mode-map (kbd "k") 'dired-previous-line)
 
-;; Kill buffers of files/directories that are deleted in dired.
-(setq dired-clean-up-buffers-too t)
+  ;; Kill buffers of files/directories that are deleted in dired.
+  (setq dired-clean-up-buffers-too t)
 
-;;Always copy directories recursively instead of asking every time.
-(setq dired-recursive-copies 'always)
+  ;;Always copy directories recursively instead of asking every time.
+  (setq dired-recursive-copies 'always)
 
-;;Ask before recursively deleting a directory, though.
-(setq dired-recursive-deletes 'top)
+  ;;Ask before recursively deleting a directory, though.
+  (setq dired-recursive-deletes 'top)
 #+END_SRC
 * Neo Tree
 #+BEGIN_SRC emacs-lisp
@@ -267,6 +267,17 @@
         entry
         (file+headline org-index-file "Tasks")
         "* TODO %?\n")))
+
+    ;; Hit M-n to quickly open up a capture template for a new todo.
+    (defun org-capture-todo ()
+    (interactive)
+    (org-capture :keys "t"))
+
+    (global-set-key (kbd "M-n") 'org-capture-todo)
+    (add-hook 'gfm-mode-hook
+            (lambda () (local-set-key (kbd "M-n") 'org-capture-todo)))
+    (add-hook 'haskell-mode-hook
+            (lambda () (local-set-key (kbd "M-n") 'org-capture-todo)))
    #+END_SRC
 ** org bullets
    #+BEGIN_SRC emacs-lisp
