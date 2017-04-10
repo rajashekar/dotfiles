@@ -98,7 +98,7 @@
      ;; force update evil keymaps after git-timemachine-mode loaded
      (add-hook 'git-timemachine-mode-hook #'evil-normalize-keymaps)))
 
-;;(global-evil-surround-mode 1)
+(global-evil-surround-mode 1)
 #+END_SRC
 * Helm Mode 
 #+BEGIN_SRC emacs-lisp
