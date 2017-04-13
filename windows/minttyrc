@@ -21,8 +21,7 @@ BoldWhite=       253, 246, 227
 
 Transparency=Low
 OpaqueWhenFocused=no
-Font=Lucida Console
-Font=Meslo LG S DZ for Powerline
+Font=MesloLGSDZ Nerd Font
 FontHeight=14
 AllowBlinking=no
 ClipShortcuts=yes
