@@ -21,7 +21,7 @@ BoldWhite=       253, 246, 227
 
 Transparency=Low
 OpaqueWhenFocused=no
-Font=MesloLGSDZ Nerd Font
+Font=DroidSansMonoForPowerline NF
 FontHeight=14
 AllowBlinking=no
 ClipShortcuts=yes
