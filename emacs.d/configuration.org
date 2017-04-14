@@ -69,6 +69,7 @@
 
 ;; Theme
 (load-theme 'material t)
+;;(load-theme 'gruvbox t)
 ;;(load-theme 'zenburn t)
 ;;(load-theme 'wombat t)
 
@@ -235,7 +236,9 @@
     (setq org-latex-listings 'minted)   
 
     ;; log time when task is done
-    (setq org-log-done 'time)
+    (setq org-log-done (quote time))
+    (setq org-log-redeadline (quote time))
+    (setq org-log-reschedule (quote time))
 
     (setq org-directory "~/org")
 
@@ -295,6 +298,9 @@
             (lambda () (local-set-key (kbd "M-n") 'org-capture-todo)))
     (add-hook 'haskell-mode-hook
             (lambda () (local-set-key (kbd "M-n") 'org-capture-todo)))
+
+     (setq org-todo-keywords
+      '((sequence "TODO" "IN-PROGRESS" "WAITING" "|" "DONE" "CANCELED")))
    #+END_SRC
 ** org bullets
    #+BEGIN_SRC emacs-lisp
