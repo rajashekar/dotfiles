@@ -9,9 +9,9 @@
 (global-linum-mode t) ;; to show line numbers
 (column-number-mode t) ;; show column number
 (set-default 'truncate-lines t) ;; no wrap
-(show-paren-mode 1) ;; show matching parenthesis 
+(show-paren-mode 1) ;; show matching parenthesis
 (fset 'yes-or-no-p 'y-or-n-p) ;; short version of yes or no
-(global-auto-revert-mode t) ;; Automatically refresh buffer 
+(global-auto-revert-mode t) ;; Automatically refresh buffer
 (global-font-lock-mode t) ;; Turn on syntax highlighting whenever possible.
 (setq vc-follow-symlinks t) ;; When opening a file, always follow symlinks.
 (transient-mark-mode t) ;; Turn on transient-mark-mode.
@@ -50,7 +50,7 @@
 (setq custom-safe-themes t)
 (setq tab-width 4)
 #+END_SRC
-* Package Management 
+* Package Management
 #+BEGIN_SRC emacs-lisp
 (require 'cask "/usr/local/share/emacs/site-lisp/cask/cask.el")
 (cask-initialize)
@@ -58,14 +58,9 @@
 #+END_SRC
 * Theme Management
 #+BEGIN_SRC emacs-lisp
-;; added by emacs - START
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil : background "#3F3F3F" :foreground "#DCDCCC" : inverse-video nil :box nil :strike-through nil : overline nil :underline nil :slant normal : weight normal :height 140 :width normal : foundry "nil" :family "Meslo LG S DZ for Powerline")))))
-;; added by emacs - END
+;; use custom file to add custom settings
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+(load custom-file 'noerror)
 
 ;; Theme
 (load-theme 'material t)
@@ -101,7 +96,7 @@
 
 (global-evil-surround-mode 1)
 #+END_SRC
-* Helm Mode 
+* Helm Mode
 #+BEGIN_SRC emacs-lisp
 (require 'helm-fuzzy-find)
 (require 'helm-config)
@@ -215,7 +210,7 @@
     (setq org-src-window-setup 'current-window)
 
     (add-hook 'org-capture-mode-hook 'evil-insert-state)
-    
+
     ;; Don’t ask before evaluating code blocks.
     (setq org-confirm-babel-evaluate nil)
 
@@ -225,15 +220,15 @@
     ;; Don’t include a footer with my contact and publishing information at the bottom of every exported HTML document.
     (setq org-html-postamble nil)
 
-    ;; Exporting to PDF 
+    ;; Exporting to PDF
     (setq org-latex-pdf-process
       '("pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
         "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"
         "pdflatex -shell-escape -interaction nonstopmode -output-directory %o %f"))
-    
+
     ;; Include the minted package in all of my LaTeX exports.
     (add-to-list 'org-latex-packages-alist '("" "minted"))
-    (setq org-latex-listings 'minted)   
+    (setq org-latex-listings 'minted)
 
     ;; log time when task is done
     (setq org-log-done (quote time))
@@ -301,6 +296,12 @@
 
      (setq org-todo-keywords
       '((sequence "TODO" "IN-PROGRESS" "WAITING" "|" "DONE" "CANCELED")))
+
+     ;; Navigation
+     (define-key org-mode-map (kbd "M-h") 'org-up-element)
+     (define-key org-mode-map (kbd "M-l") 'org-down-element)
+     (define-key org-mode-map (kbd "M-j") 'org-forward-heading-same-level)
+     (define-key org-mode-map (kbd "M-k") 'org-backward-heading-same-level)
    #+END_SRC
 ** org bullets
    #+BEGIN_SRC emacs-lisp
@@ -391,7 +392,7 @@
         (smerge-mode +1)))))
 (add-hook 'buffer-list-update-hook #'my-enable-smerge-maybe)
 #+END_SRC
-* Ivy, Counsel, Swiper  
+* Ivy, Counsel, Swiper
 #+BEGIN_SRC emacs-lisp
 (ivy-mode 1)
 (setq ivy-use-virtual-buffers t)
@@ -442,7 +443,7 @@
 
 (engine-mode t)
 #+END_SRC
-* Custom 
+* Custom
 ** Change windows settings
     #+BEGIN_SRC emacs-lisp
     (defun toggle-window-split ()
@@ -513,7 +514,7 @@
     (define-key global-map (kbd "C-_") 'text-scale-decrease)
     (define-key global-map (kbd "C--") 'text-scale-decrease))
     (sensible-defaults/bind-keys-to-change-text-size)
-    
+
     ;; back up to temp directory
     (defun sensible-defaults/backup-to-temp-directory ()
     "Store backups and auto-saved files in
@@ -577,7 +578,7 @@
    #+END_SRC
 ** Undo Tree
    #+BEGIN_SRC emacs-lisp
-    (global-undo-tree-mode) 
+    (global-undo-tree-mode)
     (global-set-key (kbd "M-/") 'undo-tree-visualize)
    #+END_SRC
 ** Switch Window

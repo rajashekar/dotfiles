@@ -7,7 +7,7 @@ syntax on
 " select color scheme
 colorscheme onedark
 " be iMproved, required
-set nocompatible              
+set nocompatible
 " to show numbers
 set number
 " to auto indent
@@ -44,7 +44,7 @@ set cmdheight=2
 " set paste toggle
 set pastetoggle=<leader>v
 " lines of text around cursor
-set scrolloff=3 
+set scrolloff=3
 " command bar height
 set cmdheight=1
 " current buffer can be put into background without closing
@@ -144,7 +144,7 @@ augr class
   au bufreadpost,filereadpost *.class set nomodified
 augr END
 
-" UltiSnips Trigger configuration. 
+" UltiSnips Trigger configuration.
 let g:UltiSnipsExpandTrigger="<tab>"
 let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
@@ -190,7 +190,7 @@ nnoremap <leader>c :windo diffthis<cr>
 nnoremap <leader>C :windo diffoff<cr>
 " move to current directory
 nnoremap gc :lcd %:p:h<cr>
-"Easy motions 
+"Easy motions
 let g:EasyMotion_do_mapping = 0 " Disable default mappings
 nmap s <Plug>(easymotion-overwin-f2)
 let g:EasyMotion_smartcase = 1
@@ -198,7 +198,7 @@ let g:EasyMotion_smartcase = 1
 "git
 let g:fugitive_github_domains      = ['https://gecgithub01.walmart.com']
 let g:github_enterprise_urls       = ['https://gecgithub01.walmart.com']
-autocmd User fugitive 
+autocmd User fugitive
   \ if fugitive#buffer().type() =~# '^\%(tree\|blob\)$' |
   \   nnoremap <buffer> .. :edit %:h<CR> |
   \ endif
@@ -262,7 +262,7 @@ elseif executable('ack')
   let g:unite_source_rec_async_command ='ack -f --nofilter --nogroup --nocolor'
 endif
 " use -no-split to not to show quick view
-" find file recuresively 
+" find file recuresively
 nnoremap <silent> <space>a :Denite file_rec<CR>
 nnoremap <silent> <space>A :DeniteCursorWord file_rec<CR>
 "nnoremap <space>a :<C-u>Unite -buffer-name=files -winheight=10 -input= -start-insert file_rec/async:!<cr>
@@ -278,7 +278,7 @@ nnoremap <space>d :<C-u>Unite -buffer-name=directories -winheight=10 -start-inse
 nnoremap <space>t :<C-u>Unite -buffer-name=tags -winheight=10 -input= -start-insert tag<cr>
 " search all tags cursor under the word
 nnoremap <space>T :<C-u>UniteWithInput -buffer-name=tagswithInput -winheight=10 -start-insert tag<cr><C-r><C-w><cr>
-" browse files 
+" browse files
 nnoremap <space>f :<C-u>Unite -buffer-name=files -start-insert file<cr>
 " get recent files
 nnoremap <space>r :<C-u>Unite -buffer-name=mru -winheight=10 -input= -start-insert file_mru<cr>
@@ -286,7 +286,7 @@ nnoremap <space>r :<C-u>Unite -buffer-name=mru -winheight=10 -input= -start-inse
 nnoremap <space>o :<C-u>Unite -buffer-name=outline -input= -start-insert outline<cr>
 " get all buffers
 nnoremap <space>b :<C-u>Unite -buffer-name=buffer -winheight=10 -input= buffer<cr>
-" get all key mappings 
+" get all key mappings
 nnoremap <space>m :<C-u>Unite -buffer-name=mappings -winheight=10 -input= mapping<cr>
 " get all yanks and history
 nnoremap <space>y :<C-u>Unite -buffer-name=yank -winheight=10 -input= history/yank<cr>
@@ -370,4 +370,4 @@ map ,` ysiw`
 
 " vimux settings
 map <leader>vp :VimuxPromptCommand<cr>
-map <leader>vc :VimuxCloseRunner<cr> 
+map <leader>vc :VimuxCloseRunner<cr>

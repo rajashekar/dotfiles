@@ -11,7 +11,12 @@ export TERM="xterm-256color"
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 #ZSH_THEME="robbyrussell"
 #ZSH_THEME="af-magic"
-ZSH_THEME="powerlevel9k/powerlevel9k"
+#ZSH_THEME="rawsyntax"
+if [ -n "$INSIDE_EMACS" ]; then
+	ZSH_THEME="robbyrussell"
+else
+	ZSH_THEME="powerlevel9k/powerlevel9k"
+fi
 #ZSH_THEME="TheOne"
 
 # Uncomment the following line to use case-sensitive completion.
@@ -124,13 +129,13 @@ function mcscope() {
 	find . -name '*.java' -exec echo \"{}\" \;> cscope.files && cscope -b
 }
 # unjar and decompile class files
-unjar () { 
-  mkdir -p /tmp/unjar/$1 ; 
-  unzip -d /tmp/unjar/$1 $1 "*.class" 1>/dev/null && find /tmp/unjar/$1 -name "*.class" -type f | xargs jad -ff -nl -nonlb -o -sjava -space -stat ; 
+unjar () {
+  mkdir -p /tmp/unjar/$1 ;
+  unzip -d /tmp/unjar/$1 $1 "*.class" 1>/dev/null && find /tmp/unjar/$1 -name "*.class" -type f | xargs jad -ff -nl -nonlb -o -sjava -space -stat ;
 }
 # open git url in browser
 function opengit() {
-	vi -c Gbrowse -c q README.md 
+	vi -c Gbrowse -c q README.md
 }
 # open git url with selected file
 function gbro() {
@@ -154,6 +159,9 @@ bindkey "^p" ctrlp
 bindkey "^R" history-incremental-pattern-search-backward
 bindkey "^S" history-incremental-pattern-search-forward
 # for regex completion
-zstyle ':completion:*' completer _expand _complete _match _prefix 
+zstyle ':completion:*' completer _expand _complete _match _prefix
 # fix for slow paste
-zstyle ':bracketed-paste-magic' active-widgets '.self-*' 
+zstyle ':bracketed-paste-magic' active-widgets '.self-*'
+
+export NVM_DIR="/Users/rchint1/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm

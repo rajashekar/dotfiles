@@ -42,8 +42,8 @@ Plug 'vim-airline/vim-airline-themes'
 Plug 'neomake/neomake'
 Plug 'tpope/vim-fugitive'
 Plug 'junegunn/gv.vim'
-Plug 'tpope/vim-repeat' 
-Plug 'sotte/presenting.vim', { 'for': 'markdown' } 
+Plug 'tpope/vim-repeat'
+Plug 'sotte/presenting.vim', { 'for': 'markdown' }
 Plug 'ervandew/supertab'
 Plug 'tpope/vim-vinegar'
 Plug 'vim-scripts/matchit.zip'
@@ -76,4 +76,5 @@ Plug 'AndrewRadev/splitjoin.vim'
 
 Plug 'benmills/vimux'
 Plug 'christoomey/vim-tmux-navigator'
+Plug 'rizzatti/dash.vim'
 call plug#end()
