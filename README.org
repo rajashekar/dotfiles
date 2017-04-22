@@ -14,8 +14,8 @@
 ** Install [[https://github.com/tpope/vim-pathogen][Pathogen]] plugin
 ** Install [[https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/Meslo/S-DZ/complete][Meslo]] Font
 *** Ubuntu Gvim might have issue with above font naming
-    BEGIN_SRC 
+    #+BEGIN_SRC 
       set guifont=MesloLGSDZ\ Nerd\ Font:h14
-    END_SRC
+    #+END_SRC
 * Emacs notes
 ** Install [[https://github.com/cask/cask][Cask]] plugin
