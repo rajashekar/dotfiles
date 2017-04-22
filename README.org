@@ -1,0 +1,17 @@
+* Dot files
+** Plugin Management
+    |---------------+----------------|
+    | App           | Plugin Manager |
+    |---------------+----------------|
+    | Vim           | Vundle         |
+    | NeoVim (nvim) | Vim plug       |
+    | Emacs         | Cask           |
+    | Zsh           | Zplug          |
+    | Tmux          | tpm            |
+    |---------------+----------------|
+* Vim notes
+** Install [[https://github.com/VundleVim/Vundle.vim][Vundle]] plugin
+** Install [[https://github.com/tpope/vim-pathogen][Pathogen]] plugin
+** Install [[https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/Meslo/S-DZ/complete][Meslo]] Font
+*** Ubuntu Gvim might have issue with above font naming
+*** set guifont=MesloLGSDZ\ Nerd\ Font:h14 to fix it 
