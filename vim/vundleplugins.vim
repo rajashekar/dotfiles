@@ -89,6 +89,11 @@ Plugin 'christoomey/vim-tmux-navigator'
 
 Plugin 'rizzatti/dash.vim'
 
+"React 
+Plugin 'mxw/vim-jsx'
+Plugin 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plugin 'junegunn/fzf.vim'
+
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
 " plugin on GitHub repo

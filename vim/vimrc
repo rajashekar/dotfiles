@@ -164,33 +164,35 @@ elseif executable('ack')
   let g:unite_source_grep_recursive_opt = ''
   let g:unite_source_rec_async_command ='ack -f --nofilter --nogroup --nocolor'
 endif
-" use -no-split to not to show quick view
-" find file recuresively
-nnoremap <space>a :<C-u>Unite -buffer-name=files -winheight=10 -input= -start-insert file_rec/async:!<cr>
-" find file recuresively cursor under the word
-nnoremap <space>A :<C-u>UniteWithInput -buffer-name=fileswithInput -winheight=10 -start-insert file_rec/async<cr><C-r><C-w><cr>
+
+" FZF settings
+" search for a word
+nnoremap <space>a :Ag<cr>
+nnoremap <space>A :Ag <C-r><C-w><cr>
 " find lines in file
-nnoremap <space>l :<C-u>Unite -buffer-name=currentFile -winheight=10 -input= -start-insert line<cr>
-" find lines in file under the cursor
-nnoremap <space>L :<C-u>UniteWithInput -buffer-name=currentFile -winheight=10 -start-insert line<cr><C-r><C-w><cr>
-" recent directories
-nnoremap <space>d :<C-u>Unite -buffer-name=directories -winheight=10 -start-insert directory_mru directory_rec/async<cr>
-" search all tags
-nnoremap <space>t :<C-u>Unite -buffer-name=tags -winheight=10 -input= -start-insert tag<cr>
-" search all tags cursor under the word
-nnoremap <space>T :<C-u>UniteWithInput -buffer-name=tagswithInput -winheight=10 -start-insert tag<cr><C-r><C-w><cr>
-" browse files
-nnoremap <space>f :<C-u>Unite -buffer-name=files -start-insert file<cr>
-" get recent files
-nnoremap <space>r :<C-u>Unite -buffer-name=mru -winheight=10 -input= -start-insert file_mru<cr>
+nnoremap <space>l :BLines<cr>
+nnoremap <space>L :BLines <C-r><C-w><cr>
+" Find tags
+nnoremap <space>t :BTags<cr>
+nnoremap <space>T :Tags <C-r><C-w><cr>
+" Find files
+nnoremap <space>f :FZF<cr>
+" History
+nnoremap <space>r :History<cr>
+" get command history
+nnoremap <space>d :History:<cr>
+" show current buffer commits
+nnoremap <space>c :BCommits<cr>
+" Show git status
+nnoremap <space>s :GFiles?<cr>
+" get all key mappings
+nnoremap <space>m :Maps<cr>
+" get all buffers
+nnoremap <space>b :Buffers<cr>
+
+" Unite settings
 " get outline of current buffer
 nnoremap <space>o :<C-u>Unite -buffer-name=outline -input= -start-insert outline<cr>
-" get all buffers
-nnoremap <space>b :<C-u>Unite -buffer-name=buffer -winheight=10 -input= buffer<cr>
-" get all key mappings
-nnoremap <space>m :<C-u>Unite -buffer-name=mappings -winheight=10 -input= mapping<cr>
-" get colorscheme
-nnoremap <space>c :<C-u>Unite -buffer-name=mappings -winheight=10 -input= colorscheme<cr>
 " get all yanks and history
 nnoremap <space>y :<C-u>Unite -buffer-name=yank -winheight=10 -input= history/yank<cr>
 " get all jump locations
@@ -293,7 +295,7 @@ let g:ctrlp_max_depth=40
 nnoremap <leader>. :CtrlPTag<cr>
 "nmap <leader>w <C-P><C-\>w
 nmap <leader>w :CtrlPMixed<cr><C-\>w
-nmap <leader>p :CtrlPMixed<cr>
+"nmap <leader>p :CtrlPMixed<cr>
 if executable('ag')
   let g:ctrlp_user_command = 'ag --nocolor -g "" %s'
   let g:ctrlp_use_caching = 0
@@ -417,3 +419,7 @@ nnoremap <leader>S :%s///g<CR>
 
 " copy current relative file path
 nnoremap <leader>cf :let @*=expand("%")<CR>
+
+" React syntax
+let g:jsx_ext_required = 0 " Allow JSX in normal JS files
+let g:syntastic_javascript_checkers = ['eslint']
