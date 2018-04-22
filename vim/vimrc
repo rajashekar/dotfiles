@@ -423,3 +423,10 @@ nnoremap <leader>cf :let @*=expand("%")<CR>
 " React syntax
 let g:jsx_ext_required = 0 " Allow JSX in normal JS files
 let g:syntastic_javascript_checkers = ['eslint']
+
+vnoremap // y/<C-R>"<CR>
+
+"enable keyboard shortcuts
+let g:tern_map_keys=1
+"show argument hints
+let g:tern_show_argument_hints='on_hold'

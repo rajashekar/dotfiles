@@ -96,6 +96,9 @@ Plugin 'junegunn/fzf.vim'
 
 Plugin 'francoiscabrol/ranger.vim'
 
+"Tern
+Plugin 'ternjs/tern_for_vim'
+Plugin 'stefandtw/quickfix-reflector.vim'
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
 " plugin on GitHub repo
