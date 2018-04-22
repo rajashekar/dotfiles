@@ -228,3 +228,51 @@ export GPG_TTY
 gits() {
     git show $(git log --pretty=oneline | fzf | awk '{print $1}')
 }
+# browse git log
+fshow() {
+  git log --graph --color=always \
+      --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
+  fzf --ansi --no-sort --reverse --tiebreak=index --bind=ctrl-s:toggle-sort \
+      --bind "ctrl-m:execute:
+                (grep -o '[a-f0-9]\{7\}' | head -1 |
+                xargs -I % sh -c 'git show --color=always % | less -R') << 'FZF-EOF'
+                {}
+FZF-EOF"
+}
+# browse git log fancy 
+alias glNoGraph='git log --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr% C(auto)%an" "$@"'
+local _gitLogLineToHash="echo {} | grep -o '[a-f0-9]\{7\}' | head -1"
+local _viewGitLogLine="$_gitLogLineToHash | xargs -I % sh -c 'git show --color=always % | diff-so-fancy'"
+
+# fcoc_preview - checkout git commit with previews
+fcoc_preview() {
+  local commit
+  commit=$( glNoGraph |
+    fzf --no-sort --reverse --tiebreak=index --no-multi \
+        --ansi --preview $_viewGitLogLine ) &&
+  git checkout $(echo "$commit" | sed "s/ .*//")
+}
+
+# fshow_preview - git commit browser with previews
+fshow_preview() {
+    glNoGraph |
+        fzf --no-sort --reverse --tiebreak=index --no-multi \
+            --ansi --preview $_viewGitLogLine \
+                --header "enter to view, alt-y to copy hash" \
+                --bind "enter:execute:$_viewGitLogLine   | less -R" \
+                --bind "alt-y:execute:$_gitLogLineToHash | xclip"
+}
+# fstatus_preview - git show diff of status
+
+alias gsStatus='git status -s "$@"'
+local _gitStatusLine="echo {} | awk '{print $2}' | head -1"
+local _viewGitStatusLine="$_gitStatusLine | xargs -I % sh -c 'git diff --color=always % | diff-so-fancy'"
+
+fstatus_preview() {
+    gsStatus | awk '{print $2}' |
+        fzf --no-sort --reverse --tiebreak=index --no-multi \
+            --ansi --preview $_viewGitStatusLine \
+                --header "enter to view, alt-a to run git add" \
+                --bind "enter:execute:$_viewGitStatusLine | less -R" \
+                --bind "alt-a:execute:$_gitStatusLine | xargs git add"
+}
