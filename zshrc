@@ -100,11 +100,16 @@ source ~/.profile
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-PATH=/Users/rchint1/Documents/jad:/usr/local/bin:$PATH
+PATH=/Users/rchint1/Library/Android/sdk/platform-tools:/usr/local/gnat/bin:/Users/rchint1/Documents/jad:/usr/local/bin:$PATH
 alias start-eclipse='open /Users/rchint1/Documents/Eclipse.app'
-alias start-canary="/Applications/Google\ Chrome\ Canary.app/Contents/MacOS/Google\ Chrome\ Canary --ignore-certificate-errors &> /dev/null &"
 alias start-chrome="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --ignore-certificate-errors &> /dev/null &"
+alias start-chrome-profile1='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --ignore-certificate-errors --profile-directory="Profile 1" &> /dev/null &'
+alias start-chrome-profile2='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --ignore-certificate-errors --profile-directory="Profile 2" --proxy-server="socks5://localhost:9002" &> /dev/null &'
+alias start-canary="/Applications/Google\ Chrome\ Canary.app/Contents/MacOS/Google\ Chrome\ Canary --ignore-certificate-errors &> /dev/null &"
+alias start-canary-socks='/Applications/Google\ Chrome\ Canary.app/Contents/MacOS/Google\ Chrome\ Canary --proxy-server="socks5://localhost:9002" &> /dev/null &'
+alias start-canary-noproxy='/Applications/Google\ Chrome\ Canary.app/Contents/MacOS/Google\ Chrome\ Canary --no-proxy-server &> /dev/null &'
 alias webshare='python -m SimpleHTTPServer'
+alias centos='ssh -p 2222 rajashekar@localhost'
 # tmux aliases
 alias ta='tmux attach'
 alias tls='tmux ls'
@@ -215,4 +220,11 @@ cb() {
      from urls order by last_visit_time desc" |
   awk -F $sep '{printf "%-'$cols's  \x1b[36m%s\n", $1, $2}' |
   fzf --ansi --multi | sed 's#.*\(https*://\)#\1#' | xargs open
+}
+GPG_TTY=$(tty)
+export GPG_TTY
+
+# browse git show fzf
+gits() {
+    git show $(git log --pretty=oneline | fzf | awk '{print $1}')
 }
