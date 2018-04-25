@@ -64,9 +64,11 @@ fi
 plugins=(git)
 
 source $ZSH/oh-my-zsh.sh
+source $ZSH/plugins/fasd/fasd.plugin.zsh
+
+# source all .zsh files inside of the zsh/ directory
 export DOTFILES=$HOME/.dotfiles
 export ZSH=$DOTFILES/zsh
-# source all .zsh files inside of the zsh/ directory
 for config ($ZSH/**/*.zsh) source $config
 
 # User configuration
@@ -140,19 +142,19 @@ unjar () {
 }
 # open git url in browser
 function opengit() {
-	vi -c Gbrowse -c q README.md
+	vim -c Gbrowse -c q README.md
 }
 # open git url with selected file
 function gbro() {
-	vi -c Gbrowse -c q $1
+	vim -c Gbrowse -c q $1
 }
 # open git url with selected lines
 function gbros() {
-	vi -c $2,$3Gbrowse -c q $1
+	vim -c $2,$3Gbrowse -c q $1
 }
 # find file and open with vi
 function vf() {
-   vi -p `find . -iname "*$1*"`;
+   vim -p `find . -iname "*$1*"`;
 }
 # ctrl p at command line
 ctrlp() {
@@ -260,7 +262,7 @@ fshow_preview() {
             --ansi --preview $_viewGitLogLine \
                 --header "enter to view, alt-y to copy hash" \
                 --bind "enter:execute:$_viewGitLogLine   | less -R" \
-                --bind "alt-y:execute:$_gitLogLineToHash | xclip"
+                --bind "alt-y:execute:$_gitLogLineToHash | pbcopy"
 }
 # fstatus_preview - git show diff of status
 
@@ -272,7 +274,12 @@ fstatus_preview() {
     gsStatus | awk '{print $2}' |
         fzf --no-sort --reverse --tiebreak=index --no-multi \
             --ansi --preview $_viewGitStatusLine \
-                --header "enter to view, alt-a to run git add" \
+                --header "enter to view, alt-a to run git add, alt-c to run git checkout --" \
                 --bind "enter:execute:$_viewGitStatusLine | less -R" \
-                --bind "alt-a:execute:$_gitStatusLine | xargs git add"
+                --bind "alt-a:execute:$_gitStatusLine | xargs git add" \
+                --bind "alt-c:execute:$_gitStatusLine | xargs git checkout --" \
 }
+
+# fasd
+eval "$(fasd --init auto)"
+alias v='f -e vim' # quick opening files with vim
