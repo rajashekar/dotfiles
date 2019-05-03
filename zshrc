@@ -102,7 +102,7 @@ source ~/.profile
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-PATH=/Users/rchint1/Library/Android/sdk/platform-tools:/usr/local/gnat/bin:/Users/rchint1/Documents/jad:/usr/local/bin:$PATH
+PATH=/Users/rchint1/Library/Android/sdk/platform-tools:/Users/rchint1/Documents/jad:/usr/local/bin:$PATH
 alias start-eclipse='open /Users/rchint1/Documents/Eclipse.app'
 alias start-chrome="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --ignore-certificate-errors &> /dev/null &"
 alias start-chrome-profile1='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --ignore-certificate-errors --profile-directory="Profile 1" &> /dev/null &'
@@ -283,3 +283,43 @@ fstatus_preview() {
 # fasd
 eval "$(fasd --init auto)"
 alias v='f -e vim' # quick opening files with vim
+export GOPATH=~/go
+export PATH=$PATH:$GOPATH/bin:~/protoc-3.7.0-osx-x86_64/bin
+export ISTIO=$GOPATH/src/istio.io # eg. ~/go/src/istio.io
+
+source "/usr/local/opt/kube-ps1/share/kube-ps1.sh"
+PS1='$(kube_ps1)'$PS1
+export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
+
+autoload -U edit-command-line
+# Emacs style
+zle -N edit-command-line
+bindkey '^xe' edit-command-line
+bindkey '^x^e' edit-command-line
+# Appends every command to the history file once it is executed
+setopt inc_append_history
+# Reloads the history whenever you use it
+setopt share_history
+# save each command's beginning timestamp and the duration to the history file
+setopt extended_history 
+setopt hist_ignore_all_dups
+# Convert a picture to a favicon
+alias make-favicon="convert -colors 256 -resize 16x16 "
+
+# Copy the working dir to the clipboard
+alias cpwd='pwd|xargs echo -n|pbcopy'
+
+# Show current airport status:
+alias apinfo='/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Resources/airport -I'
+
+alias httpdump='sudo tcpdump -i en0 -n -s 0 -w - | grep -a -o -E "Host\: .*|GET \/.*"'
+
+# mkdir, cd into it (via http://onethingwell.org/post/586977440/mkcd-improved)
+function mkcd () {
+    mkdir -p "$*"
+    cd "$*"
+}
+
+function ydl () {
+    for url ($*) /usr/bin/python /usr/local/bin/youtube-dl --continue --literal --console-title --format 22 "$url" || /usr/bin/python /usr/local/bin/youtube-dl --continue --literal --console-title "$url"
+}
