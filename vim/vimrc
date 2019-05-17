@@ -243,8 +243,14 @@ command -nargs=+ Ggr execute 'silent Ggrep!' <q-args> | cw | redraw!
 " Ack
 cnoreabbrev Ack Ack!
 nnoremap <Leader>a :Ack!<Space>
+nnoremap <Leader>A :Ack! <C-r><C-w>
 " using silver searcher for ack
-let g:ackprg = 'ag --nogroup --nocolor --column'
+" let g:ackprg = 'ag --nogroup --nocolor --column --vimgrep --smart-case'
+let g:ackprg = 'rg --vimgrep --column --line-number --fixed-strings --smart-case --no-heading --hidden'
+cnoreabbrev ag Ack
+cnoreabbrev aG Ack
+cnoreabbrev Ag Ack
+cnoreabbrev AG Ack
 
 " java decompiler
 augr class
@@ -440,9 +446,11 @@ nnoremap <silent> <space>e :call Fzf_dev()<CR>
 " ripgrep
 if executable('rg')
   let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --follow --glob "!.git/*"'
-  set grepprg=rg\ --vimgrep
+  set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case 
   command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"', 1, <bang>0)
 endif
+nnoremap <Leader>r :silent lgrep<Space>
+nnoremap <Leader>R :silent lgrep <C-r><C-w><cr>
 
 " Files + devicons
 function! Fzf_dev()
