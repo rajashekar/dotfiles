@@ -618,3 +618,13 @@
   (setq dired-recursive-deletes 'top)
 #+END_SRC
 
+* Grip Mode
+#+BEGIN_SRC emacs-lisp
+  (require 'grip-mode)
+#+END_SRC
+
+* Markdown Mode
+#+BEGIN_SRC emacs-lisp
+  (require 'markdown-mode)
+#+END_SRC
+
