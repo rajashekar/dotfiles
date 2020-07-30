@@ -67,9 +67,9 @@ source $ZSH/oh-my-zsh.sh
 source $ZSH/plugins/fasd/fasd.plugin.zsh
 
 # source all .zsh files inside of the zsh/ directory
-export DOTFILES=$HOME/.dotfiles
-export ZSH=$DOTFILES/zsh
-for config ($ZSH/**/*.zsh) source $config
+# export DOTFILES=$HOME/.dotfiles
+# export ZSH=$DOTFILES/zsh
+# for config ($ZSH/**/*.zsh) source $config
 
 # User configuration
 
@@ -323,3 +323,5 @@ function mkcd () {
 function ydl () {
     for url ($*) /usr/bin/python /usr/local/bin/youtube-dl --continue --literal --console-title --format 22 "$url" || /usr/bin/python /usr/local/bin/youtube-dl --continue --literal --console-title "$url"
 }
+
+ export PATH="~/.cask/bin:$PATH"

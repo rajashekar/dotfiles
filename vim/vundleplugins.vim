@@ -18,7 +18,6 @@ Plugin 'tpope/vim-rhubarb'
 " color schemes
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'joshdick/onedark.vim'
-Plugin 'alessandroyorba/sidonia'
 Plugin 'tomasr/molokai'
 Plugin 'dracula/vim'
 Plugin 'rakr/vim-one'
@@ -63,8 +62,6 @@ Plugin 'Xuyuanp/nerdtree-git-plugin'
 
 " autocomplete
 Plugin 'sheerun/vim-polyglot'
-Plugin 'SirVer/ultisnips'
-Plugin 'Valloric/YouCompleteMe'
 Plugin 'vim-syntastic/syntastic'
 Plugin 'ervandew/supertab'
 

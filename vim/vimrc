@@ -22,7 +22,7 @@ set smartcase
 " highlight search
 set hlsearch
 " yanking will paste directly to clipboard
-set clipboard=unnamed
+set clipboard^=unnamed,unnamedplus
 " disable creating swp file
 set noswapfile
 " on shell, which shell to use
