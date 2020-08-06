@@ -2,83 +2,104 @@
 // For documentation on these settings, see: https://aka.ms/terminal-documentation
 
 {
-	"$schema": "https://aka.ms/terminal-profiles-schema",
+    "$schema": "https://aka.ms/terminal-profiles-schema",
+    "defaultProfile": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+    "profiles":
+    [
+        {
+            // Make changes here to the powershell.exe profile
+            "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+            "name": "Windows PowerShell",
+            "commandline": "powershell.exe",
+            "cursorShape": "filledBox",
+            "hidden": false
+        },
+        {
+            // Make changes here to the cmd.exe profile
+            "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
+            "name": "cmd",
+            "commandline": "cmd.exe",
+            "cursorShape": "filledBox",
+            "hidden": false
+        },
+        {
+            "guid": "{fb4e6b08-33aa-4c7f-b166-0146fe6ce686}",
+            "name": "Anaconda",
+            "commandline": "cmd.exe /K %USERPROFILE%\\Anaconda3\\Scripts\\activate.bat",
+            "icon": "%USERPROFILE%\\Anaconda3\\Menu\\anaconda-navigator.ico",
+            "cursorShape": "filledBox",
+            "hidden": false
+        },
+        {
+            "guid": "{16156335-f32d-4e76-8cb3-9aed849d58e2}",
+            "name": "Jupyter",
+            "commandline": "%USERPROFILE%\\Anaconda3\\python.exe %USERPROFILE%\\Anaconda3\\cwp.py %USERPROFILE%\\Anaconda3 %USERPROFILE%\\Anaconda3\\python.exe %USERPROFILE%\\Anaconda3\\Scripts\\jupyter-notebook-script.py %USERPROFILE%",
+            "icon": "%USERPROFILE%\\Anaconda3\\Menu\\jupyter.ico",
+            "cursorShape": "filledBox",
+            "hidden": false
+        },
+        {
+            "guid": "{2b399ee1-a8a7-4f20-b29e-9bbdc7c05487}",
+            "name": "Cygwin",
+            "commandline": "C:\\cygwin64\\bin\\mintty.exe -i /Cygwin-Terminal.ico -",
+            "icon": "C:\\cygwin64\\\\Cygwin-Terminal.ico",
+            "cursorShape": "filledBox",
+            "hidden": false
+        },
+        {
+            "guid": "{6e9fa4d2-a4aa-562d-b1fa-0789dc1f83d7}",
+            "hidden": false,
+            "name": "WSL Ubuntu",
+            "closeOnExit": "always",
+            "cursorColor": "#97979b",
+            "cursorShape": "filledBox",
+            "colorScheme": "Snazzy",
+            "startingDirectory": "\\\\wsl$\\Ubuntu\\home\\rajashekar",
+            "fontFace": "MesloLGS NF",
+            "source": "Windows.Terminal.Wsl"
+        },
+        {
+            "guid": "{46ca431a-3a87-5fb3-83cd-11ececc031d2}",
+            "hidden": false,
+            "name": "kali-linux",
+            "cursorShape": "filledBox",
+            "source": "Windows.Terminal.Wsl"
+        },
+        {
+            "guid": "{b453ae62-4e3d-5e58-b989-0a998ec441b8}",
+            "hidden": false,
+            "name": "Azure Cloud Shell",
+            "cursorShape": "filledBox",
+            "source": "Windows.Terminal.Azure"
+        }
+    ],
 
-	"defaultProfile": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+    // Add custom color schemes to this array
+    "schemes": [
+        {
+            "name": "Snazzy",
+            "foreground": "#eff0eb",
+            "background": "#0f111a",
+            "black": "#0f111a",
+            "red": "#ff5c57",
+            "green": "#5af78e",
+            "yellow": "#f3f99d",
+            "blue": "#57c7ff",
+            "purple": "#ff6ac1",
+            "cyan": "#9aedfe",
+            "white": "#f1f1f0",
+            "brightBlack": "#686868",
+            "brightRed": "#ff5c57",
+            "brightGreen": "#5af78e",
+            "brightYellow": "#f3f99d",
+            "brightBlue": "#57c7ff",
+            "brightPurple": "#ff6ac1",
+            "brightCyan": "#9aedfe",
+            "brightWhite": "#eff0eb"
+        }
+    ],
 
-	"profiles":
-	[
-		{
-			// Make changes here to the powershell.exe profile
-			"guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
-			"name": "Windows PowerShell",
-			"commandline": "powershell.exe",
-			"cursorShape": "filledBox",
-			"hidden": false
-		},
-		{
-			// Make changes here to the cmd.exe profile
-			"guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
-			"name": "cmd",
-			"commandline": "cmd.exe",
-			"cursorShape": "filledBox",
-			"hidden": false
-		},
-		{
-			"guid": "{6e9fa4d2-a4aa-562d-b1fa-0789dc1f83d7}",
-			"hidden": false,
-			"name": "WSL Ubuntu",
-			"closeOnExit": "always",
-			"cursorColor": "#97979b",
-			"cursorShape": "filledBox",
-			"colorScheme": "Snazzy",
-			"startingDirectory": "\\\\wsl$\\Ubuntu\\home\\rajashekar",
-			"fontFace": "Meslo LG S DZ for Powerline",
-			"source": "Windows.Terminal.Wsl"
-		},
-		{
-			"guid": "{46ca431a-3a87-5fb3-83cd-11ececc031d2}",
-			"hidden": false,
-			"name": "kali-linux",
-			"cursorShape": "filledBox",
-			"source": "Windows.Terminal.Wsl"
-		},
-		{
-			"guid": "{b453ae62-4e3d-5e58-b989-0a998ec441b8}",
-			"hidden": false,
-			"name": "Azure Cloud Shell",
-			"cursorShape": "filledBox",
-			"source": "Windows.Terminal.Azure"
-		}
-	],
-
-	// Add custom color schemes to this array
-	"schemes": [
-		{
-			"name": "Snazzy",
-			"foreground": "#eff0eb",
-			"background": "#0f111a",
-			"black": "#0f111a",
-			"red": "#ff5c57",
-			"green": "#5af78e",
-			"yellow": "#f3f99d",
-			"blue": "#57c7ff",
-			"purple": "#ff6ac1",
-			"cyan": "#9aedfe",
-			"white": "#f1f1f0",
-			"brightBlack": "#686868",
-			"brightRed": "#ff5c57",
-			"brightGreen": "#5af78e",
-			"brightYellow": "#f3f99d",
-			"brightBlue": "#57c7ff",
-			"brightPurple": "#ff6ac1",
-			"brightCyan": "#9aedfe",
-			"brightWhite": "#eff0eb"
-		}
-	],
-
-	// Add any keybinding overrides to this array.
-	// To unbind a default keybinding, set the command to "unbound"
-	"keybindings": []
+    // Add any keybinding overrides to this array.
+    // To unbind a default keybinding, set the command to "unbound"
+    "keybindings": []
 }
-
