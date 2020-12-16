@@ -348,7 +348,7 @@ nnoremap gc :lcd %:p:h<cr>
 if has("gui_running")
   "set guifont=Meslo\ LG\ S\ DZ\ Regular\ for\ Powerline:h14
   "set guifont=Droid\ Sans\ Mono\ for\ Powerline\ Plus\ Nerd\ File\ Types:h14
-  set guifont=Meslo\ LG\ S\ DZ\ Regular\ for\ Powerline\ Nerd\ Font\ Complete\ Mono:h16
+  set guifont=MesloLGSDZNerdFontComplete-Regular:h16
   set guioptions-=m  "remove menu bar
   set guioptions-=T  "remove toolbar
   set guioptions-=r  "remove right-hand scroll bar
@@ -442,6 +442,18 @@ let g:tern_map_keys=1
 let g:tern_show_argument_hints='on_hold'
 
 nnoremap <silent> <space>e :call Fzf_dev()<CR>
+
+"gpg
+" Armor files
+let g:GPGPreferArmor=1
+" Set the default option
+let g:GPGDefaultRecipients=["rajshekar.ch@gmail.com"]
+augroup GPG
+    autocmd!
+    autocmd FileType gpg setlocal updatetime=12000
+    autocmd CursorHold *.\(gpg\|asc\|pgp\) quit
+augroup END
+
 
 " ripgrep
 if executable('rg')
