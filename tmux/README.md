@@ -10,3 +10,8 @@ cp theme.sh ~/.dotfiles/tmux
 
 ### copy below to copy and paste from clipboard
 brew install reattach-to-user-namespace
+
+### make sure tpm is installed
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+
+
