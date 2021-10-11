@@ -99,6 +99,16 @@ Plugin 'stefandtw/quickfix-reflector.vim'
 
 "Encryption
 Plugin 'jamessan/vim-gnupg'
+
+"Latex
+Plugin 'vim-latex/vim-latex'
+
+"Vim Rest
+Plugin 'diepm/vim-rest-console'
+
+"IntelliJ
+Plugin 'JetBrains/ideavim'
+
 " The following are examples of different formats supported.
 " Keep Plugin commands between vundle#begin/end.
 " plugin on GitHub repo

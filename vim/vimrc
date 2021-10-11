@@ -496,3 +496,8 @@ function! Fzf_dev()
         \ 'options': '-m ' . l:fzf_files_options,
         \ 'down':    '50%' })
 endfunction
+
+"Latex
+autocmd BufWritePost *.tex call Tex_RunLaTeX()
+nmap <leader>m :up<cr>:call Tex_ViewLaTeX()<cr>
+

@@ -1,6 +1,4 @@
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
-
+PATH=/usr/local/bin:/usr/local/texlive/2021/bin/universal-darwin:$PATH
 # Path to your oh-my-zsh installation.
 export ZSH=/Users/rchint1/.oh-my-zsh
 DEFAULT_USER=rchint1
@@ -9,40 +7,16 @@ export TERM="xterm-256color"
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-#ZSH_THEME="robbyrussell"
+ZSH_THEME="robbyrussell"
 #ZSH_THEME="af-magic"
 #ZSH_THEME="rawsyntax"
-if [ -n "$INSIDE_EMACS" ]; then
-	ZSH_THEME="robbyrussell"
-else
-	ZSH_THEME="powerlevel9k/powerlevel9k"
-fi
+#ZSH_THEME="agnoster"
+#if [ -n "$INSIDE_EMACS" ]; then
+#	ZSH_THEME="robbyrussell"
+#else
+#	ZSH_THEME="powerlevel9k/powerlevel9k"
+#fi
 #ZSH_THEME="TheOne"
-
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
-
-# Uncomment the following line to use hyphen-insensitive completion. Case
-# sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
-
-# Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
-
-# Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=13
-
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
-
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
-
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
-
-# Uncomment the following line to display red dots whilst waiting for completion.
-# COMPLETION_WAITING_DOTS="true"
 
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
@@ -61,19 +35,16 @@ fi
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(git zsh-autosuggestions zsh-z)
 
 source $ZSH/oh-my-zsh.sh
 source $ZSH/plugins/fasd/fasd.plugin.zsh
+source ~/.profile
 
 # source all .zsh files inside of the zsh/ directory
 # export DOTFILES=$HOME/.dotfiles
 # export ZSH=$DOTFILES/zsh
 # for config ($ZSH/**/*.zsh) source $config
-
-# User configuration
-
-# export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
@@ -92,35 +63,6 @@ export EDITOR='vi'
 # ssh
 # export SSH_KEY_PATH="~/.ssh/rsa_id"
 
-source ~/.profile
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-PATH=/Users/rchint1/Library/Android/sdk/platform-tools:/Users/rchint1/Documents/jad:/usr/local/bin:$PATH
-alias start-eclipse='open /Users/rchint1/Documents/Eclipse.app'
-alias start-chrome="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --ignore-certificate-errors &> /dev/null &"
-alias start-chrome-profile1='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --ignore-certificate-errors --profile-directory="Profile 1" &> /dev/null &'
-alias start-chrome-profile2='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --ignore-certificate-errors --profile-directory="Profile 2" --proxy-server="socks5://localhost:9002" &> /dev/null &'
-alias start-canary="/Applications/Google\ Chrome\ Canary.app/Contents/MacOS/Google\ Chrome\ Canary --ignore-certificate-errors &> /dev/null &"
-alias start-canary-socks='/Applications/Google\ Chrome\ Canary.app/Contents/MacOS/Google\ Chrome\ Canary --proxy-server="socks5://localhost:9002" &> /dev/null &'
-alias start-canary-noproxy='/Applications/Google\ Chrome\ Canary.app/Contents/MacOS/Google\ Chrome\ Canary --no-proxy-server &> /dev/null &'
-alias webshare='python -m SimpleHTTPServer'
-alias centos='ssh -p 2222 rajashekar@localhost'
-# tmux aliases
-alias ta='tmux attach'
-alias tls='tmux ls'
-alias tat='tmux attach -t'
-alias tns='tmux new-session -s'
-alias tks='tmux kill-session -t'
-alias tnw='tmux new-window -t base -n'
-# iterm shell integration
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 #load fzf
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
@@ -130,6 +72,34 @@ zplug "jocelynmallon/zshmarks"
 zplug "zsh-users/zsh-autosuggestions"
 zplug load --verbose
 bindkey '^ ' autosuggest-accept
+
+# iterm shell integration
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
+# Set personal aliases, overriding those provided by oh-my-zsh libs,
+# plugins, and themes. Aliases can be placed here, though oh-my-zsh
+# users are encouraged to define aliases within the ZSH_CUSTOM folder.
+# For a full list of active aliases, run `alias`.
+#
+alias start-chrome="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --ignore-certificate-errors &> /dev/null &"
+alias start-chrome-profile1='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --ignore-certificate-errors --profile-directory="Profile 1" &> /dev/null &'
+alias start-chrome-profile2='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --ignore-certificate-errors --profile-directory="Profile 2" --proxy-server="socks5://localhost:9002" &> /dev/null &'
+alias start-canary="/Applications/Google\ Chrome\ Canary.app/Contents/MacOS/Google\ Chrome\ Canary --ignore-certificate-errors &> /dev/null &"
+alias start-canary-socks='/Applications/Google\ Chrome\ Canary.app/Contents/MacOS/Google\ Chrome\ Canary --proxy-server="socks5://localhost:9002" &> /dev/null &'
+alias start-canary-noproxy='/Applications/Google\ Chrome\ Canary.app/Contents/MacOS/Google\ Chrome\ Canary --no-proxy-server &> /dev/null &'
+alias webshare='python -m SimpleHTTPServer'
+alias centos='ssh -p 2222 raj@localhost'
+
+# tmux aliases
+alias ta='tmux attach'
+alias tls='tmux ls'
+alias tat='tmux attach -t'
+alias tns='tmux new-session -s'
+alias tks='tmux kill-session -t'
+alias tnw='tmux new-window -t base -n'
+
+# get current branch
+alias gitc='git branch | cat | grep "*" | awk "{print $2}"'
 
 # custom functions
 function mcscope() {
@@ -288,7 +258,7 @@ export PATH=$PATH:$GOPATH/bin:~/protoc-3.7.0-osx-x86_64/bin
 export ISTIO=$GOPATH/src/istio.io # eg. ~/go/src/istio.io
 
 source "/usr/local/opt/kube-ps1/share/kube-ps1.sh"
-PS1='$(kube_ps1)'$PS1
+#PS1='$(kube_ps1)'$PS1
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
 autoload -U edit-command-line
@@ -325,3 +295,75 @@ function ydl () {
 }
 
  export PATH="~/.cask/bin:$PATH"
+
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/Users/rchint1/opt/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/Users/rchint1/opt/anaconda3/etc/profile.d/conda.sh" ]; then
+        . "/Users/rchint1/opt/anaconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/Users/rchint1/opt/anaconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator background_jobs history time anaconda virtualenv)
+
+alias gtw='~/totp --totp wmt | pbcopy'
+
+# function to push to git
+function obsidianpush() {
+    git add --all
+    git commit -a -m "sync notes"
+    git pull --rebase
+    git push
+}
+
+# aliases
+alias opull="cd ~/Google\ Drive/obsidian/Obsidian && git pull"
+alias opush="cd ~/Google\ Drive/obsidian/Obsidian && obsidianpush"
+
+GPG_TTY=`tty`
+export GPG_TTY
+
+# Keychain
+eval `keychain --agents ssh --eval id_rsa`
+eval `keychain --agents gpg --eval 80DE15A80341233088142CFE134B443F329ED543`
+
+# rclone
+export RCLONE_PASSWORD_COMMAND="pass rc"
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/rchint1/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/rchint1/Downloads/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/rchint1/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/rchint1/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
+# place this after nvm initialization!
+autoload -U add-zsh-hook
+load-nvmrc() {
+  local node_version="$(nvm version)"
+  local nvmrc_path="$(nvm_find_nvmrc)"
+
+  if [ -n "$nvmrc_path" ]; then
+    local nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
+
+    if [ "$nvmrc_node_version" = "N/A" ]; then
+      nvm install
+    elif [ "$nvmrc_node_version" != "$node_version" ]; then
+      nvm use
+    fi
+  elif [ "$node_version" != "$(nvm version default)" ]; then
+    echo "Reverting to nvm default version"
+    nvm use default
+  fi
+}
+add-zsh-hook chpwd load-nvmrc
+load-nvmrc
+[[ /usr/local/bin/kubectl ]] && source <(kubectl completion zsh)
+alias k=kubectl
+complete -F __start_kubectl k
+source "/usr/local/opt/kube-ps1/share/kube-ps1.sh"
+PS1='$(kube_ps1)'$PS1
