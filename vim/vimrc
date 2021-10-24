@@ -1,69 +1,43 @@
 " manage plugins by vundle
 source ~/.vundleplugins.vim
-" set title
-set title
-" for syntax
-syntax on
-" be iMproved, required
-set nocompatible
-" to show numbers
-set number
-" to auto indent
-set autoindent
-set smartindent
-" dont wrap large lines
-set nowrap
-" enable increment search
-set incsearch
-" enable ignore case
-set ignorecase
-" when using caps, ignore ic
-set smartcase
-" highlight search
-set hlsearch
-" yanking will paste directly to clipboard
-set clipboard^=unnamed,unnamedplus
-" disable creating swp file
-set noswapfile
-" on shell, which shell to use
-set shell=zsh
-" Better command-line completion
-set wildmode=longest,list
-set wildmenu
-" Show partial commands in the last line of the screen
-set showcmd
-" enable mouse support for vim
-set mouse=a
-" Always display the status line, even if only one window is displayed
-set laststatus=2
-" Set the command window height to 2 lines, to avoid many cases of having to
-" press <Enter> to continue"
-set cmdheight=2
-" set paste toggle
-set pastetoggle=<leader>v
-" lines of text around cursor
-set scrolloff=3
-" command bar height
-set cmdheight=1
-" current buffer can be put into background without closing
-set hidden
-" don't redraw while executing macros
-set nolazyredraw
-" switch between current and last buffer
-nmap <space>. <c-^>
-" don't show which mode disabled for PowerLine
-set noshowmode
-" faster redrawing
-set ttyfast
-" show matching braces
-set showmatch
-" how many tenths of a second to blink
-set mat=2
-" error bells
-set noerrorbells
-set visualbell
-set t_vb=
-set tm=500
+filetype plugin indent on    " required
+
+
+syntax on "for syntax
+
+set title "show title in statusbar
+set nocompatible "be iMproved, required
+set noswapfile "disable creating swp file
+set nowrap "dont wrap large lines
+set ttyfast " faster redrawing
+
+set noerrorbells "off audio error bells
+set visualbell "off visual error bells
+set t_vb= "off visual error bell"
+
+set number "to show numbers
+set shell=zsh "on shell, which shell to use
+set showcmd "Show partial commands in the last line of the screen
+set mouse=a "enable mouse support for vim
+set laststatus=2 "Always display the status line, even if only one window is displayed
+set scrolloff=3 "lines of text around cursor
+set cmdheight=1 "command bar height
+set hidden "current buffer can be put into background without closing
+set nolazyredraw "don't redraw while executing macros
+set showmatch "show matching braces
+set noshowmode "don't show which mode disabled for PowerLine
+set autoread "detect when a file is changed
+set tm=500 "timeout length of key combination presses
+set mat=2 " how many tenths of a second to blink
+
+set autoindent "enable auto indent
+set smartindent "enable smart indent
+
+set incsearch "enable increment search
+set ignorecase "enable ignore case
+set smartcase "when using caps, ignore ic
+set hlsearch "highlight search
+
 " Tab control
 set expandtab " tabs ftw
 set smarttab " tab respects 'tabstop', 'shiftwidth', and 'softtabstop'
@@ -71,19 +45,19 @@ set tabstop=4 " the visible width of tabs
 set softtabstop=4 " edit as if the tabs are 4 characters wide
 set shiftwidth=4 " number of spaces to use for indent and unindent
 set shiftround " round indent to a multiple of 'shiftwidth'
-" detect when a file is changed
-set autoread
-" mapping leader
-let mapleader=","
-" required for tmux
-set term=screen-256color
-" matchit fix
-runtime macros/matchit.vim
 
-execute pathogen#infect()
-" Except Markdown
-autocmd FileType mkd set sw=4
-autocmd FileType mkd set sts=4
+" Better command-line completion
+set wildmode=longest,list
+set wildmenu
+
+" yanking will paste directly to clipboard
+set clipboard^=unnamed,unnamedplus
+" Set the command window height to 2 lines, to avoid many cases of having to
+" press <Enter> to continue"
+set cmdheight=2
+" set paste toggle
+set pastetoggle=<leader>v
+set term=screen-256color " required for tmux
 
 " Folding
 set foldmethod=syntax
@@ -99,72 +73,104 @@ let sh_fold_enabled=1                 " sh
 let vimsyn_folding='af'               " Vim script
 let xml_syntax_folding=1              " XML
 autocmd BufRead,BufNewFile *.cql set filetype=cql
+" Except Markdown
+autocmd FileType mkd set sw=4
+autocmd FileType mkd set sts=4
 
-"Map <C-L> (redraw screen) to also turn off search highlighting until the next search
-nnoremap <leader>L :nohl<CR>
-" custom command to indent json
-com! FormatJSON %!python -m json.tool
-com! IndentJSON %!jq -r .
-" custom command to show unprintable characters
-" AirlineToggleWhitespace
-
-" Set list characters - Can be toggled with 'col'
-" set listchars=tab:•\ ,trail:•,extends:»,precedes:« " Unprintable chars mapping
+" To list special characters
 set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮,nbsp:+
 set listchars+=trail:-
 set showbreak=↪
-com! ShowSpecial set list
-nnoremap <leader>l :set list!<cr>
 
-" select color scheme
-colorscheme onedark
+set cursorline "show cursor line"
 
-"colorscheme sidonia
-"set termguicolors
-
-"colorscheme molokai
-"let g:molokai_original = 1
-"let g:rehash256 = 1
-
-"colorscheme solarized
-"set background=dark
-
-filetype plugin indent on    " required
-" To ignore plugin indent changes, instead use:
-"filetype plugin on
-"
-" Brief help
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
-"
-" see :h vundle for more details or wiki for FAQ
-" Put your non-Plugin stuff after this line
-"
-
-" Unite
-call unite#filters#matcher_default#use(['matcher_fuzzy'])
-call unite#filters#sorter_default#use(['sorter_rank'])
-"let g:unite_split_rule = 'botright'
-let g:unite_enable_ignore_case = 1
-let g:unite_enable_smart_case = 1
-let g:unite_enable_start_insert = 1
-let g:unite_source_history_yank_enable = 1
-let g:unite_prompt = ' ▸▸ '
-let g:unite_source_rec_max_cache_files = 99999
-if executable('ag')
-  let g:unite_source_grep_command = 'ag'
-  let g:unite_source_grep_default_opts = '-i --smart-case --nogroup --nocolor --ignore-dir={.git, .cabal-sandbox, .stack-work }'
-  let g:unite_source_grep_recursive_opt = ''
-  "let g:unite_source_rec_async_command = ['ag', '--follow', '--nocolor', '--nogroup','--hidden','--ignore "**.jar"','-g','']
-  let g:unite_source_rec_async_command = 'ag --follow --nocolor --nogroup --hidden --ignore "**.jar" -g ""'
-elseif executable('ack')
-  let g:unite_source_grep_command = 'ack'
-  let g:unite_source_grep_default_opts ='-i --smart-case --nogroup --nocolor --ignore-dir=''.git, .cabal-sandbox, .stack-work'''
-  let g:unite_source_grep_recursive_opt = ''
-  let g:unite_source_rec_async_command ='ack -f --nofilter --nogroup --nocolor'
+" gui settings
+if has("gui_running")
+  "set guifont=Meslo\ LG\ S\ DZ\ Regular\ for\ Powerline:h14
+  "set guifont=Droid\ Sans\ Mono\ for\ Powerline\ Plus\ Nerd\ File\ Types:h14
+  set guifont=MesloLGSDZNerdFontComplete-Regular:h16
+  set guioptions-=m  "remove menu bar
+  set guioptions-=T  "remove toolbar
+  set guioptions-=r  "remove right-hand scroll bar
+  set guioptions-=L  "remove left-hand scroll bar
 endif
+
+" CUSTOM KEY BINDINGS
+let mapleader="," " mapping leader
+"Map <C-L> (redraw screen) to also turn off search highlighting until the next search
+nnoremap <leader>L :nohl<CR>
+" custom command to show unprintable characters
+nnoremap <leader>l :set list!<cr>
+" toggle cursor line
+nnoremap <leader>i :set cursorline!<cr>
+" to write as root
+noremap <leader>W :w !sudo tee % > /dev/null
+" <Leader>q: Quit all, very useful in vimdiff
+nnoremap <Leader>q :qa<cr>
+" _ : Quick horizontal splits
+nnoremap _ :new<cr>
+" | : Quick vertical splits
+nnoremap <bar> :vnew<cr>
+" quickly edit new file
+nnoremap <leader>e : enew<cr>
+" buffer delete
+nnoremap <leader>d :bd!<cr>
+nnoremap <leader>D :%bd!<cr>
+" compare split windows
+nnoremap <leader>c :windo diffthis<cr>
+nnoremap <leader>C :windo diffoff<cr>
+" move to current directory
+nnoremap sc :lcd %:p:h<cr>
+" remove lines
+nnoremap <leader>G :g//d<CR>
+nnoremap <leader>V :v//d<CR>
+nnoremap <leader>S :%s///g<CR>
+" copy current relative file path
+nnoremap <leader>cf :let @*=expand("%")<CR>
+" lgrep
+nnoremap <Leader>r :silent lgrep<Space>
+nnoremap <Leader>R :silent lgrep <C-r><C-w><cr>
+" to resize windows
+nmap <leader>vs :vertical resize +10<cr>
+nmap <leader>hs :resize +10<cr>
+" switch between current and last buffer
+nmap <space>. <c-^>
+" quickly open quick fix
+nmap <space>q : copen<cr>
+nmap <space>Q : cclose<cr>
+" when in visual mode, search for selected text
+vnoremap // y/<C-R>"<CR>
+" remove all trailing spaces
+nnoremap <F5> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar><CR>
+
+" custom command to indent json
+com! FormatJSON %!python -m json.tool
+com! IndentJSON %!jq -r .
+com! ShowSpecial set list
+
+" java decompiler
+augr class
+  au!
+  au bufreadpost,filereadpost *.class %!jad -noctor -lnc -ff -i -p %
+  au bufreadpost,filereadpost *.class set readonly
+  au bufreadpost,filereadpost *.class set ft=java
+  au bufreadpost,filereadpost *.class normal gg=G
+  au bufreadpost,filereadpost *.class set nomodified
+augr END
+
+" theme
+colorscheme onedark " select color scheme
+" toggle background
+function! BgToggleSol()
+  if &background == "light"
+    execute ":set background=dark"
+  else
+    execute ":set background=light"
+  endif
+endfunction
+nnoremap <F2> :call BgToggleSol()<cr>
+
+" PLUGIN SPECIFIC
 
 " FZF settings
 " search for a word
@@ -178,6 +184,7 @@ nnoremap <space>t :BTags<cr>
 nnoremap <space>T :Tags <C-r><C-w><cr>
 " Find files
 nnoremap <space>f :FZF<cr>
+nnoremap <C-p> :<C-u>FZF<CR>
 nnoremap <space>F :FZF <C-r><C-w><cr>
 " History
 nnoremap <space>r :History<cr>
@@ -192,75 +199,87 @@ nnoremap <space>m :Maps<cr>
 " get all buffers
 nnoremap <space>b :Buffers<cr>
 " get Windows
-nnoremap <space>w :Windows<rc>
-" 
-nnoremap <space>h : Unite cscope/functions_calling<cr><C-r><C-w><cr>
+nnoremap <space>w :Windows<cr>
 
-" Unite settings
-" get outline of current buffer
-nnoremap <space>o :<C-u>Unite -buffer-name=outline -input= -start-insert outline<cr>
-" get all yanks and history
-nnoremap <space>y :<C-u>Unite -buffer-name=yank -winheight=10 -input= history/yank<cr>
-" get all jump locations
-nnoremap <space>j :<C-u>Unite -buffer-name=jump jump<cr>
-" search help files
-nnoremap <C-h>  :<C-u>Unite -buffer-name=help -start-insert help<CR>
-" search text in all files
-nnoremap <space>/ :Unite -no-empty -no-resize grep:.<cr>
-" search word under cursor
-" Unite quick fix
-nnoremap <space>q :<C-u>Unite -buffer-name=quickfix -winheight=10 -input= -start-insert quickfix<cr>
-" get buffers quick match
-" nnoremap <space>b :Unite -quick-match buffer<cr>
-nnoremap <space>u :UniteResume<cr>
-" cscope call reference mappings
-nnoremap <space>g : Unite cscope/find_this_symbol<cr><C-r><C-w><cr>
-" Custom mappings for the unite buffer
-autocmd FileType unite call s:unite_settings()
-function! s:unite_settings()
-  " Play nice with supertab
-    let b:SuperTabDisabled=1
-    " Enable navigation with control-j and control-k in insert mode
-    imap <buffer> <C-j>   <Plug>(unite_select_next_line)
-    imap <buffer> <C-k>   <Plug>(unite_select_previous_line)
-    nmap <buffer> <tab> <Plug>(unite_loop_cursor_down)
-    nmap <buffer> <s-tab> <Plug>(unite_loop_cursor_up)
-    imap <buffer> <C-a> <Plug>(unite_choose_action)
-    nmap <silent><buffer><expr> Enter unite#do_action('switch')
-    nmap <buffer> <C-s>      <Plug>(unite_redraw)
-    nnoremap <silent><nowait><buffer><expr> r unite#smart_map('r', unite#do_action('delete'))
-    nnoremap <silent><nowait><buffer><expr> d unite#smart_map('d', unite#do_action('diff'))
-    nnoremap <silent><nowait><buffer><expr> h unite#smart_map('h', unite#do_action('split'))
-    nnoremap <silent><nowait><buffer><expr> v unite#smart_map('v', unite#do_action('vsplit'))
-    nnoremap <silent><nowait><buffer><expr> t unite#smart_map('t', unite#do_action('tabswitch'))
-    nnoremap <silent><nowait><buffer><expr> c unite#smart_map('c', unite#do_action('cd'))
-    nnoremap <buffer> <space>q :UniteClose<CR>
+
+" use ripgrep
+if executable('rg')
+  let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --follow --glob "!.git/*"'
+  set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
+  command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"', 1, <bang>0)
+endif
+nnoremap <silent> <space>e :call Fzf_dev()<CR>
+" Files + devicons
+function! Fzf_dev()
+  let l:fzf_files_options = '--preview "bat --theme="OneHalfDark" --style=numbers,changes --color always {2..-1} | head -'.&lines.'"'
+
+  function! s:files()
+    let l:files = split(system($FZF_DEFAULT_COMMAND), '\n')
+    return s:prepend_icon(l:files)
+  endfunction
+
+  function! s:prepend_icon(candidates)
+    let l:result = []
+    for l:candidate in a:candidates
+      let l:filename = fnamemodify(l:candidate, ':p:t')
+      let l:icon = WebDevIconsGetFileTypeSymbol(l:filename, isdirectory(l:filename))
+      call add(l:result, printf('%s %s', l:icon, l:candidate))
+    endfor
+
+    return l:result
+  endfunction
+
+  function! s:edit_file(item)
+    let l:pos = stridx(a:item, ' ')
+    let l:file_path = a:item[pos+1:-1]
+    execute 'silent e' l:file_path
+  endfunction
+
+  call fzf#run({
+        \ 'source': <sid>files(),
+        \ 'sink':   function('s:edit_file'),
+        \ 'options': '-m ' . l:fzf_files_options,
+        \ 'down':    '50%' })
 endfunction
 
-"Ggrep custom command
-command -nargs=+ Ggr execute 'silent Ggrep!' <q-args> | cw | redraw!
 
-" Ack
-cnoreabbrev Ack Ack!
-nnoremap <Leader>a :Ack!<Space>
-nnoremap <Leader>A :Ack! <C-r><C-w>
-" using silver searcher for ack
-" let g:ackprg = 'ag --nogroup --nocolor --column --vimgrep --smart-case'
-let g:ackprg = 'rg --vimgrep --column --line-number --fixed-strings --smart-case --no-heading --hidden'
-cnoreabbrev ag Ack
-cnoreabbrev aG Ack
-cnoreabbrev Ag Ack
-cnoreabbrev AG Ack
+" grep
+let g:grepper       = {}
+let g:grepper.tools = ['rg', 'ag', 'grep', 'git']
+set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
+set grepformat=$f:$l:%c:%m
+" Search for the current word
+nnoremap <Leader>* :Grepper -cword -noprompt<CR>
+nnoremap <space>g : Grepper <cr>
+nnoremap <space>G :Grepper -tool rg -buffers<cr>
+" Search for the current selection
+nmap gs <plug>(GrepperOperator)
+xmap gs <plug>(GrepperOperator)
+cabbrev grep GrepperGrep
+function! SetupCommandAlias(input, output)
+  exec 'cabbrev <expr> '.a:input
+        \ .' ((getcmdtype() is# ":" && getcmdline() is# "'.a:input.'")'
+        \ .'? ("'.a:output.'") : ("'.a:input.'"))'
+endfunction
+call SetupCommandAlias("grep", "GrepperGrep")
 
-" java decompiler
-augr class
-  au!
-  au bufreadpost,filereadpost *.class %!jad -noctor -lnc -ff -i -p %
-  au bufreadpost,filereadpost *.class set readonly
-  au bufreadpost,filereadpost *.class set ft=java
-  au bufreadpost,filereadpost *.class normal gg=G
-  au bufreadpost,filereadpost *.class set nomodified
-augr END
+
+"NERTtree mappings
+" Toggle NERDTree
+nmap <silent> <leader>t :NERDTreeToggle<cr>
+" expand to the path of the file in the current buffer
+nmap <silent> <leader>T :NERDTreeFind<cr>
+
+let NERDTreeShowHidden=1
+let NERDTreeDirArrowExpandable = '▷'
+let NERDTreeDirArrowCollapsible = '▼'
+let NERDTreeShowExecutableFlag = 0
+"silent! nmap <F2> :NERDTreeToggle<CR>
+"silent! map <F3> :NERDTreeFind<CR>
+"let g:NERDTreeMapActivateNode="<F3>"
+"let g:NERDTreeMapPreview="<F4>"
+"
+
 
 " UltiSnips Trigger configuration.
 "let g:UltiSnipsExpandTrigger="<tab>"
@@ -277,20 +296,6 @@ let g:UltiSnipsJumpBackwardTrigger="<S-Tab>"
 let g:UltiSnipsEditSplit="vertical"
 let g:UltiSnipsSnippetDirectories = ['~/.vim/UltiSnips', 'UltiSnips']
 
-"NERTtree mappings
-" Toggle NERDTree
-nmap <silent> <leader>t :NERDTreeToggle<cr>
-" expand to the path of the file in the current buffer
-nmap <silent> <leader>T :NERDTreeFind<cr>
-
-let NERDTreeShowHidden=1
-let NERDTreeDirArrowExpandable = '▷'
-let NERDTreeDirArrowCollapsible = '▼'
-let NERDTreeShowExecutableFlag = 0
-"silent! nmap <F2> :NERDTreeToggle<CR>
-"silent! map <F3> :NERDTreeFind<CR>
-"let g:NERDTreeMapActivateNode="<F3>"
-"let g:NERDTreeMapPreview="<F4>"
 
 " session management
 let g:session_autosave='yes'
@@ -298,18 +303,6 @@ let g:session_autoload='yes'
 let g:session_default_to_last='1'
 let g:session_autosave_to = 'default'
 
-"CtrlP
-let g:ctrlp_working_path_mode = ""
-let g:ctrlp_max_files=0
-let g:ctrlp_max_depth=40
-nnoremap <leader>. :CtrlPTag<cr>
-"nmap <leader>w <C-P><C-\>w
-nmap <leader>w :CtrlPMixed<cr><C-\>w
-"nmap <leader>p :CtrlPMixed<cr>
-if executable('ag')
-  let g:ctrlp_user_command = 'ag --nocolor -g "" %s'
-  let g:ctrlp_use_caching = 0
-endif
 
 " air-line settings
 let g:airline_theme='wombat'
@@ -323,44 +316,7 @@ if !exists('g:airline_symbols')
     let g:airline_symbols = {}
 endif
 
-set cursorline
-" toggle cursor line
-nnoremap <leader>i :set cursorline!<cr>
-" to write as root
-noremap <leader>W :w !sudo tee % > /dev/null
-" <Leader>q: Quit all, very useful in vimdiff
-nnoremap <Leader>q :qa<cr>
-" _ : Quick horizontal splits
-nnoremap _ :new<cr>
-" | : Quick vertical splits
-nnoremap <bar> :vnew<cr>
-nnoremap <leader>e : enew<cr>
-" buffer delete
-nnoremap <leader>d :bd!<cr>
-nnoremap <leader>D :%bd!<cr>
-" compare split windows
-nnoremap <leader>c :windo diffthis<cr>
-nnoremap <leader>C :windo diffoff<cr>
-" move to current directory
-nnoremap gc :lcd %:p:h<cr>
-
-" gui settings
-if has("gui_running")
-  "set guifont=Meslo\ LG\ S\ DZ\ Regular\ for\ Powerline:h14
-  "set guifont=Droid\ Sans\ Mono\ for\ Powerline\ Plus\ Nerd\ File\ Types:h14
-  set guifont=MesloLGSDZNerdFontComplete-Regular:h16
-  set guioptions-=m  "remove menu bar
-  set guioptions-=T  "remove toolbar
-  set guioptions-=r  "remove right-hand scroll bar
-  set guioptions-=L  "remove left-hand scroll bar
-endif
-
-"Easy motions
-let g:EasyMotion_do_mapping = 0 " Disable default mappings
-nmap s <Plug>(easymotion-overwin-f2)
-let g:EasyMotion_smartcase = 1
-
-"git
+"futitive git
 let g:fugitive_github_domains      = ['https://gecgithub01.walmart.com']
 let g:github_enterprise_urls       = ['https://gecgithub01.walmart.com']
 "autocmd User fugitive
@@ -370,19 +326,14 @@ let g:github_enterprise_urls       = ['https://gecgithub01.walmart.com']
 nnoremap <leader>gl :Glog -10 -- %<CR>
 nnoremap <leader>gs :Gstatus<CR>
 nnoremap <leader>gb :Gblame<CR>
+"Ggrep custom command
+command -nargs=+ Ggr execute 'silent Ggrep!' <q-args> | cw | redraw!
 
-" toggle background
-function! BgToggleSol()
-  if &background == "light"
-    execute ":set background=dark"
-  else
-    execute ":set background=light"
-  endif
-endfunction
-nnoremap <F2> :call BgToggleSol()<cr>
 
+" vim-rsi
 " disable meta keys for RSI
 let g:rsi_no_meta = 1
+
 
 "Souround settings
 " ,# Surround a word with #{ruby interpolation}
@@ -418,30 +369,15 @@ vmap ,{ c{<C-R>"}<ESC>
 
 map ,` ysiw`
 
+
 " vimux settings
 map <leader>vp :VimuxPromptCommand<cr>
 map <leader>vc :VimuxCloseRunner<cr>
 
-" remove lines
-nnoremap <leader>G :g//d<CR>
-nnoremap <leader>V :v//d<CR>
-nnoremap <leader>S :%s///g<CR>
-
-" copy current relative file path
-nnoremap <leader>cf :let @*=expand("%")<CR>
 
 " React syntax
 let g:jsx_ext_required = 0 " Allow JSX in normal JS files
 let g:syntastic_javascript_checkers = ['eslint']
-
-vnoremap // y/<C-R>"<CR>
-
-"enable keyboard shortcuts
-let g:tern_map_keys=1
-"show argument hints
-let g:tern_show_argument_hints='on_hold'
-
-nnoremap <silent> <space>e :call Fzf_dev()<CR>
 
 "gpg
 " Armor files
@@ -454,50 +390,12 @@ augroup GPG
     autocmd CursorHold *.\(gpg\|asc\|pgp\) quit
 augroup END
 
-
-" ripgrep
-if executable('rg')
-  let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --follow --glob "!.git/*"'
-  set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case 
-  command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"', 1, <bang>0)
-endif
-nnoremap <Leader>r :silent lgrep<Space>
-nnoremap <Leader>R :silent lgrep <C-r><C-w><cr>
-
-" Files + devicons
-function! Fzf_dev()
-  let l:fzf_files_options = '--preview "bat --theme="OneHalfDark" --style=numbers,changes --color always {2..-1} | head -'.&lines.'"'
-
-  function! s:files()
-    let l:files = split(system($FZF_DEFAULT_COMMAND), '\n')
-    return s:prepend_icon(l:files)
-  endfunction
-
-  function! s:prepend_icon(candidates)
-    let l:result = []
-    for l:candidate in a:candidates
-      let l:filename = fnamemodify(l:candidate, ':p:t')
-      let l:icon = WebDevIconsGetFileTypeSymbol(l:filename, isdirectory(l:filename))
-      call add(l:result, printf('%s %s', l:icon, l:candidate))
-    endfor
-
-    return l:result
-  endfunction
-
-  function! s:edit_file(item)
-    let l:pos = stridx(a:item, ' ')
-    let l:file_path = a:item[pos+1:-1]
-    execute 'silent e' l:file_path
-  endfunction
-
-  call fzf#run({
-        \ 'source': <sid>files(),
-        \ 'sink':   function('s:edit_file'),
-        \ 'options': '-m ' . l:fzf_files_options,
-        \ 'down':    '50%' })
-endfunction
+" tern
+"enable keyboard shortcuts
+let g:tern_map_keys=1
+"show argument hints
+let g:tern_show_argument_hints='on_hold'
 
 "Latex
 autocmd BufWritePost *.tex call Tex_RunLaTeX()
 nmap <leader>m :up<cr>:call Tex_ViewLaTeX()<cr>
-

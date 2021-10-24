@@ -339,6 +339,9 @@ nnoremap <leader>c :windo diffthis<cr>
 nnoremap <leader>C :windo diffoff<cr>
 " move to current directory
 nnoremap gc :lcd %:p:h<cr>
+" open quick fix
+nnoremap <space>q :copen<cr>
+nnoremap <space>Q :cclose<cr>
 
 " gui settings
 if has("gui_running")
