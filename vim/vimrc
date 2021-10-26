@@ -143,6 +143,13 @@ vnoremap // y/<C-R>"<CR>
 " remove all trailing spaces
 nnoremap <F5> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar><CR>
 
+" Terminal
+" vim-powered terminal in split window
+map <Leader>z :bel term ++close<cr>
+tmap <Leader>z <c-w>:vert term ++close<cr>
+
+nnoremap <Leader>cl :set conceallevel=0<cr>
+
 " custom command to indent json
 com! FormatJSON %!python -m json.tool
 com! IndentJSON %!jq -r .
@@ -158,6 +165,9 @@ augr class
   au bufreadpost,filereadpost *.class set nomodified
 augr END
 
+
+
+" PLUGIN SPECIFIC
 " theme
 colorscheme onedark " select color scheme
 " toggle background
@@ -169,8 +179,18 @@ function! BgToggleSol()
   endif
 endfunction
 nnoremap <F2> :call BgToggleSol()<cr>
+" air-line settings
+let g:airline_theme='wombat'
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
+let g:table_mode_corner_corner="+"
+let g:table_mode_header_fillchar="="
+let g:airline_powerline_fonts = 1
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
 
-" PLUGIN SPECIFIC
 
 " FZF settings
 " search for a word
@@ -200,8 +220,6 @@ nnoremap <space>m :Maps<cr>
 nnoremap <space>b :Buffers<cr>
 " get Windows
 nnoremap <space>w :Windows<cr>
-
-
 " use ripgrep
 if executable('rg')
   let $FZF_DEFAULT_COMMAND = 'rg --files --hidden --follow --glob "!.git/*"'
@@ -269,22 +287,25 @@ call SetupCommandAlias("grep", "GrepperGrep")
 nmap <silent> <leader>t :NERDTreeToggle<cr>
 " expand to the path of the file in the current buffer
 nmap <silent> <leader>T :NERDTreeFind<cr>
-
 let NERDTreeShowHidden=1
 let NERDTreeDirArrowExpandable = '▷'
 let NERDTreeDirArrowCollapsible = '▼'
 let NERDTreeShowExecutableFlag = 0
-"silent! nmap <F2> :NERDTreeToggle<CR>
-"silent! map <F3> :NERDTreeFind<CR>
-"let g:NERDTreeMapActivateNode="<F3>"
-"let g:NERDTreeMapPreview="<F4>"
-"
+
+
+"futitive git
+let g:fugitive_github_domains      = ['https://gecgithub01.walmart.com']
+let g:github_enterprise_urls       = ['https://gecgithub01.walmart.com']
+nnoremap <leader>gl :Git log -10 -- %<CR>
+nnoremap <leader>gs :Git<CR>
+nnoremap <leader>gb :Git blame<CR>
+nnoremap <leader>gB :GV<CR>
+nnoremap <leader>gd :Gvdiffsplit<CR>
+"Ggrep custom command
+command -nargs=+ Ggr execute 'silent Ggrep!' <q-args> | cw | redraw!
 
 
 " UltiSnips Trigger configuration.
-"let g:UltiSnipsExpandTrigger="<tab>"
-"let g:UltiSnipsJumpForwardTrigger="<c-b>"
-"let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 let g:ycm_key_list_select_completion=['<C-n>', '<Down>']
 let g:ycm_key_list_previous_completion=['<C-p>', '<Up>']
 
@@ -303,37 +324,9 @@ let g:session_autoload='yes'
 let g:session_default_to_last='1'
 let g:session_autosave_to = 'default'
 
-
-" air-line settings
-let g:airline_theme='wombat'
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#left_sep = ' '
-let g:airline#extensions#tabline#left_alt_sep = '|'
-let g:table_mode_corner_corner="+"
-let g:table_mode_header_fillchar="="
-let g:airline_powerline_fonts = 1
-if !exists('g:airline_symbols')
-    let g:airline_symbols = {}
-endif
-
-"futitive git
-let g:fugitive_github_domains      = ['https://gecgithub01.walmart.com']
-let g:github_enterprise_urls       = ['https://gecgithub01.walmart.com']
-"autocmd User fugitive
-"  \ if fugitive#buffer().type() =~# '^\%(tree\|blob\)$' |
-"  \   nnoremap <buffer> .. :edit %:h<CR> |
-"  \ endif
-nnoremap <leader>gl :Glog -10 -- %<CR>
-nnoremap <leader>gs :Gstatus<CR>
-nnoremap <leader>gb :Gblame<CR>
-"Ggrep custom command
-command -nargs=+ Ggr execute 'silent Ggrep!' <q-args> | cw | redraw!
-
-
 " vim-rsi
 " disable meta keys for RSI
 let g:rsi_no_meta = 1
-
 
 "Souround settings
 " ,# Surround a word with #{ruby interpolation}
@@ -369,12 +362,6 @@ vmap ,{ c{<C-R>"}<ESC>
 
 map ,` ysiw`
 
-
-" vimux settings
-map <leader>vp :VimuxPromptCommand<cr>
-map <leader>vc :VimuxCloseRunner<cr>
-
-
 " React syntax
 let g:jsx_ext_required = 0 " Allow JSX in normal JS files
 let g:syntastic_javascript_checkers = ['eslint']
@@ -384,11 +371,11 @@ let g:syntastic_javascript_checkers = ['eslint']
 let g:GPGPreferArmor=1
 " Set the default option
 let g:GPGDefaultRecipients=["rajshekar.ch@gmail.com"]
-augroup GPG
-    autocmd!
-    autocmd FileType gpg setlocal updatetime=12000
-    autocmd CursorHold *.\(gpg\|asc\|pgp\) quit
-augroup END
+"augroup GPG
+"    autocmd!
+"    autocmd FileType gpg setlocal updatetime=12000
+"    autocmd CursorHold *.\(gpg\|asc\|pgp\) quit
+"augroup END
 
 " tern
 "enable keyboard shortcuts
@@ -399,3 +386,4 @@ let g:tern_show_argument_hints='on_hold'
 "Latex
 autocmd BufWritePost *.tex call Tex_RunLaTeX()
 nmap <leader>m :up<cr>:call Tex_ViewLaTeX()<cr>
+

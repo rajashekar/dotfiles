@@ -16,6 +16,8 @@ Plugin 'rakr/vim-one'
 " airline
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
+" Add icons to plugins, you need to have Nert compatible font
+Plugin 'ryanoasis/vim-devicons'
 
 " fuzzy finders
 Plugin 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
@@ -24,71 +26,75 @@ Plugin 'junegunn/fzf.vim'
 " search
 Plugin 'mhinz/vim-grepper'
 
-" git
-Plugin 'airblade/vim-gitgutter'
-Plugin 'tpope/vim-fugitive'
-Plugin 'junegunn/gv.vim'
-Plugin 'tpope/vim-rhubarb'
-
-" ctags cscope
-Plugin 'craigemery/vim-autotag'
-
-" motions
-Plugin 'tpope/vim-surround'
-Plugin 'tpope/vim-unimpaired'
-Plugin 'tpope/vim-markdown'
-Plugin 'tpope/vim-rsi'
-Plugin 'tpope/vim-repeat'
-Plugin 'honza/vim-snippets'
-Plugin 'Raimondi/delimitMate'
-
 " file and folder
-Plugin 'scrooloose/nerdcommenter'
 Plugin 'scrooloose/nerdtree'
+" shows git marks in tree
 Plugin 'Xuyuanp/nerdtree-git-plugin'
 
-" autocomplete
-Plugin 'sheerun/vim-polyglot'
-Plugin 'vim-syntastic/syntastic'
-Plugin 'ervandew/supertab'
+" git
+Plugin 'tpope/vim-fugitive'
+" A git commit browser.
+Plugin 'junegunn/gv.vim'
+" shows what line got changed, move between hunks
+Plugin 'airblade/vim-gitgutter'
+" Enables :GBrowse from fugitive.vim to open GitHub URLs.
+Plugin 'tpope/vim-rhubarb'
 
-" sytax
-Plugin 'xolox/vim-misc'
-Plugin 'xolox/vim-session'
-Plugin 'Yggdroot/indentLine'
-Plugin 'ryanoasis/vim-devicons'
-Plugin 'elzr/vim-json'
 
-"Presenting
-Plugin 'sotte/presenting.vim'
+" session management
+Plugin 'tpope/vim-obsession'
+
+
+" automatic tabling
+" :Tabularize /= will align with =
 Plugin 'godlygeek/tabular'
+" An awesome automatic table creator & formatter
+" ,tm to toggle TableModeToggle
 Plugin 'dhruvasagar/vim-table-mode'
-Plugin 'vim-scripts/DrawIt'
 
-"tmux
-Plugin 'benmills/vimux'
+" navigate seamlessly between vim and tmux
 Plugin 'christoomey/vim-tmux-navigator'
 
-Plugin 'rizzatti/dash.vim'
-
-"React 
+" code
+" Gives mappings to surround text with special chars
+Plugin 'tpope/vim-surround'
+" Gives mappings with ] [
+Plugin 'tpope/vim-unimpaired'
+" Gives option to repeat above
+Plugin 'tpope/vim-repeat'
+" Gives options C-a, C-e in insert mode
+Plugin 'tpope/vim-rsi'
+" Provides automatic closing brackets
+Plugin 'Raimondi/delimitMate'
+" language packs for Vim
+Plugin 'sheerun/vim-polyglot'
+" Supertab is a vim plugin which allows you to use <Tab> for all your insert
+" completion needs
+Plugin 'ervandew/supertab'
+" commenting
+Plugin 'scrooloose/nerdcommenter'
+" ctags cscope
+Plugin 'craigemery/vim-autotag'
+" React
 Plugin 'mxw/vim-jsx'
-
-Plugin 'francoiscabrol/ranger.vim'
-
-"Tern
+" Tern is a stand-alone code-analysis engine for JavaScript
 Plugin 'ternjs/tern_for_vim'
-Plugin 'stefandtw/quickfix-reflector.vim'
-
-"Encryption
-Plugin 'jamessan/vim-gnupg'
-
+" syntax checking plugin
+Plugin 'vim-syntastic/syntastic'
+" Snippet engine
+Plugin 'SirVer/ultisnips'
+" Provides some default snippets
+Plugin 'honza/vim-snippets'
+" show vertical bars for indented lines
+Plugin 'Yggdroot/indentLine'
+" json highlighting
+Plugin 'elzr/vim-json'
 "Latex
 Plugin 'vim-latex/vim-latex'
-
 "Vim Rest
 Plugin 'diepm/vim-rest-console'
 
-"IntelliJ
-Plugin 'JetBrains/ideavim'
+
+"Encryption
+Plugin 'jamessan/vim-gnupg'
 call vundle#end()
