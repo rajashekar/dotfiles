@@ -155,6 +155,9 @@ com! FormatJSON %!python -m json.tool
 com! IndentJSON %!jq -r .
 com! ShowSpecial set list
 
+" C-x C-k to auto complete dictionary words
+set dictionary+=/usr/share/dict/words
+
 " java decompiler
 augr class
   au!
@@ -361,6 +364,7 @@ vmap ,} c{ <C-R>" }<ESC>
 vmap ,{ c{<C-R>"}<ESC>
 
 map ,` ysiw`
+vmap ,` c`<C-R>"`<ESC>
 
 " React syntax
 let g:jsx_ext_required = 0 " Allow JSX in normal JS files

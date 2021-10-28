@@ -1,0 +1,39 @@
+snippet '^code' "Prism coding snippet" r
+<pre class="line-numbers linkable-line-numbers" data-line="$3">
+<code class="language-$1">$2
+</code></pre>
+endsnippet
+
+snippet '^himg' "Prism coding snippet" r
+{% include image-caption.html imageurl="$1#wide" title="$2" caption="$3" %}
+endsnippet
+
+snippet 'note' "note nippet"
+<div class="note" markdown="1"> 
+**Note**: $1
+</div>
+endsnippet
+
+snippet '^toc' "Generate toc" r
+* TOC
+{:toc}
+endsnippet
+
+snippet '^-' "Generate Jekyll meta" r
+---
+title: "$1"
+date: 2021-10-16T00:00:00+00:00
+author: Rajashekar Chintalapati
+layout: post
+toc: true
+permalink: /$2/
+categories: development
+tags: [$3]
+featured_image_thumbnail: /assets/images/posts/$4
+featured_image: /assets/images/posts/$5
+---
+endsnippet
+
+snippet '^break' "Generate break" r
+<div class="breaker"></div>
+endsnippet
