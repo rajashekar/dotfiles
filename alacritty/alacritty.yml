@@ -1,0 +1,8 @@
+window:
+  dynamic_padding: false
+  decorations: buttonless
+
+font:
+  size: 16
+  normal:
+    family: JetBrainsMono Nerd Font
