@@ -98,7 +98,10 @@ Plugin 'vim-latex/vim-latex'
 Plugin 'diepm/vim-rest-console'
 " Liquid support
 Plugin 'tpope/vim-liquid'
-
+" sneak
+Plugin 'justinmk/vim-sneak'
+" which key
+Plugin 'liuchengxu/vim-which-key'
 
 "Encryption
 Plugin 'jamessan/vim-gnupg'

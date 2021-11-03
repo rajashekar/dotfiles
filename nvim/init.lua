@@ -12,6 +12,7 @@ local opt = vim.opt
 local cmd = vim.cmd
 local g = vim.g
 local o = vim.o
+local fn = vim.fn
 local env = vim.env
 
 local utils = require("utils")
@@ -29,15 +30,6 @@ cmd [[syntax on]]
 cmd [[filetype plugin indent on]]
 cmd [[let g:onedark_style = 'darker']]
 cmd [[colorscheme gruvbox]]
-
--- UltiSnips Trigger configuration.
-g["ycm_key_list_select_completion"] = {'<C-n>', '<Down>'}
-g["ycm_key_list_previous_completion"] = {'<C-p>', '<Up>'}
-g["UltiSnipsExpandTrigger"] = "<Tab>"
-g["UltiSnipsJumpForwardTrigger"] = "<Tab>"
-g["UltiSnipsJumpBackwardTrigger"] = "<S-Tab>"
-g["UltiSnipsEditSplit"] = "vertical"
-g["UltiSnipsSnippetDirectories"] = {'~/.config/nvim/UltiSnips', 'UltiSnips'}
 
 
 opt.backup = false -- don't use backup files
@@ -59,6 +51,12 @@ opt.hlsearch = true -- highlight search results
 opt.incsearch = true -- set incremental search, like modern browsers
 opt.lazyredraw = false -- don't redraw while executing macros
 opt.magic = true -- set magic on, for regular expressions
+
+if fn.executable("rg") then
+  -- if ripgrep installed, use that as a grepper
+  opt.grepprg = "rg --vimgrep --no-heading"
+  opt.grepformat = "%f:%l:%c:%m,%f:%l:%m"
+end
 
 -- error bells
 opt.errorbells = false
@@ -200,24 +198,35 @@ vmap('<leader>{','c{ <C-R>" }<ESC>')
 vmap('<leader>}','c{<C-R>"}<ESC>')
 
 
--- Nerd Tree
+-- UltiSnips Trigger configuration.
+g["ycm_key_list_select_completion"] = {'<C-n>', '<Down>'}
+g["ycm_key_list_previous_completion"] = {'<C-p>', '<Up>'}
+g["UltiSnipsExpandTrigger"] = "<Tab>"
+g["UltiSnipsJumpForwardTrigger"] = "<Tab>"
+g["UltiSnipsJumpBackwardTrigger"] = "<S-Tab>"
+g["UltiSnipsEditSplit"] = "vertical"
+g["UltiSnipsSnippetDirectories"] = {'~/.config/nvim/UltiSnips', 'UltiSnips'}
+
+
+-- Nvim Tree
 nmap('<leader>t', ": NvimTreeToggle<cr>")
 nmap('<leader>T', ": NvimTreeFindFile<cr>")
 
 
 -- Telescope
 -- Using Lua functions
-nnoremap("<leader>ff","<cmd>lua require('telescope.builtin').find_files()<cr>")
-nnoremap("<leader>fl","<cmd>lua require('telescope.builtin').file_browser()<cr>")
-nnoremap("<leader>fr","<cmd>lua require('telescope.builtin').oldfiles()<cr>")
-nnoremap("<leader>fk","<cmd>lua require('telescope.builtin').keymaps()<cr>")
-nnoremap("<leader>fb","<cmd>lua require('telescope.builtin').buffers()<cr>")
-nnoremap("<leader>fg","<cmd>lua require('telescope.builtin').git_files()<cr>")
-nnoremap("<leader>fgb","<cmd>lua require('telescope.builtin').git_bcommits()<cr>")
-nnoremap("<leader>fgc","<cmd>lua require('telescope.builtin').git_commits()<cr>")
-nnoremap("<leader>fgs","<cmd>lua require('telescope.builtin').git_status()<cr>")
 nnoremap("<leader>fa","<cmd>lua require('telescope.builtin').live_grep()<cr>")
+nnoremap("<leader>fb","<cmd>lua require('telescope.builtin').buffers()<cr>")
+nnoremap("<leader>fc","<cmd>lua require('telescope.builtin').git_commits()<cr>")
+nnoremap("<leader>fd","<cmd>lua require('telescope.builtin').git_bcommits()<cr>")
+nnoremap("<leader>ff","<cmd>lua require('telescope.builtin').find_files()<cr>")
+nnoremap("<leader>fg","<cmd>lua require('telescope.builtin').git_files()<cr>")
+nnoremap("<leader>fj","<cmd>lua require('telescope.builtin').jumplist()<cr>")
+nnoremap("<leader>fl","<cmd>lua require('telescope.builtin').file_browser()<cr>")
+nnoremap("<leader>fk","<cmd>lua require('telescope.builtin').keymaps()<cr>")
 nnoremap("<leader>fh","<cmd>lua require('telescope.builtin').help_tags()<cr>")
+nnoremap("<leader>fr","<cmd>lua require('telescope.builtin').oldfiles()<cr>")
+nnoremap("<leader>fs","<cmd>lua require('telescope.builtin').git_status()<cr>")
 
 
 -- Git 
@@ -384,3 +393,12 @@ local cmp = require('cmp')
       { name = 'cmdline' }
     })
   })
+
+-- Which key
+nnoremap("<leader>",":WhichKey ','<cr>")
+nnoremap("<space>",":WhichKey '<Space>'<cr>")
+nnoremap("]",":WhichKey ']'<cr>")
+nnoremap("[",":WhichKey '['<cr>")
+
+-- sneak
+g["sneak#label"] = 1

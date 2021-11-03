@@ -19,6 +19,12 @@ return require('packer').startup(function(use)
     'nvim-lualine/lualine.nvim',
     requires = {'kyazdani42/nvim-web-devicons', opt = true}
   }
+  use { 'alvarosevilla95/luatab.nvim', requires='kyazdani42/nvim-web-devicons' }
+  use {
+	"SmiteshP/nvim-gps",
+	requires = "nvim-treesitter/nvim-treesitter"
+  }
+
   -- Files & Folders
   use {
     'kyazdani42/nvim-tree.lua',
@@ -65,20 +71,10 @@ return require('packer').startup(function(use)
   -- Tree sitter simple and easy way to use the interface for tree-sitter in Neovim 
   use {
 	'nvim-treesitter/nvim-treesitter',
-	run = ':TSUpdate',
-	config = function()
-		require("nvim-treesitter.configs").setup {
-			ensure_installed = "all",
-
-			highlight = {
-				enable = true
-			},
-			indent = {
-				enable = true
-			}
-		}
-	end
+	run = ':TSUpdate'
   }
+  use 'nvim-treesitter/playground'
+  use 'nvim-treesitter/nvim-treesitter-textobjects'
   -- Markdown preview
   use 'iamcco/markdown-preview.nvim' 
   -- Toggle term
@@ -90,10 +86,13 @@ return require('packer').startup(function(use)
 		}
 	  end
   }
+  use 'liuchengxu/vim-which-key'
   -- Supertab is a vim plugin which allows you to use <Tab> for all your insert completion needs
   use 'ervandew/supertab'
   -- code completion - LSP
   use 'neovim/nvim-lspconfig'
+  use 'williamboman/nvim-lsp-installer'
+  use 'onsails/lspkind-nvim'
   use 'hrsh7th/cmp-nvim-lsp'
   use 'hrsh7th/cmp-buffer'
   use 'hrsh7th/cmp-path'
@@ -127,6 +126,9 @@ return require('packer').startup(function(use)
     'glacambre/firenvim',
     run = function() vim.fn['firenvim#install'](0) end 
   }
+
+  -- Easy motion
+  use 'justinmk/vim-sneak'
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
