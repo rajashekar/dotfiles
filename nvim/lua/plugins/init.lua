@@ -9,7 +9,6 @@ return require('packer').startup(function(use)
   -- My plugins here
   -- use 'foo1/bar1.nvim'
   use 'wbthomason/packer.nvim'
-  use 'neovim/nvim-lspconfig'
 
   -- Themes
   -- main theme
@@ -68,9 +67,13 @@ return require('packer').startup(function(use)
 	'nvim-treesitter/nvim-treesitter',
 	run = ':TSUpdate',
 	config = function()
-		require("nvim-treesitter").setup {
-			ensure_installed = "maintained",
+		require("nvim-treesitter.configs").setup {
+			ensure_installed = "all",
+
 			highlight = {
+				enable = true
+			},
+			indent = {
 				enable = true
 			}
 		}
@@ -87,7 +90,15 @@ return require('packer').startup(function(use)
 		}
 	  end
   }
-
+  -- Supertab is a vim plugin which allows you to use <Tab> for all your insert completion needs
+  use 'ervandew/supertab'
+  -- code completion - LSP
+  use 'neovim/nvim-lspconfig'
+  use 'hrsh7th/cmp-nvim-lsp'
+  use 'hrsh7th/cmp-buffer'
+  use 'hrsh7th/cmp-path'
+  use 'hrsh7th/cmp-cmdline'
+  use 'hrsh7th/nvim-cmp'
 
   -- Lua
   -- A pretty list for showing diagnostics, references, telescope results, quickfix and 
@@ -102,6 +113,19 @@ return require('packer').startup(function(use)
   	-- refer to the configuration section below
   	}
   end
+  }
+
+  -- GPG
+  use 'jamessan/vim-gnupg'
+
+  -- Tables
+  use 'godlygeek/tabular'
+  use 'dhruvasagar/vim-table-mode'
+
+  -- Browser integration
+  use {
+    'glacambre/firenvim',
+    run = function() vim.fn['firenvim#install'](0) end 
   }
 
   -- Automatically set up your configuration after cloning packer.nvim

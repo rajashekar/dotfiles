@@ -23,6 +23,9 @@ Plugin 'ryanoasis/vim-devicons'
 Plugin 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plugin 'junegunn/fzf.vim'
 
+" fancy startup screen
+Plugin 'mhinz/vim-startify'
+
 " search
 Plugin 'mhinz/vim-grepper'
 
@@ -93,6 +96,8 @@ Plugin 'elzr/vim-json'
 Plugin 'vim-latex/vim-latex'
 "Vim Rest
 Plugin 'diepm/vim-rest-console'
+" Liquid support
+Plugin 'tpope/vim-liquid'
 
 
 "Encryption

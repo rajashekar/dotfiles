@@ -78,11 +78,13 @@ autocmd FileType mkd set sw=4
 autocmd FileType mkd set sts=4
 
 " To list special characters
-set listchars=tab:▸\ ,eol:¬,extends:❯,precedes:❮,nbsp:+
+set listchars=tab:▸\ ,eol:↲,extends:❯,precedes:❮,nbsp:+
 set listchars+=trail:-
 set showbreak=↪
 
 set cursorline "show cursor line"
+
+set encoding=utf8
 
 " gui settings
 if has("gui_running")

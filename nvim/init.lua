@@ -132,10 +132,12 @@ nmap("<leader>d", ":bd!<cr>")
 nmap("<leader>e", ":enew<cr>")
 nmap("<leader>h", ":nohl<cr>")
 nmap("<leader>l", ":set list!<cr>")
-
+nmap("<leader>q", ":q<cr>")
 nmap("cr",":let @*=expand('%')<cr>")
+-- Split settings
 nmap("-", ":new<cr>")
 nmap("|", ":vnew<cr>")
+
 
 -- Navigation in insert mode (emacs bindings)
 local opt_j = "∆"
@@ -154,8 +156,10 @@ inoremap("<c-b>", "<Left>")
 inoremap("<c-f>", "<Right>")
 inoremap("<c-w>", "<Esc>dbi")
 
+
 -- Zoom into pane
 nmap("<leader>z", "<Plug>Zoom")
+
 
 -- Souround settings
 -- ,# Surround a word with #{ruby interpolation}
@@ -200,6 +204,7 @@ vmap('<leader>}','c{<C-R>"}<ESC>')
 nmap('<leader>t', ": NvimTreeToggle<cr>")
 nmap('<leader>T', ": NvimTreeFindFile<cr>")
 
+
 -- Telescope
 -- Using Lua functions
 nnoremap("<leader>ff","<cmd>lua require('telescope.builtin').find_files()<cr>")
@@ -214,6 +219,7 @@ nnoremap("<leader>fgs","<cmd>lua require('telescope.builtin').git_status()<cr>")
 nnoremap("<leader>fa","<cmd>lua require('telescope.builtin').live_grep()<cr>")
 nnoremap("<leader>fh","<cmd>lua require('telescope.builtin').help_tags()<cr>")
 
+
 -- Git 
 g["fugitive_github_domains"] = {"https://gecgithub01.walmart.com"}
 g["github_enterprise_urls"] = {"https://gecgithub01.walmart.com"}
@@ -222,6 +228,7 @@ nnoremap("<leader>gs", ":Git<cr>")
 nnoremap("<leader>gb", ":Git blame<cr>")
 nnoremap("<leader>gB", ":GV<cr>")
 nnoremap("<leader>gd", ":Gvdiffsplit<cr>")
+
 
 -- Trouble
 nnoremap("<leader>xx", "<cmd>TroubleToggle<cr>")
@@ -252,6 +259,128 @@ function _G.set_terminal_keymaps()
   vim.api.nvim_buf_set_keymap(0, 't', '<C-k>', [[<C-\><C-n><C-W>k]], opts)
   vim.api.nvim_buf_set_keymap(0, 't', '<C-l>', [[<C-\><C-n><C-W>l]], opts)
 end
-
 -- if you only want these mappings for toggle term use term://*toggleterm#* instead
 vim.cmd('autocmd! TermOpen term://* lua set_terminal_keymaps()')
+
+-- GPG
+g["GPGPreferArmor"] = 1
+g["GPGDefaultRecipients"] = {"rajshekar.ch@gmail.com"}
+
+
+-- Firenvim (browser integration)
+vim.cmd 'let g:firenvim_config = { "globalSettings": { "alt": "all", }, "localSettings": { ".*": { "cmdline": "neovim", "content": "text", "priority": 0, "selector": "textarea", "takeover": "always", }, } }'
+-- Disable `firenvim` for the particular webiste
+vim.cmd 'let fc = g:firenvim_config["localSettings"]'
+vim.cmd 'let fc["https?://twitter.com/"] = { "takeover": "never", "priority": 1 }'
+-- Change `firenvim` file type to enable syntax highlight, `coc` works perfectly
+-- " after this settings!!!
+vim.cmd 'autocmd BufEnter github.com_*.txt set filetype=markdown'
+vim.cmd 'autocmd BufEnter txti.es_*.txt set filetype=typescript'
+-- Increase the font size to solve the `text too small` issue
+function IsFirenvimActive(event)
+    if vim.g.enable_vim_debug then print("IsFirenvimActive, event: ", vim.inspect(event)) end
+
+    if vim.fn.exists('*nvim_get_chan_info') == 0 then return 0 end
+
+    local ui = vim.api.nvim_get_chan_info(event.chan)
+    if vim.g.enable_vim_debug then print("IsFirenvimActive, ui: ", vim.inspect(ui)) end
+    local is_firenvim_active_in_browser = (ui['client'] ~= nil and ui['client']['name'] ~= nil)
+    if vim.g.enable_vim_debug then print("is_firenvim_active_in_browser: ", is_firenvim_active_in_browser) end
+    return is_firenvim_active_in_browser
+end
+function OnUIEnter(event)
+    if IsFirenvimActive(event) then
+        -- Disable the status bar
+        vim.cmd 'set laststatus=0'
+
+        -- Increase the font size
+        vim.cmd 'set guifont=MesloLGSDZ\\ Nerd\\ Font:h20'
+    end
+end
+vim.cmd([[autocmd UIEnter * :call luaeval('OnUIEnter(vim.fn.deepcopy(vim.v.event))')]])
+
+
+-- lsp config
+local nvim_lsp = require('lspconfig')
+-- Use an on_attach function to only map the following keys
+-- after the language server attaches to the current buffer
+local on_attach = function(client, bufnr)
+  local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+  local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+
+  -- Enable completion triggered by <c-x><c-o>
+  buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
+
+  -- Mappings.
+  local opts = { noremap=true, silent=true }
+
+  -- See `:help vim.lsp.*` for documentation on any of the below functions
+  buf_set_keymap('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+  buf_set_keymap('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  buf_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+  buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+  buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+  buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+  buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+  buf_set_keymap('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+  buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+  buf_set_keymap('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+  buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+  buf_set_keymap('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
+  buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
+  buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+  buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+  buf_set_keymap('n', '<space>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', opts)
+
+end
+
+-- Use a loop to conveniently call 'setup' on multiple servers and
+-- map buffer local keybindings when the language server attaches
+local servers = { 'pyright', 'rust_analyzer', 'tsserver' }
+for _, lsp in ipairs(servers) do
+  nvim_lsp[lsp].setup {
+    on_attach = on_attach,
+    flags = {
+      debounce_text_changes = 150,
+    }
+  }
+end
+
+-- nvim cmp - code completion
+local cmp = require('cmp')
+  cmp.setup({
+    mapping = {
+      ['<C-d>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
+      ['<C-f>'] = cmp.mapping(cmp.mapping.scroll_docs(4), { 'i', 'c' }),
+      ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
+      ['<C-y>'] = cmp.config.disable, -- Specify `cmp.config.disable` if you want to remove the default `<C-y>` mapping.
+      ['<C-e>'] = cmp.mapping({
+        i = cmp.mapping.abort(),
+        c = cmp.mapping.close(),
+      }),
+      ['<CR>'] = cmp.mapping.confirm({ select = true }),
+    },
+    sources = cmp.config.sources({
+      { name = 'nvim_lsp' },
+      { name = 'ultisnips' }, -- For ultisnips users.
+      -- { name = 'luasnip' }, -- For luasnip users.
+      -- { name = 'snippy' }, -- For snippy users.
+    }, {
+      { name = 'buffer' },
+    })
+  })
+  -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
+  cmp.setup.cmdline('/', {
+    sources = {
+      { name = 'buffer' }
+    }
+  })
+  -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+  cmp.setup.cmdline(':', {
+    sources = cmp.config.sources({
+      { name = 'path' }
+    }, {
+      { name = 'cmdline' }
+    })
+  })
