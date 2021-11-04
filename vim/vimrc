@@ -128,7 +128,7 @@ nnoremap <leader>G :g//d<CR>
 nnoremap <leader>V :v//d<CR>
 nnoremap <leader>S :%s///g<CR>
 " copy current relative file path
-nnoremap <leader>cf :let @*=expand("%")<CR>
+nnoremap cr :let @*=expand
 " lgrep
 nnoremap <Leader>r :silent lgrep<Space>
 nnoremap <Leader>R :silent lgrep <C-r><C-w><cr>

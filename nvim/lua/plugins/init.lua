@@ -19,7 +19,9 @@ return require('packer').startup(function(use)
     'nvim-lualine/lualine.nvim',
     requires = {'kyazdani42/nvim-web-devicons', opt = true}
   }
-  use { 'alvarosevilla95/luatab.nvim', requires='kyazdani42/nvim-web-devicons' }
+  use { 'alvarosevilla95/luatab.nvim', 
+    requires='kyazdani42/nvim-web-devicons' 
+  }
   use {
 	"SmiteshP/nvim-gps",
 	requires = "nvim-treesitter/nvim-treesitter"

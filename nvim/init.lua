@@ -30,7 +30,8 @@ cmd [[syntax on]]
 cmd [[filetype plugin indent on]]
 cmd [[let g:onedark_style = 'darker']]
 cmd [[colorscheme gruvbox]]
-
+cmd [[com! FormatJSON %!python -m json.tool]]
+cmd [[com! IndentJSON %!jq -r .]]
 
 opt.backup = false -- don't use backup files
 opt.writebackup = false -- don't backup the file while editing
@@ -135,6 +136,11 @@ nmap("cr",":let @*=expand('%')<cr>")
 -- Split settings
 nmap("-", ":new<cr>")
 nmap("|", ":vnew<cr>")
+-- quick fix
+nmap("<space>q", ":copen<cr>")
+nmap("<space>Q", ":cclose<cr>")
+-- Search selected text in visual mode
+vnoremap("//", 'y/<C-R>"<cr>')
 
 
 -- Navigation in insert mode (emacs bindings)
@@ -402,3 +408,7 @@ nnoremap("[",":WhichKey '['<cr>")
 
 -- sneak
 g["sneak#label"] = 1
+
+-- luatab
+vim.o.tabline = '%!v:lua.require\'luatab\'.tabline()'
+

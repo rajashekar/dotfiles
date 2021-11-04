@@ -5,7 +5,7 @@ window:
 font:
   size: 16
   normal:
-    family: JetBrainsMono Nerd Font
+    family: MesloLGSDZ Nerd Font
 
 # You can quickly preview themes using
 # https://github.com/rajasegar/alacritty-themes

@@ -12,3 +12,6 @@ cp ~/.config/kitty/kitty.conf kitty/kitty.conf
 
 # Copy Alacritty
 cp -R ~/.config/alacritty/alacritty.yml alacritty/alacritty.yml
+
+# Copy tmux
+cp ~/.tmux.conf tmux/tmux.conf
