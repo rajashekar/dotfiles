@@ -100,7 +100,7 @@ endif
 " CUSTOM KEY BINDINGS
 let mapleader="," " mapping leader
 "Map <C-L> (redraw screen) to also turn off search highlighting until the next search
-nnoremap <leader>L :nohl<CR>
+nnoremap <leader>L :nohl<cr>
 " custom command to show unprintable characters
 nnoremap <leader>l :set list!<cr>
 " toggle cursor line
@@ -124,9 +124,9 @@ nnoremap <leader>C :windo diffoff<cr>
 " move to current directory
 nnoremap sc :lcd %:p:h<cr>
 " remove lines
-nnoremap <leader>G :g//d<CR>
-nnoremap <leader>V :v//d<CR>
-nnoremap <leader>S :%s///g<CR>
+nnoremap <leader>G :g//d<cr>
+nnoremap <leader>V :v//d<cr>
+nnoremap <leader>S :%s///g<cr>
 " copy current relative file path
 nnoremap cr :let @*=expand
 " lgrep
@@ -141,9 +141,9 @@ nmap <space>. <c-^>
 nmap <space>q : copen<cr>
 nmap <space>Q : cclose<cr>
 " when in visual mode, search for selected text
-vnoremap // y/<C-R>"<CR>
+vnoremap // y/<C-R>"<cr>
 " remove all trailing spaces
-nnoremap <F5> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar><CR>
+nnoremap <F5> :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar><cr>
 
 " emacs bindings
 " alt - j
@@ -222,7 +222,7 @@ nnoremap <space>t :BTags<cr>
 nnoremap <space>T :Tags <C-r><C-w><cr>
 " Find files
 nnoremap <space>f :FZF<cr>
-nnoremap <C-p> :<C-u>FZF<CR>
+nnoremap <C-p> :<C-u>FZF<cr>
 nnoremap <space>F :FZF <C-r><C-w><cr>
 " History
 nnoremap <space>r :History<cr>
@@ -244,7 +244,7 @@ if executable('rg')
   set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
   command! -bang -nargs=* Find call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --hidden --follow --glob "!.git/*" --color "always" '.shellescape(<q-args>).'| tr -d "\017"', 1, <bang>0)
 endif
-nnoremap <silent> <space>e :call Fzf_dev()<CR>
+nnoremap <silent> <space>e :call Fzf_dev()<cr>
 " Files + devicons
 function! Fzf_dev()
   let l:fzf_files_options = '--preview "bat --theme="OneHalfDark" --style=numbers,changes --color always {2..-1} | head -'.&lines.'"'
@@ -295,7 +295,7 @@ let g:grepper.tools = ['rg', 'ag', 'grep', 'git']
 set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
 set grepformat=$f:$l:%c:%m
 " Search for the current word
-nnoremap <Leader>* :Grepper -cword -noprompt<CR>
+nnoremap <Leader>* :Grepper -cword -noprompt<cr>
 nnoremap <space>g : Grepper <cr>
 nnoremap <space>G :Grepper -tool rg -buffers<cr>
 " Search for the current selection
@@ -324,11 +324,11 @@ let NERDTreeShowExecutableFlag = 0
 "futitive git
 let g:fugitive_github_domains      = ['https://gecgithub01.walmart.com']
 let g:github_enterprise_urls       = ['https://gecgithub01.walmart.com']
-nnoremap <leader>gl :Git log -10 -- %<CR>
-nnoremap <leader>gs :Git<CR>
-nnoremap <leader>gb :Git blame<CR>
-nnoremap <leader>gB :GV<CR>
-nnoremap <leader>gd :Gvdiffsplit<CR>
+nnoremap <leader>gl :Git log -10 -- %<cr>
+nnoremap <leader>gs :Git<cr>
+nnoremap <leader>gb :Git blame<cr>
+nnoremap <leader>gB :GV<cr>
+nnoremap <leader>gd :Gvdiffsplit<cr>
 "Ggrep custom command
 command -nargs=+ Ggr execute 'silent Ggrep!' <q-args> | cw | redraw!
 
@@ -420,7 +420,13 @@ nmap <leader>m :up<cr>:call Tex_ViewLaTeX()<cr>
 let g:sneak#label = 1
 
 " Which key
-nnoremap <silent> <leader> :WhichKey ','<CR>
-nnoremap <silent> <space> :WhichKey '<space>'<CR>
-nnoremap ] :WhichKey ']'<CR>
-nnoremap [ :WhichKey '['<CR>
+nnoremap <silent> <leader> :WhichKey ','<cr>
+nnoremap <silent> <space> :WhichKey '<space>'<cr>
+nnoremap ] :WhichKey ']'<cr>
+nnoremap [ :WhichKey '['<cr>
+
+" Vimux
+"" Prompt for a command to run
+map <leader>vp :VimuxPromptCommand<cr>
+" Run last command executed by VimuxRunCommand
+map <leader>vl :VimuxRunLastCommand<cr>

@@ -412,3 +412,14 @@ g["sneak#label"] = 1
 -- luatab
 vim.o.tabline = '%!v:lua.require\'luatab\'.tabline()'
 
+-- packer
+nnoremap("<leader>ps",":PackerSync <cr>")
+nnoremap("<leader>pi",":PackerInstall <cr>")
+nnoremap("<leader>pc",":PackerClean <cr>")
+
+-- vimux
+-- Prompt for a command to run
+nnoremap("<leader>vp", ":VimuxPromptCommand<cr>")
+-- Run last command executed by VimuxRunCommand
+nnoremap("<leader>vl", ":VimuxRunLastCommand<cr>")
+

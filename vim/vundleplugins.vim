@@ -57,6 +57,8 @@ Plugin 'dhruvasagar/vim-table-mode'
 
 " navigate seamlessly between vim and tmux
 Plugin 'christoomey/vim-tmux-navigator'
+Plugin 'preservim/vimux'
+Plugin 'ivanov/vim-ipython'
 
 " code
 " Gives mappings to surround text with special chars
