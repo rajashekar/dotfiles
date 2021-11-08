@@ -1,0 +1,45 @@
+{
+    "editor.minimap.enabled": false,
+    "workbench.editor.enablePreview": false,
+    "terminal.integrated.fontFamily": "MesloLGSDZ Nerd Font",
+    "terminal.integrated.fontSize": 16,
+    "terminal.integrated.automationShell.osx": "",
+    "python.pythonPath": "/Users/rchint1/.local/share/virtualenvs/legato-server-WGdvKxNb",
+    "python.linting.pylintEnabled": false,
+    "python.linting.flake8Path": "/Users/rchint1/opt/anaconda3/bin/flake8",
+    "python.linting.flake8Enabled": true,
+    "python.linting.flake8Args": [
+        "--max-line-length=120",
+    ], 
+    "python.formatting.provider": "black",
+    "python.formatting.blackArgs": [
+        "--line-length",
+        "120"
+    ],
+    "python.formatting.blackPath":"/Users/rchint1/.local/share/virtualenvs/legato-server-WGdvKxNb/bin/black",
+    "[python]": {
+        "editor.formatOnSave": true
+    },
+    "python.testing.pytestArgs": [
+        "tests"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "jupyter.sendSelectionToInteractiveWindow": false,
+    "workbench.editorAssociations": {
+        "*.ipynb": "jupyter-notebook"
+    },
+    "vim.useSystemClipboard": true,
+    "window.zoomLevel": 0,
+    "python.defaultInterpreterPath": "/Users/rchint1/.local/share/virtualenvs/legato-server-WGdvKxNb",
+    "notebook.cellToolbarLocation": {
+        "default": "right",
+        "jupyter-notebook": "left"
+    },
+    "latex-workshop.view.pdf.viewer": "tab",
+    "explorer.confirmDelete": false,
+    "workbench.colorTheme": "One Dark Pro",
+    "workbench.iconTheme": "material-icon-theme",
+    "editor.fontFamily": "'MesloLGSDZ Nerd Font', Menlo, Monaco, 'Courier New', monospace",
+    "editor.fontSize": 16
+}
