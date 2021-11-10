@@ -1,0 +1,1604 @@
+[[id:C7217F33-D906-4637-A143-868931604E83][Test]]#+TITLE: Emacs Configuration
+Most of this are from https://config.daviwil.com/emacs
+* Startup Performance
+#+BEGIN_SRC emacs-lisp
+  ;; Fix for Package cl is deprecated
+  (setq byte-compile-warnings '(cl-functions))
+  ;; The default is 800 kilobytes.  Measured in bytes.
+  (setq gc-cons-threshold (* 50 1000 1000))
+
+  ;; Profile emacs startup
+  (add-hook 'emacs-startup-hook
+            (lambda ()
+              (message "*** Emacs loaded in %s with %d garbage collections."
+                       (format "%.2f seconds"
+                               (float-time
+                                (time-subtract after-init-time before-init-time)))
+                       gcs-done)))
+#+END_SRC
+* Native Compilation
+#+BEGIN_SRC emacs-lisp
+;; Silence compiler warnings as they can be pretty disruptive
+(setq native-comp-async-report-warnings-errors nil)
+#+END_SRC
+* Package Management
+#+BEGIN_SRC emacs-lisp
+;; Initialize package sources
+;; Bootstrap straight.el
+(defvar bootstrap-version)
+(let ((bootstrap-file
+      (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+        "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+        'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+
+;; Always use straight to install on systems other than Linux
+(setq straight-use-package-by-default (not (eq system-type 'gnu/linux)))
+
+;; Use straight.el for use-package expressions
+(straight-use-package 'use-package)
+
+;; Clean up unused repos with 'straight-remove-unused-repos'
+#+END_SRC
+* Keep .emacs.d clean
+#+BEGIN_SRC emacs-lisp
+;; Change the user-emacs-directory to keep unwanted things out of ~/.emacs.d
+(setq user-emacs-directory (expand-file-name "~/.cache/emacs/")
+      url-history-file (expand-file-name "url/history" user-emacs-directory))
+
+;; Use no-littering to automatically set common paths to the new user-emacs-directory
+(use-package no-littering)
+
+;; Keep customization settings in a temporary file (thanks Ambrevar!)
+(setq custom-file
+      (if (boundp 'server-socket-dir)
+          (expand-file-name "custom.el" server-socket-dir)
+        (expand-file-name (format "emacs-custom-%s.el" (user-uid)) temporary-file-directory)))
+(load custom-file t)
+#+END_SRC
+* Default Coding System
+#+BEGIN_SRC emacs-lisp
+(set-default-coding-systems 'utf-8)
+#+END_SRC
+* Server Mode
+#+BEGIN_SRC emacs-lisp
+(server-start)
+#+END_SRC
+* Keyboard Bindings
+** Escape cancels All
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+#+END_SRC
+** Rebind C-u
+#+BEGIN_SRC emacs-lisp
+(global-set-key (kbd "C-M-u") 'universal-argument)
+#+END_SRC
+** Lets be Evil
+#+BEGIN_SRC emacs-lisp
+(defun dw/evil-hook ()
+  (dolist (mode '(custom-mode
+                  eshell-mode
+                  git-rebase-mode
+                  erc-mode
+                  circe-server-mode
+                  circe-chat-mode
+                  circe-query-mode
+                  sauron-mode
+                  term-mode))
+  (add-to-list 'evil-emacs-state-modes mode)))
+
+(defun dw/dont-arrow-me-bro ()
+  (interactive)
+  (message "Arrow keys are bad, you know?"))
+
+(use-package undo-tree
+  :init
+  (global-undo-tree-mode 1))
+
+(use-package evil
+  :init
+  (setq evil-want-integration t)
+  (setq evil-want-keybinding nil)
+  (setq evil-want-C-u-scroll t)
+  (setq evil-want-C-i-jump nil)
+  (setq evil-respect-visual-line-mode t)
+  (setq evil-undo-system 'undo-tree)
+  :config
+  (add-hook 'evil-mode-hook 'dw/evil-hook)
+  (evil-mode 1)
+  (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
+  (define-key evil-insert-state-map (kbd "C-h") 'evil-delete-backward-char-and-join)
+
+  ;; Use visual line motions even outside of visual-line-mode buffers
+  (evil-global-set-key 'motion "j" 'evil-next-visual-line)
+  (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+
+  ;; Disable arrow keys in normal and visual modes
+  (define-key evil-normal-state-map (kbd "<left>") 'dw/dont-arrow-me-bro)
+  (define-key evil-normal-state-map (kbd "<right>") 'dw/dont-arrow-me-bro)
+  (define-key evil-normal-state-map (kbd "<down>") 'dw/dont-arrow-me-bro)
+  (define-key evil-normal-state-map (kbd "<up>") 'dw/dont-arrow-me-bro)
+  (evil-global-set-key 'motion (kbd "<left>") 'dw/dont-arrow-me-bro)
+  (evil-global-set-key 'motion (kbd "<right>") 'dw/dont-arrow-me-bro)
+  (evil-global-set-key 'motion (kbd "<down>") 'dw/dont-arrow-me-bro)
+  (evil-global-set-key 'motion (kbd "<up>") 'dw/dont-arrow-me-bro)
+
+  (evil-set-initial-state 'messages-buffer-mode 'normal)
+  (evil-set-initial-state 'dashboard-mode 'normal))
+
+(use-package evil-collection
+  :after evil
+  :init
+  (setq evil-collection-company-use-tng nil)  ;; Is this a bug in evil-collection?
+  :custom
+  (evil-collection-outline-bind-tab-p nil)
+  :config
+  (setq evil-collection-mode-list
+        (remove 'lispy evil-collection-mode-list))
+  (evil-collection-init))
+#+END_SRC
+** Which Key
+#+BEGIN_SRC emacs-lisp
+(use-package which-key
+  :init (which-key-mode)
+  :diminish which-key-mode
+  :config
+  (setq which-key-idle-delay 0.3))
+#+END_SRC
+** Simiplify Leader Bindings
+#+BEGIN_SRC emacs-lisp
+(use-package general
+  :config
+  (general-evil-setup t)
+
+  (general-create-definer dw/leader-key-def
+    :keymaps '(normal insert visual emacs)
+    :prefix "SPC"
+    :global-prefix "C-SPC")
+
+  (general-create-definer dw/ctrl-c-keys
+    :prefix "C-c"))
+#+END_SRC
+* User Interface
+#+BEGIN_SRC emacs-lisp
+;; Thanks, but no thanks
+(setq inhibit-startup-message t)
+(setq initial-scratch-message "") ;; disable messaging on scratch pad
+(setq ring-bell-function 'ignore) ;; get rid of bells
+(setq visible-bell nil) ;; No visible bell
+
+(scroll-bar-mode -1)        ; Disable visible scrollbar
+(tool-bar-mode -1)          ; Disable the toolbar
+(tooltip-mode -1)           ; Disable tooltips
+(set-fringe-mode 10)        ; Give some breathing room
+(menu-bar-mode -1)          ; Disable the menu bar
+
+(global-hl-line-mode 1) ;; to show cursor
+(set-default 'truncate-lines t) ;; no wrap
+(fset 'yes-or-no-p 'y-or-n-p) ;; short version of yes or no
+
+
+;; Enable line numbers
+(column-number-mode)
+;; Enable line numbers for some modes
+(dolist (mode '(text-mode-hook
+                prog-mode-hook
+                conf-mode-hook))
+  (add-hook mode (lambda () (display-line-numbers-mode 1))))
+;; Override some modes which derive from the above
+(dolist (mode '(org-mode-hook))
+  (add-hook mode (lambda () (display-line-numbers-mode 0))))
+;; Don't warn for large files
+(setq large-file-warning-threshold nil)
+;; Don't warn for following symlinked files
+(setq vc-follow-symlinks t)
+;; Don't warn when advice is added for functions
+(setq ad-redefinition-action 'accept)
+#+END_SRC
+* Improve scrolling
+#+BEGIN_SRC emacs-lisp
+(setq mouse-wheel-scroll-amount '(1 ((shift) . 1))) ;; one line at a time
+(setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
+(setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
+(setq scroll-step 1) ;; keyboard scroll one line at a time
+(setq use-dialog-box nil) ;; Disable dialog boxes since they weren't working in Mac OSX
+#+END_SRC
+* Theme
+#+BEGIN_SRC emacs-lisp
+(use-package spacegray-theme :defer t)
+(use-package doom-themes :defer t)
+(load-theme 'doom-palenight t)
+(doom-themes-visual-bell-config)
+#+END_SRC
+* Font
+#+BEGIN_SRC emacs-lisp
+(pcase system-type
+  ((or 'gnu/linux 'windows-nt 'cygwin)
+   (set-face-attribute 'default nil
+                       :font "JetBrains Mono"
+                       :weight 'light
+                       :height 170))
+  ('darwin (set-face-attribute 'default nil :font "Fira Mono" :height 170)))
+#+END_SRC
+* Enable proper unicode glyph support
+#+BEGIN_SRC emacs-lisp
+(defun dw/replace-unicode-font-mapping (block-name old-font new-font)
+  (let* ((block-idx (cl-position-if
+                         (lambda (i) (string-equal (car i) block-name))
+                         unicode-fonts-block-font-mapping))
+         (block-fonts (cadr (nth block-idx unicode-fonts-block-font-mapping)))
+         (updated-block (cl-substitute new-font old-font block-fonts :test 'string-equal)))
+    (setf (cdr (nth block-idx unicode-fonts-block-font-mapping))
+          `(,updated-block))))
+(use-package unicode-fonts
+  :custom
+  (unicode-fonts-skip-font-groups '(low-quality-glyphs))
+  :config
+  ;; Fix the font mappings to use the right emoji font
+  (mapcar
+    (lambda (block-name)
+      (dw/replace-unicode-font-mapping block-name "Apple Color Emoji" "Noto Color Emoji"))
+    '("Dingbats"
+      "Emoticons"
+      "Miscellaneous Symbols and Pictographs"
+      "Transport and Map Symbols"))
+  (unicode-fonts-setup))
+#+END_SRC
+* Emojis in bufers
+#+BEGIN_SRC emacs-lisp
+(use-package emojify
+  :hook (erc-mode . emojify-mode)
+  :commands emojify-mode)
+#+END_SRC
+* Mode Line
+#+BEGIN_SRC emacs-lisp
+(setq display-time-format "%l:%M %p %b %y"
+      display-time-default-load-average nil)
+
+;; Enable Mode Diminishing
+(use-package diminish)
+
+;; Doom Modeline
+;; You must run (all-the-icons-install-fonts) one time after
+;; installing this package!
+
+(use-package minions
+  :hook (doom-modeline-mode . minions-mode))
+
+(use-package doom-modeline
+  :after eshell     ;; Make sure it gets hooked after eshell
+  :hook (after-init . doom-modeline-init)
+  :custom-face
+  (mode-line ((t (:height 0.85))))
+  (mode-line-inactive ((t (:height 0.85))))
+  :custom
+  (doom-modeline-height 15)
+  (doom-modeline-bar-width 6)
+  (doom-modeline-lsp t)
+  (doom-modeline-github nil)
+  (doom-modeline-mu4e nil)
+  (doom-modeline-irc nil)
+  (doom-modeline-minor-modes t)
+  (doom-modeline-persp-name nil)
+  (doom-modeline-buffer-file-name-style 'truncate-except-project)
+  (doom-modeline-major-mode-icon nil))
+#+END_SRC
+* Dashboard
+#+BEGIN_SRC emacs-lisp
+(use-package dashboard
+  :ensure t
+  :config
+  (dashboard-setup-startup-hook))
+(setq dashboard-items '((recents  . 5)
+                        (bookmarks . 5)
+                        (projects . 5)
+                        (agenda . 5)
+                        (registers . 5)))
+#+END_SRC
+* Workspaces
+Commands are all prefixed by C-x x
+#+BEGIN_SRC emacs-lisp
+(use-package perspective
+  :demand t
+  :bind (("C-M-k" . persp-switch)
+          ("C-M-n" . persp-next)
+          ("C-x k" . persp-kill-buffer*))
+  :custom
+  (persp-initial-frame-name "Main")
+  :config
+  ;; Running `persp-mode' multiple times resets the perspective list...
+  (unless (equal persp-mode t)
+    (persp-mode)))
+#+END_SRC
+* Notifications
+#+BEGIN_SRC emacs-lisp
+(use-package alert
+  :commands alert
+  :config
+  (setq alert-default-style 'notifications))
+#+END_SRC
+* Auto Saving Changed files
+super-save auto-saves your buffers, when certain events happen - e.g. you switch between buffers, an Emacs frame loses focus, etc. You can think of it as both something that augments and replaces the standard auto-save-mode.
+#+BEGIN_SRC emacs-lisp
+(use-package super-save
+  :defer 1
+  :diminish super-save-mode
+  :config
+  (super-save-mode +1)
+  (setq super-save-auto-save-when-idle t))
+#+END_SRC
+* Auto-Reverting Changed Files
+#+BEGIN_SRC emacs-lisp
+;; Revert Dired and other buffers
+(setq global-auto-revert-non-file-buffers t)
+
+;; Revert buffers when the underlying file has changed
+(global-auto-revert-mode 1)
+#+END_SRC
+* UI Toggles
+#+BEGIN_SRC emacs-lisp
+(dw/leader-key-def
+  "t"  '(:ignore t :which-key "toggles")
+  "tw" 'whitespace-mode
+  "tt" '(counsel-load-theme :which-key "choose theme"))
+#+END_SRC
+* Matching Braces
+#+BEGIN_SRC emacs-lisp
+(use-package paren
+  :config
+  (set-face-attribute 'show-paren-match-expression nil :background "#363e4a")
+  (show-paren-mode 1))
+#+END_SRC
+* Display World Time
+#+BEGIN_SRC emacs-lisp
+(setq display-time-world-list
+  '(("Etc/UTC" "UTC")
+    ("America/Los_Angeles" "Seattle")
+    ("America/New_York" "New York")
+    ("Europe/Athens" "Athens")
+    ("Pacific/Auckland" "Auckland")
+    ("Asia/Shanghai" "Shanghai")
+    ("Asia/Kolkata" "Hyderabad")))
+(setq display-time-world-time-format "%a, %d %b %I:%M %p %Z")
+#+END_SRC
+* Pinentry
+#+BEGIN_SRC emacs-lisp
+;; On Mac, brew install pinentry-mac 
+;; Add below lines to ~/gnupg/gpg-agent.conf
+;; pinentry-program /usr/local/bin/pinentry-mac
+;; to reload, gpgconf --reload gpg-agent
+(setq epa-pinentry-mode 'loopback)
+#+END_SRC
+* Tramp
+#+BEGIN_SRC emacs-lisp
+;; Set default connection mode to SSH
+(setq tramp-default-method "ssh")
+#+END_SRC
+* Editing
+#+BEGIN_SRC emacs-lisp
+(setq-default tab-width 2)
+(setq-default evil-shift-width tab-width)
+(setq-default indent-tabs-mode nil)
+#+END_SRC
+* Commenting lines
+#+BEGIN_SRC emacs-lisp
+(use-package evil-nerd-commenter
+  :bind ("M-/" . evilnc-comment-or-uncomment-lines))
+#+END_SRC
+* Automatically clean whitespace
+#+BEGIN_SRC emacs-lisp
+(use-package ws-butler
+  :hook ((text-mode . ws-butler-mode)
+         (prog-mode . ws-butler-mode)))
+#+END_SRC
+* Use Parinfer for Lispy languages
+#+BEGIN_SRC emacs-lisp
+(use-package parinfer
+  :disabled
+  :hook ((clojure-mode . parinfer-mode)
+         (emacs-lisp-mode . parinfer-mode)
+         (common-lisp-mode . parinfer-mode)
+         (scheme-mode . parinfer-mode)
+         (lisp-mode . parinfer-mode))
+  :config
+  (setq parinfer-extensions
+      '(defaults       ; should be included.
+        pretty-parens  ; different paren styles for different modes.
+        evil           ; If you use Evil.
+        smart-tab      ; C-b & C-f jump positions and smart shift with tab & S-tab.
+        smart-yank)))  ; Yank behavior depend on mode.
+
+(dw/leader-key-def
+  "tp" 'parinfer-toggle-mode)
+#+END_SRC
+* Orgami
+#+BEGIN_SRC emacs-lisp
+(use-package origami
+  :hook (yaml-mode . origami-mode))
+#+END_SRC
+* Stateful keymaps with Hydra
+#+BEGIN_SRC emacs-lisp
+(use-package hydra
+  :defer 1)
+#+END_SRC
+* Completion
+** Preserve Minibuffer History
+#+BEGIN_SRC emacs-lisp
+(use-package savehist
+  :config
+  (setq history-length 25)
+  (savehist-mode 1))
+#+END_SRC
+** Completions with Vertico
+#+BEGIN_SRC emacs-lisp
+(defun dw/minibuffer-backward-kill (arg)
+  "When minibuffer is completing a file name delete up to parent
+folder, otherwise delete a word"
+  (interactive "p")
+  (if minibuffer-completing-file-name
+      ;; Borrowed from https://github.com/raxod502/selectrum/issues/498#issuecomment-803283608
+      (if (string-match-p "/." (minibuffer-contents))
+          (zap-up-to-char (- arg) ?/)
+        (delete-minibuffer-contents))
+      (delete-word (- arg))))
+
+(use-package vertico
+  ;; :straight '(vertico :host github
+  ;;                     :repo "minad/vertico"
+  ;;                     :branch "main")
+  :bind (:map vertico-map
+         ("C-j" . vertico-next)
+         ("C-k" . vertico-previous)
+         ("C-f" . vertico-exit)
+         :map minibuffer-local-map
+         ("M-h" . dw/minibuffer-backward-kill))
+  :custom
+  (vertico-cycle t)
+  :custom-face
+  (vertico-current ((t (:background "#3a3f5a"))))
+  :init
+  (vertico-mode))
+#+END_SRC
+** Completions in Regions with Corfu
+#+BEGIN_SRC emacs-lisp
+(use-package corfu
+  :straight '(corfu :host github
+                    :repo "minad/corfu")
+  :bind (:map corfu-map
+         ("C-j" . corfu-next)
+         ("C-k" . corfu-previous)
+         ("C-f" . corfu-insert))
+  :custom
+  (corfu-cycle t)
+  :config
+  (corfu-global-mode))
+#+END_SRC
+** Improved Candidate Filtering with Orderless
+#+BEGIN_SRC emacs-lisp
+(use-package orderless
+  :straight t
+  :init
+  (setq completion-styles '(orderless)
+        completion-category-defaults nil
+        completion-category-overrides '((file (styles . (partial-completion))))))
+#+END_SRC
+** Consult Commmands
+#+BEGIN_SRC emacs-lisp
+(defun dw/get-project-root ()
+  (when (fboundp 'projectile-project-root)
+    (projectile-project-root)))
+
+(use-package consult
+  :demand t
+  :bind (("C-s" . consult-line)
+         ("C-M-l" . consult-imenu)
+         ("C-M-j" . persp-switch-to-buffer*)
+         :map minibuffer-local-map
+         ("C-r" . consult-history))
+  :custom
+  (consult-project-root-function #'dw/get-project-root)
+  (completion-in-region-function #'consult-completion-in-region))
+#+END_SRC
+** Switching Directories with consult-dir
+#+BEGIN_SRC emacs-lisp
+(use-package consult-dir
+  :straight t
+  :bind (("C-x C-d" . consult-dir)
+         :map vertico-map
+         ("C-x C-d" . consult-dir)
+         ("C-x C-j" . consult-dir-jump-file))
+  :custom
+  (consult-dir-project-list-function nil))
+
+;; Thanks Karthik!
+(with-eval-after-load 'eshell-mode
+  (defun eshell/z (&optional regexp)
+    "Navigate to a previously visited directory in eshell."
+    (let ((eshell-dirs (delete-dups (mapcar 'abbreviate-file-name
+                                            (ring-elements eshell-last-dir-ring)))))
+      (cond
+       ((and (not regexp) (featurep 'consult-dir))
+        (let* ((consult-dir--source-eshell `(:name "Eshell"
+                                                   :narrow ?e
+                                                   :category file
+                                                   :face consult-file
+                                                   :items ,eshell-dirs))
+               (consult-dir-sources (cons consult-dir--source-eshell consult-dir-sources)))
+          (eshell/cd (substring-no-properties (consult-dir--pick "Switch directory: ")))))
+       (t (eshell/cd (if regexp (eshell-find-previous-directory regexp)
+                       (completing-read "cd: " eshell-dirs))))))))
+#+END_SRC
+** Completion Annotations with Marginalia
+#+BEGIN_SRC emacs-lisp
+(use-package marginalia
+  :after vertico
+  :straight t
+  :custom
+  (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
+  :init
+  (marginalia-mode))
+#+END_SRC
+** Completion Actions with Embark
+#+BEGIN_SRC emacs-lisp
+(use-package embark
+  :straight t
+  :bind (("C-S-a" . embark-act)
+          :map minibuffer-local-map
+          ("C-d" . embark-act))
+  :config
+
+  ;; Show Embark actions via which-key
+  (setq embark-action-indicator
+        (lambda (map)
+          (which-key--show-keymap "Embark" map nil nil 'no-paging)
+          #'which-key--hide-popup-ignore-command)
+        embark-become-indicator embark-action-indicator))
+
+(use-package embark-consult
+  :after embark)
+#+END_SRC
+* Jumping with Avy
+#+BEGIN_SRC emacs-lisp
+(use-package avy
+  :commands (avy-goto-char avy-goto-word-0 avy-goto-line))
+
+(dw/leader-key-def
+  "j"   '(:ignore t :which-key "jump")
+  "jj"  '(avy-goto-char :which-key "jump to char")
+  "jw"  '(avy-goto-word-0 :which-key "jump to word")
+  "jl"  '(avy-goto-line :which-key "jump to line"))
+#+END_SRC
+* Buffer Management with Bufler
+#+BEGIN_SRC emacs-lisp
+(use-package bufler
+  :disabled
+  :straight t
+  :bind (("C-M-j" . bufler-switch-buffer)
+         ("C-M-k" . bufler-workspace-frame-set))
+  :config
+  (evil-collection-define-key 'normal 'bufler-list-mode-map
+    (kbd "RET")   'bufler-list-buffer-switch
+    (kbd "M-RET") 'bufler-list-buffer-peek
+    "D"           'bufler-list-buffer-kill)
+
+  (setf bufler-groups
+        (bufler-defgroups
+          ;; Subgroup collecting all named workspaces.
+          (group (auto-workspace))
+          ;; Subgroup collecting buffers in a projectile project.
+          (group (auto-projectile))
+          ;; Grouping browser windows
+          (group
+           (group-or "Browsers"
+                     (name-match "Vimb" (rx bos "vimb"))
+                     (name-match "Qutebrowser" (rx bos "Qutebrowser"))
+                     (name-match "Chromium" (rx bos "Chromium"))))
+          (group
+           (group-or "Chat"
+                     (mode-match "Telega" (rx bos "telega-"))))
+          (group
+           ;; Subgroup collecting all `help-mode' and `info-mode' buffers.
+           (group-or "Help/Info"
+                     (mode-match "*Help*" (rx bos (or "help-" "helpful-")))
+                     ;; (mode-match "*Helpful*" (rx bos "helpful-"))
+                     (mode-match "*Info*" (rx bos "info-"))))
+          (group
+           ;; Subgroup collecting all special buffers (i.e. ones that are not
+           ;; file-backed), except `magit-status-mode' buffers (which are allowed to fall
+           ;; through to other groups, so they end up grouped with their project buffers).
+           (group-and "*Special*"
+                      (name-match "**Special**"
+                                  (rx bos "*" (or "Messages" "Warnings" "scratch" "Backtrace" "Pinentry") "*"))
+                      (lambda (buffer)
+                        (unless (or (funcall (mode-match "Magit" (rx bos "magit-status"))
+                                             buffer)
+                                    (funcall (mode-match "Dired" (rx bos "dired"))
+                                             buffer)
+                                    (funcall (auto-file) buffer))
+                          "*Special*"))))
+          ;; Group remaining buffers by major mode.
+          (auto-mode))))
+#+END_SRC
+* Window Management
+** Framing Scaling/Zooming
+The keybindings for this are C+M+- and C+M+=.
+#+BEGIN_SRC emacs-lisp
+(use-package default-text-scale
+  :defer 1
+  :config
+  (default-text-scale-mode))
+#+END_SRC
+** Window Selection with ace-window
+#+BEGIN_SRC emacs-lisp
+(use-package ace-window
+  :bind (("M-o" . ace-window))
+  :custom
+  (aw-scope 'frame)
+  (aw-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l))
+  (aw-minibuffer-flag t)
+  :config
+  (ace-window-display-mode 1))
+#+END_SRC
+** Window History with winner-mode
+#+BEGIN_SRC emacs-lisp
+(use-package winner
+  :after evil
+  :config
+  (winner-mode)
+  (define-key evil-window-map "u" 'winner-undo)
+  (define-key evil-window-map "U" 'winner-redo))
+#+END_SRC
+** Set Margins for Modes
+#+BEGIN_SRC emacs-lisp
+(defun dw/org-mode-visual-fill ()
+  (setq visual-fill-column-width 110
+        visual-fill-column-center-text t)
+  (visual-fill-column-mode 1))
+
+(use-package visual-fill-column
+  :defer t
+  :hook (org-mode . dw/org-mode-visual-fill))
+#+END_SRC
+** Control Buffer Placement
+#+BEGIN_SRC emacs-lisp
+;; If a popup does happen, don't resize windows to be equal-sized
+(setq even-window-sizes nil)
+#+END_SRC
+** Taming Popups with Popper.el
+#+BEGIN_SRC emacs-lisp
+(defun dw/popper-window-height (window)
+  (let (buffer-mode (with-current-buffer (window-buffer window)
+                      major-mode))
+    (pcase buffer-mode
+      ('exwm-mode 40)
+      (_ 15))))
+
+(use-package popper
+  :straight (popper :host github
+                    :repo "karthink/popper"
+                    :build (:not autoloads))
+  :bind (("C-M-'" . popper-toggle-latest)
+         ("M-'" . popper-cycle)
+         ("C-M-\"" . popper-toggle-type))
+  :custom
+  (popper-window-height 12)
+   ;; (popper-window-height
+   ;; (lambda (window)
+   ;;   (let ((buffer-mode (with-current-buffer (window-buffer window)
+   ;;                        major-mode)))
+   ;;     (message "BUFFER MODE: %s" buffer-mode)
+   ;;     (pcase buffer-mode
+   ;;       ('exwm-mode 40)
+   ;;       ('helpful-mode 20)
+   ;;       ('eshell-mode (progn (message "eshell!") 10))
+   ;;       (_ 15)))))
+  (popper-reference-buffers
+   '("^\\*eshell\\*"
+     "^vterm"
+     help-mode
+     helpful-mode
+     compilation-mode))
+  :init
+  (require 'popper) ;; Needed because I disabled autoloads
+  (popper-mode 1))
+#+END_SRC
+** Expand Region
+#+BEGIN_SRC emacs-lisp
+(use-package expand-region
+  :bind (("M-[" . er/expand-region)
+         ("C-(" . er/mark-outside-pairs)))
+#+END_SRC
+* Credential Management
+#+BEGIN_SRC emacs-lisp
+(use-package password-store
+  :config
+  (setq password-store-password-length 12))
+
+(use-package auth-source-pass
+  :config
+  (auth-source-pass-enable))
+
+(use-package oauth2
+  :straight t)
+
+(dw/leader-key-def
+  "ap" '(:ignore t :which-key "pass")
+  "app" 'password-store-copy
+  "api" 'password-store-insert
+  "apg" 'password-store-generate)
+#+END_SRC
+* File Browsing
+** Dired
+#+BEGIN_SRC emacs-lisp
+(use-package all-the-icons-dired)
+(use-package dired
+  :ensure nil
+  :straight nil
+  :defer 1
+  :commands (dired dired-jump)
+  :config
+  (setq dired-listing-switches "-agho --group-directories-first"
+        dired-omit-files "^\\.[^.].*"
+        dired-omit-verbose nil
+        dired-hide-details-hide-symlink-targets nil
+        delete-by-moving-to-trash t)
+
+  (autoload 'dired-omit-mode "dired-x")
+
+  (add-hook 'dired-load-hook
+            (lambda ()
+              (interactive)
+              (dired-collapse)))
+
+  (add-hook 'dired-mode-hook
+            (lambda ()
+              (interactive)
+              (dired-omit-mode 1)
+              (dired-hide-details-mode 1)
+              (hl-line-mode 1)))
+
+  (use-package dired-rainbow
+    :defer 2
+    :config
+    (dired-rainbow-define-chmod directory "#6cb2eb" "d.*")
+    (dired-rainbow-define html "#eb5286" ("css" "less" "sass" "scss" "htm" "html" "jhtm" "mht" "eml" "mustache" "xhtml"))
+    (dired-rainbow-define xml "#f2d024" ("xml" "xsd" "xsl" "xslt" "wsdl" "bib" "json" "msg" "pgn" "rss" "yaml" "yml" "rdata"))
+    (dired-rainbow-define document "#9561e2" ("docm" "doc" "docx" "odb" "odt" "pdb" "pdf" "ps" "rtf" "djvu" "epub" "odp" "ppt" "pptx"))
+    (dired-rainbow-define markdown "#ffed4a" ("org" "etx" "info" "markdown" "md" "mkd" "nfo" "pod" "rst" "tex" "textfile" "txt"))
+    (dired-rainbow-define database "#6574cd" ("xlsx" "xls" "csv" "accdb" "db" "mdb" "sqlite" "nc"))
+    (dired-rainbow-define media "#de751f" ("mp3" "mp4" "mkv" "MP3" "MP4" "avi" "mpeg" "mpg" "flv" "ogg" "mov" "mid" "midi" "wav" "aiff" "flac"))
+    (dired-rainbow-define image "#f66d9b" ("tiff" "tif" "cdr" "gif" "ico" "jpeg" "jpg" "png" "psd" "eps" "svg"))
+    (dired-rainbow-define log "#c17d11" ("log"))
+    (dired-rainbow-define shell "#f6993f" ("awk" "bash" "bat" "sed" "sh" "zsh" "vim"))
+    (dired-rainbow-define interpreted "#38c172" ("py" "ipynb" "rb" "pl" "t" "msql" "mysql" "pgsql" "sql" "r" "clj" "cljs" "scala" "js"))
+    (dired-rainbow-define compiled "#4dc0b5" ("asm" "cl" "lisp" "el" "c" "h" "c++" "h++" "hpp" "hxx" "m" "cc" "cs" "cp" "cpp" "go" "f" "for" "ftn" "f90" "f95" "f03" "f08" "s" "rs" "hi" "hs" "pyc" ".java"))
+    (dired-rainbow-define executable "#8cc4ff" ("exe" "msi"))
+    (dired-rainbow-define compressed "#51d88a" ("7z" "zip" "bz2" "tgz" "txz" "gz" "xz" "z" "Z" "jar" "war" "ear" "rar" "sar" "xpi" "apk" "xz" "tar"))
+    (dired-rainbow-define packaged "#faad63" ("deb" "rpm" "apk" "jad" "jar" "cab" "pak" "pk3" "vdf" "vpk" "bsp"))
+    (dired-rainbow-define encrypted "#ffed4a" ("gpg" "pgp" "asc" "bfe" "enc" "signature" "sig" "p12" "pem"))
+    (dired-rainbow-define fonts "#6cb2eb" ("afm" "fon" "fnt" "pfb" "pfm" "ttf" "otf"))
+    (dired-rainbow-define partition "#e3342f" ("dmg" "iso" "bin" "nrg" "qcow" "toast" "vcd" "vmdk" "bak"))
+    (dired-rainbow-define vc "#0074d9" ("git" "gitignore" "gitattributes" "gitmodules"))
+    (dired-rainbow-define-chmod executable-unix "#38c172" "-.*x.*"))
+
+  (use-package dired-single
+    :defer t)
+
+  (use-package dired-ranger
+    :defer t)
+
+  (use-package dired-collapse
+    :defer t)
+  (evil-collection-define-key 'normal 'dired-mode-map
+      "h" 'dired-single-up-directory
+      "H" 'dired-omit-mode
+      "l" 'dired-single-buffer
+      "y" 'dired-ranger-copy
+      "X" 'dired-ranger-move
+      "p" 'dired-ranger-paste))
+#+END_SRC
+* Org Mode
+#+BEGIN_SRC emacs-lisp
+(setq-default fill-column 120)
+
+;; Turn on indentation and auto-fill mode for Org files
+(defun dw/org-mode-setup ()
+  (org-indent-mode)
+  (variable-pitch-mode 1)
+  (auto-fill-mode 0)
+  (visual-line-mode 1)
+  (setq evil-auto-indent nil)
+  (diminish org-indent-mode))
+
+;; Make sure Straight pulls Org from Guix
+(straight-use-package '(org :type built-in))
+
+(use-package org
+  :defer t
+  :hook (org-mode . dw/org-mode-setup)
+  :config
+  (setq org-ellipsis " ▾"
+        org-hide-emphasis-markers t
+        org-src-fontify-natively t
+        org-fontify-quote-and-verse-blocks t
+        org-src-tab-acts-natively t
+        org-edit-src-content-indentation 2
+        org-hide-block-startup nil
+        org-src-preserve-indentation nil
+        org-startup-folded 'content
+        org-cycle-separator-lines 2)
+
+  (setq org-modules
+    '(org-crypt
+        org-habit
+        org-bookmark
+        org-eshell
+        org-irc))
+
+  (setq org-refile-targets '((nil :maxlevel . 1)
+                             (org-agenda-files :maxlevel . 1)))
+
+  (setq org-outline-path-complete-in-steps nil)
+  (setq org-refile-use-outline-path t)
+  (evil-define-key '(normal insert visual) org-mode-map (kbd "C-j") 'org-next-visible-heading)
+  (evil-define-key '(normal insert visual) org-mode-map (kbd "C-k") 'org-previous-visible-heading)
+
+  (evil-define-key '(normal insert visual) org-mode-map (kbd "M-j") 'org-metadown)
+  (evil-define-key '(normal insert visual) org-mode-map (kbd "M-k") 'org-metaup)
+
+  (org-babel-do-load-languages
+    'org-babel-load-languages
+    '((emacs-lisp . t)
+      (ledger . t)))
+
+  (push '("conf-unix" . conf-unix) org-src-lang-modes)
+
+  ;; NOTE: Subsequent sections are still part of this use-package block!
+#+END_SRC
+** Fonts and Bullets
+#+BEGIN_SRC emacs-lisp
+(use-package org-superstar
+  :after org
+  :hook (org-mode . org-superstar-mode)
+  :custom
+  (org-superstar-remove-leading-stars t)
+  (org-superstar-headline-bullets-list '("◉" "○" "●" "○" "●" "○" "●")))
+
+;; Increase the size of various headings
+(set-face-attribute 'org-document-title nil :font "Fira Mono" :weight 'bold :height 1.3)
+(dolist (face '((org-level-1 . 1.2)
+                (org-level-2 . 1.1)
+                (org-level-3 . 1.05)
+                (org-level-4 . 1.0)
+                (org-level-5 . 1.1)
+                (org-level-6 . 1.1)
+                (org-level-7 . 1.1)
+                (org-level-8 . 1.1)))
+  (set-face-attribute (car face) nil :font "Fira Mono" :weight 'medium :height (cdr face)))
+
+;; Make sure org-indent face is available
+(require 'org-indent)
+
+;; Ensure that anything that should be fixed-pitch in Org files appears that way
+(set-face-attribute 'org-block nil :foreground nil :inherit 'fixed-pitch)
+(set-face-attribute 'org-table nil  :inherit 'fixed-pitch)
+(set-face-attribute 'org-formula nil  :inherit 'fixed-pitch)
+(set-face-attribute 'org-code nil   :inherit '(shadow fixed-pitch))
+(set-face-attribute 'org-indent nil :inherit '(org-hide fixed-pitch))
+(set-face-attribute 'org-verbatim nil :inherit '(shadow fixed-pitch))
+(set-face-attribute 'org-special-keyword nil :inherit '(font-lock-comment-face fixed-pitch))
+(set-face-attribute 'org-meta-line nil :inherit '(font-lock-comment-face fixed-pitch))
+(set-face-attribute 'org-checkbox nil :inherit 'fixed-pitch)
+
+;; Get rid of the background on column views
+(set-face-attribute 'org-column nil :background nil)
+(set-face-attribute 'org-column-title nil :background nil)
+#+END_SRC
+** Block Templates
+#+BEGIN_SRC emacs-lisp
+(require 'org-tempo)
+
+(add-to-list 'org-structure-template-alist '("sh" . "src sh"))
+(add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+(add-to-list 'org-structure-template-alist '("sc" . "src scheme"))
+(add-to-list 'org-structure-template-alist '("ts" . "src typescript"))
+(add-to-list 'org-structure-template-alist '("py" . "src python"))
+(add-to-list 'org-structure-template-alist '("go" . "src go"))
+(add-to-list 'org-structure-template-alist '("yaml" . "src yaml"))
+(add-to-list 'org-structure-template-alist '("json" . "src json"))
+#+END_SRC
+** Searching
+#+BEGIN_SRC emacs-lisp
+(defun dw/search-org-files ()
+  (interactive)
+  (counsel-rg "" "~/Notes" nil "Search Notes: "))
+#+END_SRC
+** Bindings
+#+BEGIN_SRC emacs-lisp
+;; fix for File mode specification error: (void-function evil-redirect-digit-argument)
+(fset 'evil-redirect-digit-argument 'ignore) 
+
+(add-to-list 'evil-digit-bound-motions 'evil-org-beginning-of-line)
+(evil-define-key 'motion 'evil-org-mode
+    (kbd "0") 'evil-org-beginning-of-line)
+
+(use-package evil-org
+  :after org
+  :hook ((org-mode . evil-org-mode)
+         (org-agenda-mode . evil-org-mode)
+         (evil-org-mode . (lambda () (evil-org-set-key-theme '(navigation todo insert textobjects additional)))))
+  :config
+  (require 'evil-org-agenda)
+  (evil-org-agenda-set-keys))
+
+(dw/leader-key-def
+  "o"   '(:ignore t :which-key "org mode")
+
+  "oi"  '(:ignore t :which-key "insert")
+  "oil" '(org-insert-link :which-key "insert link")
+
+  "on"  '(org-toggle-narrow-to-subtree :which-key "toggle narrow")
+
+  "os"  '(dw/counsel-rg-org-files :which-key "search notes")
+
+  "oa"  '(org-agenda :which-key "status")
+  "ot"  '(org-todo-list :which-key "todos")
+  "oc"  '(org-capture t :which-key "capture")
+  "ox"  '(org-export-dispatch t :which-key "export"))
+#+END_SRC
+** End of use-package org-mode
+#+BEGIN_SRC emacs-lisp
+)
+#+END_SRC
+** Table of Contents
+#+BEGIN_SRC emacs-lisp
+(use-package org-make-toc
+  :hook (org-mode . org-make-toc-mode))
+#+END_SRC
+** Org-present
+#+BEGIN_SRC emacs-lisp
+(defun dw/org-present-prepare-slide ()
+  (org-overview)
+  (org-show-entry)
+  (org-show-children))
+
+(defun dw/org-present-hook ()
+  (setq-local face-remapping-alist '((default (:height 1.5) variable-pitch)
+                                     (header-line (:height 4.5) variable-pitch)
+                                     (org-document-title (:height 1.75) org-document-title)
+                                     (org-code (:height 1.55) org-code)
+                                     (org-verbatim (:height 1.55) org-verbatim)
+                                     (org-block (:height 1.25) org-block)
+                                     (org-block-begin-line (:height 0.7) org-block)))
+  (setq header-line-format " ")
+  (org-appear-mode -1)
+  (org-display-inline-images)
+  (dw/org-present-prepare-slide)
+  (dw/kill-panel))
+
+(defun dw/org-present-quit-hook ()
+  (setq-local face-remapping-alist '((default variable-pitch default)))
+  (setq header-line-format nil)
+  (org-present-small)
+  (org-remove-inline-images)
+  (org-appear-mode 1)
+  (dw/start-panel))
+
+(defun dw/org-present-prev ()
+  (interactive)
+  (org-present-prev)
+  (dw/org-present-prepare-slide))
+
+(defun dw/org-present-next ()
+  (interactive)
+  (org-present-next)
+  (dw/org-present-prepare-slide)
+  (when (fboundp 'live-crafter-add-timestamp)
+    (live-crafter-add-timestamp (substring-no-properties (org-get-heading t t t t)))))
+
+(use-package org-present
+  :bind (:map org-present-mode-keymap
+         ("C-c C-j" . dw/org-present-next)
+         ("C-c C-k" . dw/org-present-prev))
+  :hook ((org-present-mode . dw/org-present-hook)
+         (org-present-mode-quit . dw/org-present-quit-hook)))
+#+END_SRC
+** Org Roam
+#+BEGIN_SRC emacs-lisp
+(defvar dw/org-roam-project-template
+  '("p" "project" plain "** TODO %?"
+    :if-new (file+head+olp "%<%Y%m%d%H%M%S>-${slug}.org"
+                           "#+title: ${title}\n#+category: ${title}\n#+filetags: Project\n"
+                           ("Tasks"))))
+
+(defun my/org-roam-filter-by-tag (tag-name)
+  (lambda (node)
+    (member tag-name (org-roam-node-tags node))))
+
+(defun my/org-roam-list-notes-by-tag (tag-name)
+  (mapcar #'org-roam-node-file
+          (seq-filter
+           (my/org-roam-filter-by-tag tag-name)
+           (org-roam-node-list))))
+
+(defun org-roam-node-insert-immediate (arg &rest args)
+  (interactive "P")
+  (let ((args (push arg args))
+        (org-roam-capture-templates (list (append (car org-roam-capture-templates)
+                                                  '(:immediate-finish t)))))
+    (apply #'org-roam-node-insert args)))
+
+(defun dw/org-roam-goto-month ()
+  (interactive)
+  (org-roam-capture- :goto (when (org-roam-node-from-title-or-alias (format-time-string "%Y-%B")) '(4))
+                     :node (org-roam-node-create)
+                     :templates '(("m" "month" plain "\n* Goals\n\n%?* Summary\n\n"
+                                   :if-new (file+head "%<%Y-%B>.org"
+                                                      "#+title: %<%Y-%B>\n#+filetags: Project\n")
+                                   :unnarrowed t))))
+
+(defun dw/org-roam-goto-year ()
+  (interactive)
+  (org-roam-capture- :goto (when (org-roam-node-from-title-or-alias (format-time-string "%Y")) '(4))
+                     :node (org-roam-node-create)
+                     :templates '(("y" "year" plain "\n* Goals\n\n%?* Summary\n\n"
+                                   :if-new (file+head "%<%Y>.org"
+                                                      "#+title: %<%Y>\n#+filetags: Project\n")
+                                   :unnarrowed t))))
+
+(defun dw/org-roam-capture-task ()
+  (interactive)
+  ;; Add the project file to the agenda after capture is finished
+  (add-hook 'org-capture-after-finalize-hook #'my/org-roam-project-finalize-hook)
+
+  ;; Capture the new task, creating the project file if necessary
+  (org-roam-capture- :node (org-roam-node-read
+                            nil
+                            (my/org-roam-filter-by-tag "Project"))
+                     :templates (list dw/org-roam-project-template)))
+
+(defun my/org-roam-refresh-agenda-list ()
+  (interactive)
+  (setq org-agenda-files (my/org-roam-list-notes-by-tag "Project")))
+
+(defhydra dw/org-roam-jump-menu (:hint nil)
+  "
+^Dailies^        ^Capture^       ^Jump^
+^^^^^^^^-------------------------------------------------
+_t_: today       _T_: today       _m_: current month
+_r_: tomorrow    _R_: tomorrow    _e_: current year
+_y_: yesterday   _Y_: yesterday   ^ ^
+_d_: date        ^ ^              ^ ^
+"
+  ("t" org-roam-dailies-goto-today)
+  ("r" org-roam-dailies-goto-tomorrow)
+  ("y" org-roam-dailies-goto-yesterday)
+  ("d" org-roam-dailies-goto-date)
+  ("T" org-roam-dailies-capture-today)
+  ("R" org-roam-dailies-capture-tomorrow)
+  ("Y" org-roam-dailies-capture-yesterday)
+  ("m" dw/org-roam-goto-month)
+  ("e" dw/org-roam-goto-year)
+  ("c" nil "cancel"))
+
+(use-package org-roam
+  :demand t
+  :straight t
+  :init
+  (setq org-roam-v2-ack t)
+  (setq dw/daily-note-filename "%<%Y-%m-%d>.org"
+        dw/daily-note-header "#+title: %<%Y-%m-%d %a>\n\n[[roam:%<%Y-%B>]]\n\n")
+  :custom
+  (org-roam-directory "~/Notes/Roam/")
+  (org-roam-dailies-directory "Journal/")
+  (org-roam-completion-everywhere t)
+  (org-roam-capture-templates
+   '(("d" "default" plain "%?"
+      :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+                         "#+title: ${title}\n")
+      :unnarrowed t)))
+  (org-roam-dailies-capture-templates
+   `(("d" "default" entry
+      "* %?"
+      :if-new (file+head ,dw/daily-note-filename
+                         ,dw/daily-note-header))
+     ("t" "task" entry
+      "* TODO %?\n  %U\n  %a\n  %i"
+      :if-new (file+head+olp ,dw/daily-note-filename
+                             ,dw/daily-note-header
+                             ("Tasks"))
+      :empty-lines 1)
+     ("l" "log entry" entry
+      "* %<%I:%M %p> - %?"
+      :if-new (file+head+olp ,dw/daily-note-filename
+                             ,dw/daily-note-header
+                             ("Log")))
+     ("j" "journal" entry
+      "* %<%I:%M %p> - Journal  :journal:\n\n%?\n\n"
+      :if-new (file+head+olp ,dw/daily-note-filename
+                             ,dw/daily-note-header
+                             ("Log")))
+     ("m" "meeting" entry
+      "* %<%I:%M %p> - %^{Meeting Title}  :meetings:\n\n%?\n\n"
+      :if-new (file+head+olp ,dw/daily-note-filename
+                             ,dw/daily-note-header
+                             ("Log")))))
+  :bind (("C-c n l" . org-roam-buffer-toggle)
+         ("C-c n f" . org-roam-node-find)
+         ("C-c n d" . dw/org-roam-jump-menu/body)
+         ("C-c n c" . org-roam-dailies-capture-today)
+         ("C-c n t" . dw/org-roam-capture-task)
+         ("C-c n g" . org-roam-graph)
+         :map org-mode-map
+         (("C-c n i" . org-roam-node-insert)
+          ("C-c n I" . org-roam-insert-immediate)))
+  :config
+  (org-roam-db-autosync-mode)
+
+  ;; Build the agenda list the first time for the session
+  (my/org-roam-refresh-agenda-list))
+#+END_SRC
+** Deft
+#+BEGIN_SRC emacs-lisp
+(use-package deft
+  :commands (deft)
+  :config (setq deft-directory "~/Notes/Roam"
+                deft-recursive t
+                deft-extensions '("md" "org")))
+#+END_SRC
+** Auto-show Markup Symbols
+#+BEGIN_SRC emacs-lisp
+(use-package org-appear
+  :hook (org-mode . org-appear-mode))
+#+END_SRC
+* Git
+#+BEGIN_SRC emacs-lisp
+(use-package magit
+  :bind ("C-M-;" . magit-status)
+  :commands (magit-status magit-get-current-branch)
+  :custom
+  (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
+
+(dw/leader-key-def
+  "g"   '(:ignore t :which-key "git")
+  "gs"  'magit-status
+  "gd"  'magit-diff-unstaged
+  "gc"  'magit-branch-or-checkout
+  "gl"   '(:ignore t :which-key "log")
+  "glc" 'magit-log-current
+  "glf" 'magit-log-buffer-file
+  "gb"  'magit-branch
+  "gP"  'magit-push-current
+  "gp"  'magit-pull-branch
+  "gf"  'magit-fetch
+  "gF"  'magit-fetch-all
+  "gr"  'magit-rebase)
+
+(use-package magit-todos
+  :defer t)
+
+(use-package git-link
+  :commands git-link
+  :config
+  (setq git-link-open-in-browser t)
+  (dw/leader-key-def
+      "gL"  'git-link))
+
+(use-package git-gutter
+  :straight git-gutter-fringe
+  :diminish
+  :hook ((text-mode . git-gutter-mode)
+         (prog-mode . git-gutter-mode))
+  :config
+  (setq git-gutter:update-interval 2)
+    (require 'git-gutter-fringe)
+    (set-face-foreground 'git-gutter-fr:added "LightGreen")
+    (fringe-helper-define 'git-gutter-fr:added nil
+      "XXXXXXXXXX"
+      "XXXXXXXXXX"
+      "XXXXXXXXXX"
+      ".........."
+      ".........."
+      "XXXXXXXXXX"
+      "XXXXXXXXXX"
+      "XXXXXXXXXX"
+      ".........."
+      ".........."
+      "XXXXXXXXXX"
+      "XXXXXXXXXX"
+      "XXXXXXXXXX")
+
+    (set-face-foreground 'git-gutter-fr:modified "LightGoldenrod")
+    (fringe-helper-define 'git-gutter-fr:modified nil
+      "XXXXXXXXXX"
+      "XXXXXXXXXX"
+      "XXXXXXXXXX"
+      ".........."
+      ".........."
+      "XXXXXXXXXX"
+      "XXXXXXXXXX"
+      "XXXXXXXXXX"
+      ".........."
+      ".........."
+      "XXXXXXXXXX"
+      "XXXXXXXXXX"
+      "XXXXXXXXXX")
+
+    (set-face-foreground 'git-gutter-fr:deleted "LightCoral")
+    (fringe-helper-define 'git-gutter-fr:deleted nil
+      "XXXXXXXXXX"
+      "XXXXXXXXXX"
+      "XXXXXXXXXX"
+      ".........."
+      ".........."
+      "XXXXXXXXXX"
+      "XXXXXXXXXX"
+      "XXXXXXXXXX"
+      ".........."
+      ".........."
+      "XXXXXXXXXX"
+      "XXXXXXXXXX"
+      "XXXXXXXXXX")
+
+  ;; These characters are used in terminal mode
+  (setq git-gutter:modified-sign "≡")
+  (setq git-gutter:added-sign "≡")
+  (setq git-gutter:deleted-sign "≡")
+  (set-face-foreground 'git-gutter:added "LightGreen")
+  (set-face-foreground 'git-gutter:modified "LightGoldenrod")
+  (set-face-foreground 'git-gutter:deleted "LightCoral"))
+
+(global-set-key (kbd "C-x g") 'magit-status)
+#+END_SRC
+* Projectile
+#+BEGIN_SRC emacs-lisp
+(defun dw/switch-project-action ()
+  "Switch to a workspace with the project name and start `magit-status'."
+  ;; TODO: Switch to EXWM workspace 1?
+  (persp-switch (projectile-project-name))
+  (magit-status))
+
+(use-package projectile
+  :diminish projectile-mode
+  :config (projectile-mode)
+  :demand t
+  :bind ("C-M-p" . projectile-find-file)
+  :bind-keymap
+  ("C-c p" . projectile-command-map)
+  :init
+  (when (file-directory-p "~/Projects/Code")
+    (setq projectile-project-search-path '("~/Projects/Code")))
+  (setq projectile-switch-project-action #'dw/switch-project-action))
+
+(use-package counsel-projectile
+  :disabled
+  :after projectile
+  :config
+  (counsel-projectile-mode))
+
+(dw/leader-key-def
+  "pf"  'projectile-find-file
+  "ps"  'projectile-switch-project
+  "pF"  'consult-ripgrep
+  "pp"  'projectile-find-file
+  "pc"  'projectile-compile-project
+  "pd"  'projectile-dired)
+#+END_SRC
+* Language Server Support
+#+BEGIN_SRC emacs-lisp
+(use-package lsp-mode
+  :straight t
+  :commands lsp
+  :hook ((typescript-mode js2-mode web-mode) . lsp)
+  :bind (:map lsp-mode-map
+         ("TAB" . completion-at-point))
+  :custom (lsp-headerline-breadcrumb-enable nil))
+
+(dw/leader-key-def
+  "l"  '(:ignore t :which-key "lsp")
+  "ld" 'xref-find-definitions
+  "lr" 'xref-find-references
+  "ln" 'lsp-ui-find-next-reference
+  "lp" 'lsp-ui-find-prev-reference
+  "ls" 'counsel-imenu
+  "le" 'lsp-ui-flycheck-list
+  "lS" 'lsp-ui-sideline-mode
+  "lX" 'lsp-execute-code-action)
+
+(use-package lsp-ui
+  :straight t
+  :hook (lsp-mode . lsp-ui-mode)
+  :config
+  (setq lsp-ui-sideline-enable t)
+  (setq lsp-ui-sideline-show-hover nil)
+  (setq lsp-ui-doc-position 'bottom)
+  (lsp-ui-doc-show))
+#+END_SRC
+* Debug Adapter Support
+#+BEGIN_SRC emacs-lisp
+(use-package dap-mode
+  :straight t
+  :custom
+  (lsp-enable-dap-auto-configure nil)
+  :config
+  (dap-ui-mode 1)
+  (dap-tooltip-mode 1)
+  (require 'dap-node)
+  (dap-node-setup))
+#+END_SRC
+* Markdown
+#+BEGIN_SRC emacs-lisp
+(use-package markdown-mode
+  :straight t
+  :mode "\\.md\\'"
+  :config
+  (setq markdown-command "marked")
+  (defun dw/set-markdown-header-font-sizes ()
+    (dolist (face '((markdown-header-face-1 . 1.2)
+                    (markdown-header-face-2 . 1.1)
+                    (markdown-header-face-3 . 1.0)
+                    (markdown-header-face-4 . 1.0)
+                    (markdown-header-face-5 . 1.0)))
+      (set-face-attribute (car face) nil :weight 'normal :height (cdr face))))
+
+  (defun dw/markdown-mode-hook ()
+    (dw/set-markdown-header-font-sizes))
+
+  (add-hook 'markdown-mode-hook 'dw/markdown-mode-hook))
+#+END_SRC
+* HTML
+#+BEGIN_SRC emacs-lisp
+(use-package web-mode
+  :mode "(\\.\\(html?\\|ejs\\|tsx\\|jsx\\)\\'"
+  :config
+  (setq-default web-mode-code-indent-offset 2)
+  (setq-default web-mode-markup-indent-offset 2)
+  (setq-default web-mode-attribute-indent-offset 2))
+
+;; 1. Start the server with `httpd-start'
+;; 2. Use `impatient-mode' on any buffer
+(use-package impatient-mode
+  :straight t)
+
+(use-package skewer-mode
+  :straight t)
+#+END_SRC
+* Yaml
+#+BEGIN_SRC emacs-lisp
+(use-package yaml-mode
+  :mode "\\.ya?ml\\'")
+#+END_SRC
+* Flycheck
+#+BEGIN_SRC emacs-lisp
+(use-package flycheck
+  :defer t
+  :hook (lsp-mode . flycheck-mode))
+#+END_SRC
+* Snippets
+#+BEGIN_SRC emacs-lisp
+(use-package yasnippet
+  :hook (prog-mode . yas-minor-mode)
+  :config
+  (yas-reload-all))
+#+END_SRC
+* Smart Parens
+#+BEGIN_SRC emacs-lisp
+(use-package smartparens
+  :hook (prog-mode . smartparens-mode))
+#+END_SRC
+* Rainbow Delimiters
+#+BEGIN_SRC emacs-lisp
+(use-package rainbow-delimiters
+  :hook (prog-mode . rainbow-delimiters-mode))
+#+END_SRC
+* Rainbow Mode
+#+BEGIN_SRC emacs-lisp
+(use-package rainbow-mode
+  :defer t
+  :hook (org-mode
+         emacs-lisp-mode
+         web-mode
+         typescript-mode
+         js2-mode))
+#+END_SRC
+* eshell
+#+BEGIN_SRC emacs-lisp
+(defun read-file (file-path)
+  (with-temp-buffer
+    (insert-file-contents file-path)
+    (buffer-string)))
+
+(defun dw/get-current-package-version ()
+  (interactive)
+  (let ((package-json-file (concat (eshell/pwd) "/package.json")))
+    (when (file-exists-p package-json-file)
+      (let* ((package-json-contents (read-file package-json-file))
+             (package-json (ignore-errors (json-parse-string package-json-contents))))
+        (when package-json
+          (ignore-errors (gethash "version" package-json)))))))
+
+(defun dw/map-line-to-status-char (line)
+  (cond ((string-match "^?\\? " line) "?")))
+
+(defun dw/get-git-status-prompt ()
+  (let ((status-lines (cdr (process-lines "git" "status" "--porcelain" "-b"))))
+    (seq-uniq (seq-filter 'identity (mapcar 'dw/map-line-to-status-char status-lines)))))
+
+(defun dw/get-prompt-path ()
+  (let* ((current-path (eshell/pwd))
+         (git-output (shell-command-to-string "git rev-parse --show-toplevel"))
+         (has-path (not (string-match "^fatal" git-output))))
+    (if (not has-path)
+      (abbreviate-file-name current-path)
+      (string-remove-prefix (file-name-directory git-output) current-path))))
+
+;; This prompt function mostly replicates my custom zsh prompt setup
+;; that is powered by github.com/denysdovhan/spaceship-prompt.
+(defun dw/eshell-prompt ()
+  (let ((current-branch (magit-get-current-branch))
+        (package-version (dw/get-current-package-version)))
+    (concat
+     "\n"
+     (propertize (system-name) 'face `(:foreground "#62aeed"))
+     (propertize " ॐ " 'face `(:foreground "white"))
+     (propertize (dw/get-prompt-path) 'face `(:foreground "#82cfd3"))
+     (when current-branch
+       (concat
+        (propertize " • " 'face `(:foreground "white"))
+        (propertize (concat " " current-branch) 'face `(:foreground "#c475f0"))))
+     (when package-version
+       (concat
+        (propertize " @ " 'face `(:foreground "white"))
+        (propertize package-version 'face `(:foreground "#e8a206"))))
+     (propertize " • " 'face `(:foreground "white"))
+     (propertize (format-time-string "%I:%M:%S %p") 'face `(:foreground "#5a5b7f"))
+     (if (= (user-uid) 0)
+         (propertize "\n#" 'face `(:foreground "red2"))
+       (propertize "\nλ" 'face `(:foreground "#aece4a")))
+     (propertize " " 'face `(:foreground "white")))))
+
+(defun dw/eshell-configure ()
+  (require 'evil-collection-eshell)
+  (evil-collection-eshell-setup)
+
+  (use-package xterm-color)
+
+  (push 'eshell-tramp eshell-modules-list)
+  (push 'xterm-color-filter eshell-preoutput-filter-functions)
+  (delq 'eshell-handle-ansi-color eshell-output-filter-functions)
+
+  ;; Save command history when commands are entered
+  (add-hook 'eshell-pre-command-hook 'eshell-save-some-history)
+
+  (add-hook 'eshell-before-prompt-hook
+            (lambda ()
+              (setq xterm-color-preserve-properties t)))
+
+  ;; Truncate buffer for performance
+  (add-to-list 'eshell-output-filter-functions 'eshell-truncate-buffer)
+
+  ;; We want to use xterm-256color when running interactive commands
+  ;; in eshell but not during other times when we might be launching
+  ;; a shell command to gather its output.
+  (add-hook 'eshell-pre-command-hook
+            (lambda () (setenv "TERM" "xterm-256color")))
+  (add-hook 'eshell-post-command-hook
+            (lambda () (setenv "TERM" "dumb")))
+
+  ;; Use completion-at-point to provide completions in eshell
+  (define-key eshell-mode-map (kbd "<tab>") 'completion-at-point)
+
+  ;; Initialize the shell history
+  (eshell-hist-initialize)
+
+  (evil-define-key '(normal insert visual) eshell-mode-map (kbd "C-r") 'consult-history)
+  (evil-define-key '(normal insert visual) eshell-mode-map (kbd "<home>") 'eshell-bol)
+  (evil-normalize-keymaps)
+
+  (setenv "PAGER" "cat")
+
+  (setq eshell-prompt-function      'dw/eshell-prompt
+        eshell-prompt-regexp        "^λ "
+        eshell-history-size         10000
+        eshell-buffer-maximum-lines 10000
+        eshell-hist-ignoredups t
+        eshell-highlight-prompt t
+        eshell-scroll-to-bottom-on-input t
+        eshell-prefer-lisp-functions nil))
+
+(use-package eshell
+  :hook (eshell-first-time-mode . dw/eshell-configure)
+  :init
+  (setq eshell-directory-name "~/.dotfiles/.emacs.d/eshell/")
+        eshell-aliases-file (expand-file-name "~/.dotfiles/.emacs.d/eshell/alias"))
+
+(use-package eshell-z
+  :hook ((eshell-mode . (lambda () (require 'eshell-z)))
+         (eshell-z-change-dir .  (lambda () (eshell/pushd (eshell/pwd))))))
+
+(use-package exec-path-from-shell
+  :init
+  (setq exec-path-from-shell-check-startup-files nil)
+  :config
+  (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-initialize)))
+
+(dw/leader-key-def
+  "SPC" 'eshell)
+
+(with-eval-after-load 'esh-opt
+  (setq eshell-destroy-buffer-when-process-dies t)
+  (setq eshell-visual-commands '("htop" "zsh" "vim")))
+
+(use-package eshell-syntax-highlighting
+  :after esh-mode
+  :config
+  (eshell-syntax-highlighting-global-mode +1))
+
+(use-package esh-autosuggest
+  :hook (eshell-mode . esh-autosuggest-mode)
+  :config
+  (setq esh-autosuggest-delay 0.5)
+  (set-face-foreground 'company-preview-common "#4b5668")
+  (set-face-background 'company-preview nil))
+
+(use-package eshell-toggle
+  :disabled
+  :after eshell
+  :bind ("C-M-'" . eshell-toggle)
+  :custom
+  (eshell-toggle-size-fraction 3)
+  (eshell-toggle-use-projectile-root t)
+  (eshell-toggle-run-command nil))
+
+(use-package vterm
+  :after evil-collection
+  :commands vterm
+  :config
+  (setq vterm-max-scrollback 10000)
+  (advice-add 'evil-collection-vterm-insert :before #'vterm-reset-cursor-point))
+#+END_SRC
+* Emacs Lisp
+#+BEGIN_SRC emacs-lisp
+(add-hook 'emacs-lisp-mode-hook #'flycheck-mode)
+
+(use-package helpful
+  :custom
+  (counsel-describe-function-function #'helpful-callable)
+  (counsel-describe-variable-function #'helpful-variable)
+  :bind
+  ([remap describe-function] . helpful-function)
+  ([remap describe-symbol] . helpful-symbol)
+  ([remap describe-variable] . helpful-variable)
+  ([remap describe-command] . helpful-command)
+  ([remap describe-key] . helpful-key))
+
+(dw/leader-key-def
+  "e"   '(:ignore t :which-key "eval")
+  "eb"  '(eval-buffer :which-key "eval buffer"))
+
+(dw/leader-key-def
+  :keymaps '(visual)
+  "er" '(eval-region :which-key "eval region"))
+#+END_SRC
+* Docker
+#+BEGIN_SRC emacs-lisp
+(use-package docker
+  :commands docker)
+
+(use-package docker-tramp
+  :defer t
+  :after docker)
+#+END_SRC
+* ediff
+#+BEGIN_SRC emacs-lisp
+(setq ediff-diff-options "-w"
+      ediff-split-window-function 'split-window-horizontally
+      ediff-window-setup-function 'ediff-setup-windows-plain)
+#+END_SRC
