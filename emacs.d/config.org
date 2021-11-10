@@ -1,4 +1,4 @@
-[[id:C7217F33-D906-4637-A143-868931604E83][Test]]#+TITLE: Emacs Configuration
+#+TITLE: Emacs Configuration
 Most of this are from https://config.daviwil.com/emacs
 * Startup Performance
 #+BEGIN_SRC emacs-lisp
