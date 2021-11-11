@@ -1382,10 +1382,19 @@ _d_: date        ^ ^              ^ ^
 #+END_SRC
 * Snippets
 #+BEGIN_SRC emacs-lisp
-(use-package yasnippet
-  :hook (prog-mode . yas-minor-mode)
-  :config
-  (yas-reload-all))
+  (use-package yasnippet
+    :hook
+      ((prog-mode . yas-minor-mode)
+      ((lambda() (yas-activate-extra-mode 'fundamental-mode)) . yas-minor-mode))
+    :config
+      (yas-global-mode 1)
+      (setq yas-snippet-dirs '("~/.emacs.d/snippets"))
+      (yas-reload-all))
+
+  (use-package yasnippet-snippets
+    :ensure t
+    :defer t
+    :after yasnippet)
 #+END_SRC
 * Smart Parens
 #+BEGIN_SRC emacs-lisp

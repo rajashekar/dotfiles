@@ -7,6 +7,8 @@ require('lualine').setup{
 }
 require("plugins.init")
 require("plugins.fzf")
+require("plugins.gitsigns")
+require("plugins.treesitter")
 
 local opt = vim.opt
 local cmd = vim.cmd
@@ -221,18 +223,23 @@ nmap('<leader>T', ": NvimTreeFindFile<cr>")
 
 -- Telescope
 -- Using Lua functions
-nnoremap("<leader>fa","<cmd>lua require('telescope.builtin').live_grep()<cr>")
-nnoremap("<leader>fb","<cmd>lua require('telescope.builtin').buffers()<cr>")
-nnoremap("<leader>fc","<cmd>lua require('telescope.builtin').git_commits()<cr>")
-nnoremap("<leader>fd","<cmd>lua require('telescope.builtin').git_bcommits()<cr>")
-nnoremap("<leader>ff","<cmd>lua require('telescope.builtin').find_files()<cr>")
-nnoremap("<leader>fg","<cmd>lua require('telescope.builtin').git_files()<cr>")
-nnoremap("<leader>fj","<cmd>lua require('telescope.builtin').jumplist()<cr>")
-nnoremap("<leader>fl","<cmd>lua require('telescope.builtin').file_browser()<cr>")
-nnoremap("<leader>fk","<cmd>lua require('telescope.builtin').keymaps()<cr>")
-nnoremap("<leader>fh","<cmd>lua require('telescope.builtin').help_tags()<cr>")
-nnoremap("<leader>fr","<cmd>lua require('telescope.builtin').oldfiles()<cr>")
-nnoremap("<leader>fs","<cmd>lua require('telescope.builtin').git_status()<cr>")
+nnoremap("fa","<cmd>lua require('telescope.builtin').live_grep()<cr>")
+nnoremap("fb","<cmd>lua require('telescope.builtin').buffers()<cr>")
+nnoremap("fc","<cmd>lua require('telescope.builtin').git_commits()<cr>")
+nnoremap("fd","<cmd>lua require('telescope.builtin').git_bcommits()<cr>")
+nnoremap("fe","<cmd>lua require('telescope.builtin').git_branches()<cr>")
+nnoremap("ff","<cmd>lua require('telescope.builtin').find_files()<cr>")
+nnoremap("fh","<cmd>lua require('telescope.builtin').help_tags()<cr>")
+nnoremap("fg","<cmd>lua require('telescope.builtin').git_files()<cr>")
+nnoremap("fj","<cmd>lua require('telescope.builtin').jumplist()<cr>")
+nnoremap("fk","<cmd>lua require('telescope.builtin').keymaps()<cr>")
+nnoremap("fl","<cmd>lua require('telescope.builtin').file_browser()<cr>")
+nnoremap("fq","<cmd>lua require('telescope.builtin').quickfix()<cr>")
+nnoremap("fm","<cmd>lua require('telescope.builtin').marks()<cr>")
+nnoremap("fr","<cmd>lua require('telescope.builtin').oldfiles()<cr>")
+nnoremap("fs","<cmd>lua require('telescope.builtin').git_status()<cr>")
+nnoremap("f/","<cmd>lua require('telescope.builtin').search_history()<cr>")
+nnoremap("f:","<cmd>lua require('telescope.builtin').commands()<cr>")
 
 
 -- Git 
@@ -364,6 +371,7 @@ end
 
 -- nvim cmp - code completion
 local cmp = require('cmp')
+local lspkind = require('lspkind')
   cmp.setup({
     mapping = {
       ['<C-d>'] = cmp.mapping(cmp.mapping.scroll_docs(-4), { 'i', 'c' }),
@@ -383,7 +391,10 @@ local cmp = require('cmp')
       -- { name = 'snippy' }, -- For snippy users.
     }, {
       { name = 'buffer' },
-    })
+    }),
+	formatting = {
+		format = lspkind.cmp_format({with_text = false, maxwidth = 50})
+	}
   })
   -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
   cmp.setup.cmdline('/', {
@@ -405,6 +416,7 @@ nnoremap("<leader>",":WhichKey ','<cr>")
 nnoremap("<space>",":WhichKey '<Space>'<cr>")
 nnoremap("]",":WhichKey ']'<cr>")
 nnoremap("[",":WhichKey '['<cr>")
+nnoremap("f",":WhichKey 'f'<cr>")
 
 -- sneak
 g["sneak#label"] = 1
@@ -422,4 +434,23 @@ nnoremap("<leader>pc",":PackerClean <cr>")
 nnoremap("<leader>vp", ":VimuxPromptCommand<cr>")
 -- Run last command executed by VimuxRunCommand
 nnoremap("<leader>vl", ":VimuxRunLastCommand<cr>")
+
+
+-- lspsaga
+-- lsp provider to find the cursor word definition and reference
+nnoremap("gh", "<cmd>lua require'lspsaga.provider'.lsp_finder()<CR>")
+-- code action
+nnoremap("gca","<cmd>lua require('lspsaga.codeaction').code_action()<CR>")
+vnoremap("gca","<C-U>lua require('lspsaga.codeaction').range_code_action()<CR>")
+-- show hover doc
+nnoremap("K","<cmd>lua require('lspsaga.hover').render_hover_doc()<CR>")
+-- show signature help
+nnoremap("gs","<cmd>lua require('lspsaga.signaturehelp').signature_help()<CR>")
+-- rename
+nnoremap("gr","<cmd>lua require('lspsaga.rename').rename()<CR>")
+-- preview definition
+nnoremap("gD","<cmd>lua require'lspsaga.provider'.preview_definition()<CR>")
+
+
+-- lspkind
 

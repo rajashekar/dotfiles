@@ -100,6 +100,7 @@ return require('packer').startup(function(use)
   use 'hrsh7th/cmp-path'
   use 'hrsh7th/cmp-cmdline'
   use 'hrsh7th/nvim-cmp'
+  use 'glepnir/lspsaga.nvim'
 
   -- Lua
   -- A pretty list for showing diagnostics, references, telescope results, quickfix and 

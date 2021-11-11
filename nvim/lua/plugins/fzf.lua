@@ -38,6 +38,8 @@ nmap("<space>c", ":BCommits<cr>")
 nmap("<space>s", ":GFiles?<cr>")
 -- get all key mappings
 nmap("<space>m", ":Maps<cr>")
+-- get all key mappings
+nmap("<space>M", ":Marks<cr>")
 -- get all buffers
 nmap("<space>b", ":Buffers<cr>")
 -- get Windows
