@@ -8,6 +8,7 @@ cp -R ~/.emacs.d/snippets emacs.d/
 # Copy vim 
 cp ~/.vimrc vim/vimrc
 cp ~/.vundleplugins.vim vim/vundleplugins.vim
+cp -R ~/.vim/UltiSnips vim/
 
 # Copy nvim
 cp -R ~/.config/nvim/ nvim/
