@@ -4,6 +4,7 @@
 cp ~/.emacs.d/init.el emacs.d/init.el
 cp ~/.emacs.d/config.org emacs.d/config.org
 cp -R ~/.emacs.d/snippets emacs.d/
+cp -R ~/.emacs.d/utils emacs.d/
 
 # Copy vim 
 cp ~/.vimrc vim/vimrc
