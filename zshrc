@@ -25,7 +25,7 @@ KREW_PATH=${KREW_ROOT:-$HOME/.krew}/bin
 PATH=$SLEGE_PATH:$GOPATH:$TEX_PATH:$RVM_PATH:$PROTOC_PATH:$KREW_PATH:/usr/local/bin:$PATH
 
 # Exports
-export ZSH=/Users/rchint1/.oh-my-zsh
+export ZSH=$HOME/.oh-my-zsh
 export TERM="xterm-256color"
 export EDITOR='vi'
 export PATH
@@ -75,9 +75,10 @@ plugins=(
 	fzf 
 	keychain
 	kubectl
-	kube_ps1
+	kube-ps1
 	git 
 	gpg-agent
+	gcloud
 	pass
 	nvm
 	tmux
@@ -142,9 +143,12 @@ function fd() {
 }
 
 # search history
-function fh() {
+function hist_copy() {
   eval $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed 's/ *[0-9]* *//' | pbcopy )
 }
+zle -N hist_copy
+# key bindings
+bindkey "^h" hist-copy
 
 # c - browse chrome history
 function ch() {
@@ -254,21 +258,11 @@ function obsidianpush() {
 alias opull="cd ~/Google\ Drive/obsidian/Obsidian && git pull"
 alias opush="cd ~/Google\ Drive/obsidian/Obsidian && obsidianpush"
 
-
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/rchint1/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/rchint1/Downloads/google-cloud-sdk/path.zsh.inc'; fi
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/rchint1/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/rchint1/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
-
 ke() { k exec -it "$@" -- sh }
 fzfc() {cat ~/.zsh_history | awk -F';' '{print $2}' | fzf | pbcopy}
 fzfv() {vi $(fzf --preview 'bat --style=numbers --color=always --line-range :500 {}')}
 fzfn() {nvim $(fzf --preview 'bat --style=numbers --color=always --line-range :500 {}')}
 
-zle -N fh
-# key bindings
-bindkey "^h" fh
 
 # Application specific
 
@@ -289,4 +283,4 @@ unset __conda_setup
 # <<< conda initialize <<<
 
 # kubernetes
-PS1='$(kube_ps1)'$PS1
+PROMPT='$(kube_ps1)'$PROMPT
