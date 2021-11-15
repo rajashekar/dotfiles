@@ -6,7 +6,6 @@ Most of this are from https://config.daviwil.com/emacs
   (setq byte-compile-warnings '(cl-functions))
   ;; The default is 800 kilobytes.  Measured in bytes.
   (setq gc-cons-threshold (* 50 1000 1000))
-
   ;; Profile emacs startup
   (add-hook 'emacs-startup-hook
             (lambda ()
@@ -222,7 +221,7 @@ Most of this are from https://config.daviwil.com/emacs
    (set-face-attribute 'default nil
                        :font "JetBrains Mono"
                        :weight 'light
-                       :height 170))
+                       :height 150))
   ('darwin (set-face-attribute 'default nil :font "Fira Mono" :height 170)))
 #+END_SRC
 * Enable proper unicode glyph support
@@ -802,6 +801,17 @@ The keybindings for this are C+M+- and C+M+=.
       "X" 'dired-ranger-move
       "p" 'dired-ranger-paste))
 #+END_SRC
+** Neo Tree
+#+BEGIN_SRC emacs-lisp
+(use-package neotree
+  :init
+  (setq neo-theme (if (display-graphic-p) 'icons 'arrow)))
+
+(dw/leader-key-def
+  "tn" 'neotree-toggle
+  "nr" 'neotree-refresh)
+#+END_SRC
+
 * Org Mode
 #+BEGIN_SRC emacs-lisp
   (setq-default fill-column 120)
