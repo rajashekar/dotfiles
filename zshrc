@@ -14,13 +14,16 @@ zle -N edit-command-line
 # VARIABLES
 DEFAULT_USER=rchint1
 ZSH_THEME="robbyrussell"
-SLEGE_PATH=~/.slege/bin
-TEX_PATH=/usr/local/texlive/2021/bin/universal-darwin
-GO_PATH=~/go/bin
-PROTOC_PATH=~/protoc-3.7.0-osx-x86_64/bin
-RVM_PATH=$HOME/.rvm/bin
 KREW_PATH=${KREW_ROOT:-$HOME/.krew}/bin
-PATH=$SLEGE_PATH:$GOPATH:$TEX_PATH:$RVM_PATH:$PROTOC_PATH:$KREW_PATH:/usr/local/bin:$PATH
+
+if command -v brew > /dev/null; then
+	SLEGE_PATH=~/.slege/bin
+	TEX_PATH=/usr/local/texlive/2021/bin/universal-darwin
+	GO_PATH=~/go/bin
+	PROTOC_PATH=~/protoc-3.7.0-osx-x86_64/bin
+	RVM_PATH=$HOME/.rvm/bin
+	PATH=$SLEGE_PATH:$GOPATH:$TEX_PATH:$RVM_PATH:$PROTOC_PATH:$KREW_PATH:/usr/local/bin:$PATH
+fi
 
 # EXPORTS
 export ZSH=$HOME/.oh-my-zsh
@@ -88,8 +91,12 @@ source $HOME/.oh-my-zsh/plugins/kube-ps1/kube-ps1.plugin.zsh
 PROMPT='$(kube_ps1)'$PROMPT
 
 # ALIASES
-alias vim='/usr/local/bin/vi'
-alias vi='/usr/local/bin/vi'
+if command -v brew > /dev/null; then
+	alias vim='/usr/local/bin/vi'
+	alias vi='/usr/local/bin/vi'
+elif command -v apt > /dev/null; then
+	alias vi='/usr/bin/vim'
+fi
 alias start-chrome="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --ignore-certificate-errors &> /dev/null &"
 alias start-chrome-profile1='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --ignore-certificate-errors --profile-directory="Profile 1" &> /dev/null &'
 alias start-chrome-profile2='/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --ignore-certificate-errors --profile-directory="Profile 2" --proxy-server="socks5://localhost:9002" &> /dev/null &'
@@ -261,16 +268,21 @@ bindkey '^x^e' edit-command-line
 
 # Application specific
 # Anaconda
+if command -v brew > /dev/null; then
+	CONDA_PATH=$HOME/opt/anaconda3
+elif command -v apt > /dev/null; then
+	CONDA_PATH=$HOME/anaconda3
+fi
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('$HOME/opt/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+__conda_setup="$('$CONDA_PATH/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
 else
-    if [ -f "$HOME/opt/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "$HOME/opt/anaconda3/etc/profile.d/conda.sh"
+    if [ -f "$CONDA_PATH/etc/profile.d/conda.sh" ]; then
+        . "$CONDA_PATH/etc/profile.d/conda.sh"
     else
-        export PATH="$HOME/opt/anaconda3/bin:$PATH"
+        export PATH="$CONDA_PATH/bin:$PATH"
     fi
 fi
 unset __conda_setup
