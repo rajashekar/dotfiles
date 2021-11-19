@@ -106,8 +106,8 @@ bindsym $mod+a focus parent
 
 # Define names for default workspaces for which we configure key bindings later on.
 # We use variables to avoid repeating the names in multiple places.
-set $ws1 "1"
-set $ws2 "2"
+set $ws1 "1 "
+set $ws2 "2 "
 set $ws3 "3"
 set $ws4 "4"
 set $ws5 "5"
@@ -191,9 +191,9 @@ client.urgent           $urgent-bg-color    $urgent-bg-color   $text-color      
 # Start i3bar to display a workspace bar (plus the system information i3status
 # finds out, if available)
 bar {
-        status_command i3blocks
+        status_command i3blocks -c ~/.config/i3/i3blocks.conf
         position top
-        font pango:MesloLGSDZ Nerd Font Mono 10
+        font pango:Font Awesome 5 Free Solid, MesloLGSDZ Nerd Font Mono 12
         colors {
                 background $bg-color
                 separator #757575
