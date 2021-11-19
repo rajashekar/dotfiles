@@ -145,6 +145,7 @@ bindsym $mod+Shift+0 move container to workspace number $ws10
 bindsym $mod+Shift+c reload
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $mod+Shift+r restart
+# bindsym $mod+shift+r exec --no-startup-id restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 
@@ -207,6 +208,9 @@ bar {
 default_border none
 bindsym $mod+shift+x exec i3lock
 
+
+bindsym --release $mod+shift+s exec import /tmp/ss.png
+
 # sudo apt install feh
 exec_always feh --bg-scale /home/rajashekar/Pictures/Wallpapers/wallpaper.jpg
 
@@ -215,7 +219,7 @@ exec_always feh --bg-scale /home/rajashekar/Pictures/Wallpapers/wallpaper.jpg
 exec_always xrandr --output eDP-1 --off --output DP-1 --off --output HDMI-1 --off --output HDMI-2 --primary --mode 2560x1440 --pos 1920x0 --rotate normal
 
 # Compton
-exec_always --no-startup-id compton
+exec_always --no-startup-id pkill compton; compton
 
 ###############
 ### i3-gaps ###
