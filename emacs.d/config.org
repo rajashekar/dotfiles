@@ -1621,3 +1621,8 @@ _d_: date        ^ ^              ^ ^
       ediff-split-window-function 'split-window-horizontally
       ediff-window-setup-function 'ediff-setup-windows-plain)
 #+END_SRC
+
+* Narrow and Wide
+#+BEGIN_SRC emacs-lisp
+(put 'narrow-to-region 'disabled nil)
+#+END_SRC

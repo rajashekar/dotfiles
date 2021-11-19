@@ -134,6 +134,8 @@ nmap("<leader>e", ":enew<cr>")
 nmap("<leader>h", ":nohl<cr>")
 nmap("<leader>l", ":set list!<cr>")
 nmap("<leader>q", ":q<cr>")
+-- spell check correction
+nmap("<leader>s", "1z=")
 nmap("cr",":let @*=expand('%')<cr>")
 -- Split settings
 nmap("-", ":new<cr>")
@@ -217,8 +219,9 @@ g["UltiSnipsSnippetDirectories"] = {'~/.config/nvim/UltiSnips', 'UltiSnips'}
 
 
 -- Nvim Tree
-nmap('<leader>t', ": NvimTreeToggle<cr>")
-nmap('<leader>T', ": NvimTreeFindFile<cr>")
+nmap('<leader>t', ":NvimTreeToggle<cr>")
+nmap('<leader>T', ":NvimTreeFindFile<cr>")
+nmap('<leader>r', ":NvimTreeRefresh<cr>")
 
 
 -- Telescope
@@ -414,8 +417,8 @@ local lspkind = require('lspkind')
 -- Which key
 nnoremap("<leader>",":WhichKey ','<cr>")
 nnoremap("<space>",":WhichKey '<Space>'<cr>")
-nnoremap("]",":WhichKey ']'<cr>")
-nnoremap("[",":WhichKey '['<cr>")
+-- nnoremap("]",":WhichKey ']'<cr>")
+-- nnoremap("[",":WhichKey '['<cr>")
 nnoremap("f",":WhichKey 'f'<cr>")
 
 -- sneak

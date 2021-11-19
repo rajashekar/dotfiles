@@ -10,10 +10,8 @@ setopt hist_ignore_all_dups
 # Emacs style edit command line
 autoload -U edit-command-line
 zle -N edit-command-line
-bindkey '^xe' edit-command-line
-bindkey '^x^e' edit-command-line
 
-# variables
+# VARIABLES
 DEFAULT_USER=rchint1
 ZSH_THEME="robbyrussell"
 SLEGE_PATH=~/.slege/bin
@@ -24,7 +22,7 @@ RVM_PATH=$HOME/.rvm/bin
 KREW_PATH=${KREW_ROOT:-$HOME/.krew}/bin
 PATH=$SLEGE_PATH:$GOPATH:$TEX_PATH:$RVM_PATH:$PROTOC_PATH:$KREW_PATH:/usr/local/bin:$PATH
 
-# Exports
+# EXPORTS
 export ZSH=$HOME/.oh-my-zsh
 export TERM="xterm-256color"
 export EDITOR='vi'
@@ -32,7 +30,7 @@ export PATH
 # rclone
 export RCLONE_PASSWORD_COMMAND="pass rc"
 
-# source
+# SOURCE
 source $ZSH/oh-my-zsh.sh
 source ~/.profile
 # source all .zsh files inside of the zsh/ directory
@@ -40,7 +38,9 @@ source ~/.profile
 # export ZSH=$DOTFILES/zsh
 # for config ($ZSH/**/*.zsh) source $config
 
-# zplug - plugin manager
+
+# PLUGIN MANAGER
+# zplug
 source ~/.zplug/init.zsh
 zplug "jocelynmallon/zshmarks"
 zplug "agkozak/zsh-z"
@@ -51,7 +51,6 @@ if ! zplug check; then
 fi
 # source plugins and add commands to the PATH
 zplug load
-bindkey '^ ' autosuggest-accept
 
 # style control
 # for regex completion
@@ -84,9 +83,11 @@ plugins=(
 	tmux
 )
 
-bindkey "^x^o" copybuffer
+source $HOME/.oh-my-zsh/plugins/kube-ps1/kube-ps1.plugin.zsh
+# KUBERNETES (this needs to be after)
+PROMPT='$(kube_ps1)'$PROMPT
 
-# aliases
+# ALIASES
 alias vim='/usr/local/bin/vi'
 alias vi='/usr/local/bin/vi'
 alias start-chrome="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --ignore-certificate-errors &> /dev/null &"
@@ -109,7 +110,8 @@ alias gitc='git branch | cat | grep "*" | awk "{print $2}"'
 alias agf='ag --nobreak --nonumbers --noheading . | fzf'
 alias v='f -e vim' # quick opening files with vim
 
-# custom functions
+
+# FUNCTIONS
 function mcscope() {
 	find . -name '*.java' -exec echo \"{}\" \;> cscope.files && cscope -b
 }
@@ -147,8 +149,6 @@ function hist_copy() {
   eval $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed 's/ *[0-9]* *//' | pbcopy )
 }
 zle -N hist_copy
-# key bindings
-bindkey "^h" hist-copy
 
 # c - browse chrome history
 function ch() {
@@ -247,25 +247,19 @@ function ydl () {
     for url ($*) /usr/bin/python /usr/local/bin/youtube-dl --continue --literal --console-title --format 22 "$url" || /usr/bin/python /usr/local/bin/youtube-dl --continue --literal --console-title "$url"
 }
 
-# function to push to git
-function obsidianpush() {
-    git add --all
-    git commit -a -m "sync notes"
-    git pull --rebase
-    git push
-}
-# aliases
-alias opull="cd ~/Google\ Drive/obsidian/Obsidian && git pull"
-alias opush="cd ~/Google\ Drive/obsidian/Obsidian && obsidianpush"
-
 ke() { k exec -it "$@" -- sh }
 fzfc() {cat ~/.zsh_history | awk -F';' '{print $2}' | fzf | pbcopy}
 fzfv() {vi $(fzf --preview 'bat --style=numbers --color=always --line-range :500 {}')}
 fzfn() {nvim $(fzf --preview 'bat --style=numbers --color=always --line-range :500 {}')}
 
+# KEY BINDINGS
+bindkey '^ ' autosuggest-accept
+bindkey "^h" hist-copy
+bindkey "^x^o" copybuffer
+bindkey '^xe' edit-command-line
+bindkey '^x^e' edit-command-line
 
 # Application specific
-
 # Anaconda
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
@@ -281,6 +275,3 @@ else
 fi
 unset __conda_setup
 # <<< conda initialize <<<
-
-# kubernetes
-PROMPT='$(kube_ps1)'$PROMPT

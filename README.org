@@ -1,27 +1,28 @@
 * Dot files
+This repo contains all the dot files that I use for development.
 ** Plugin Management
     |---------------+----------------|
     | App           | Plugin Manager |
     |---------------+----------------|
     | Vim           | Vundle         |
-    | NeoVim (nvim) | Vim plug       |
-    | Emacs         | Cask           |
+    | NeoVim (nvim) | Packer         |
+    | Emacs         | straight.el    |
     | Zsh           | Zplug          |
     | Tmux          | tpm            |
     |---------------+----------------|
-* Vim notes
+* Pre-requisites
+** MacOS
+** Windows
+** Linux
+* Terminal Emulator
+* Shell
+* Editors
+** Vim
 *** Install [[https://github.com/VundleVim/Vundle.vim][Vundle]] plugin
-*** Install [[https://github.com/tpope/vim-pathogen][Pathogen]] plugin
 *** Install [[https://github.com/ryanoasis/nerd-fonts/tree/master/patched-fonts/Meslo/S-DZ/complete][Meslo]] Font
 **** Ubuntu Gvim might have issue with above font naming
      #+BEGIN_SRC 
        set guifont=MesloLGSDZ\ Nerd\ Font:h14
      #+END_SRC
-* Emacs notes
-*** Install [[https://github.com/cask/cask][Cask]] plugin
-    #+BEGIN_SRC 
-      curl -fsSL https://raw.githubusercontent.com/cask/cask/master/go | python 
-      cd ~/.emacsd
-      cask install
-    #+END_SRC
-*** delete org-20170210 in ~/.emacs.d/.cask/24.5/elpa
+** Neovim
+** Emacs
