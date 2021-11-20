@@ -86,6 +86,9 @@ plugins=(
 	tmux
 )
 
+# need to manually source fzf 
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# need to manually source kube ps1
 source $HOME/.oh-my-zsh/plugins/kube-ps1/kube-ps1.plugin.zsh
 # KUBERNETES (this needs to be after)
 PROMPT='$(kube_ps1)'$PROMPT
