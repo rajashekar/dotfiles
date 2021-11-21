@@ -60,13 +60,10 @@ zplug load
 zstyle ':completion:*' completer _expand _complete _match _prefix
 # fix for slow paste
 zstyle ':bracketed-paste-magic' active-widgets '.self-*'
-zstyle :omz:plugins:keychain agents gpg,ssh
-zstyle :omz:plugins:keychain identities id_rsa 80DE15A80341233088142CFE134B443F329ED543
 
 # Plugins
 # Which plugins would you like to load? 
 # (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# install fzf, fasd, keychain
 plugins=(
 	copybuffer
 	copyfile
@@ -74,8 +71,6 @@ plugins=(
 	dotenv
 	emacs
 	fasd 
-	fzf 
-	keychain
 	kubectl
 	kube-ps1
 	git 
@@ -86,6 +81,10 @@ plugins=(
 	tmux
 )
 
+# need to manually add keychain
+# Keychain
+eval `keychain --agents ssh --eval id_rsa`
+eval `keychain --agents gpg --eval 80DE15A80341233088142CFE134B443F329ED543`
 # need to manually source fzf 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 # need to manually source kube ps1
