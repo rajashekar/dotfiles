@@ -24,4 +24,5 @@ cp -R ~/.config/alacritty/alacritty.yml alacritty/alacritty.yml
 cp ~/.tmux.conf tmux/tmux.conf
 
 # Copy zsh
-cp ~/.zshrc zshrc
+cp ~/.zshrc zsh/zshrc
+cp -R ~/.oh-my-zsh/custom zsh

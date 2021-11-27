@@ -104,6 +104,8 @@ Plugin 'tpope/vim-liquid'
 Plugin 'justinmk/vim-sneak'
 " which key
 Plugin 'liuchengxu/vim-which-key'
+" css colors
+Plugin 'ap/vim-css-color'
 
 "Encryption
 Plugin 'jamessan/vim-gnupg'

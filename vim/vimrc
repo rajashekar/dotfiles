@@ -430,3 +430,6 @@ nnoremap [ :WhichKey '['<cr>
 map <leader>vp :VimuxPromptCommand<cr>
 " Run last command executed by VimuxRunCommand
 map <leader>vl :VimuxRunLastCommand<cr>
+
+" css colors
+let g:cssColorVimDoNotMessMyUpdatetime = 1
