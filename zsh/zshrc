@@ -6,22 +6,11 @@ export PATH
 # rclone
 export RCLONE_PASSWORD_COMMAND="pass rc"
 
-# PLUGIN MANAGER
-# zplug
-source ~/.zplug/init.zsh
-zplug "agkozak/zsh-z"
-zplug "zsh-users/zsh-autosuggestions"
-zplug "zsh-users/zsh-syntax-highlighting", defer:2
-if ! zplug check; then
-    zplug install
-fi
-# source plugins and add commands to the PATH
-zplug load
-
 # ENV VARIABLES
 DEFAULT_USER=rchint1
 ZSH_THEME="robbyrussell"
 KREW_PATH=${KREW_ROOT:-$HOME/.krew}/bin
+DISABLE_MAGIC_FUNCTIONS="true"
 # OS specific variables
 if [[ "${OSTYPE}" == darwin* ]]; then
 	SLEGE_PATH=~/.slege/bin
@@ -32,47 +21,63 @@ if [[ "${OSTYPE}" == darwin* ]]; then
 	PATH=$SLEGE_PATH:$GOPATH:$TEX_PATH:$RVM_PATH:$PROTOC_PATH:$KREW_PATH:/usr/local/bin:$PATH
 fi
 
-
 # automatically update omz 
 zstyle ':omz:update' mode auto
-# forces zsh to realize new commands
-zstyle ':completion:*' completer _oldlist _expand _complete _match _ignored _approximate
 # select latest file in that directory
 zstyle ':completion:*' file-sort date
-# fix for slow paste
-zstyle ':bracketed-paste-magic' active-widgets '.self-*'
 # keychain settings
 zstyle :omz:plugins:keychain agents gpg,ssh
 zstyle :omz:plugins:keychain identities id_rsa 80DE15A80341233088142CFE134B443F329ED543
-
-# Plugins
-# Which plugins would you like to load? 
-# (plugins can be found in ~/.oh-my-zsh/plugins/*)
-plugins=(
-	copybuffer
-	copyfile
-	docker
-	dotenv
-	emacs
-	fasd 
-	fzf
-	keychain
-	kubectl
-	kube-ps1
-	git 
-	gpg-agent
-	gcloud
-	pass
-	nvm
-	tmux
-)
 
 # SOURCE oh-my-zsh after plugins 
 source $ZSH/oh-my-zsh.sh
 source ~/.profile
 
-PROMPT='$(kube_ps1)'$PROMPT
+# PLUGIN MANAGER
+# zplug
+# install zplug, plugin manager for zsh, https://github.com/zplug/zplug
+# curl -sL --proto-redir -all,https https://raw.githubusercontent.com/zplug/installer/master/installer.zsh | zsh
+# zplug configruation
+if [[ ! -d "${ZPLUG_HOME}" ]]; then
+  if [[ ! -d ~/.zplug ]]; then
+    git clone https://github.com/zplug/zplug ~/.zplug
+    # If we can't get zplug, it'll be a very sobering shell experience. To at
+    # least complete the sourcing of this file, we'll define an always-false
+    # returning zplug function.
+    if [[ $? != 0 ]]; then
+      function zplug() {
+        return 1
+      }
+    fi
+  fi
+  export ZPLUG_HOME=~/.zplug
+fi
+if [[ -d "${ZPLUG_HOME}" ]]; then
+  source "${ZPLUG_HOME}/init.zsh"
+fi
 
+zplug 'plugins/git', from:oh-my-zsh, if:'which git'
+zplug 'plugins/copybuffer', from:oh-my-zsh
+zplug 'plugins/docker', from:oh-my-zsh, if:'which docker'
+zplug 'plugins/fzf', from:oh-my-zsh, if:'which fzf'
+zplug 'plugins/keychain', from:oh-my-zsh, if:'which keychain'
+zplug 'plugins/kubectl', from:oh-my-zsh, if:'which kubectl'
+zplug 'plugins/kube-ps1', from:oh-my-zsh, if:'which kubectl'
+zplug 'plugins/gpg-agent', from:oh-my-zsh, if:'which gpg'
+zplug 'plugins/gcloud', from:oh-my-zsh, if:'which gcloud'
+zplug 'plugins/pass', from:oh-my-zsh, if:'which pass'
+zplug 'plugins/nvm', from:oh-my-zsh, if:'which nvm'
+zplug 'plugins/tmux', from:oh-my-zsh, if:'which tmux'
+zplug "agkozak/zsh-z"
+zplug "zsh-users/zsh-autosuggestions"
+zplug "zsh-users/zsh-syntax-highlighting", defer:2
+zplug "Aloxaf/fzf-tab", if:'which fzf', defer:2
+if ! zplug check; then
+    zplug install
+fi
+# source plugins and add commands to the PATH
+zplug load
+
+PROMPT='$(kube_ps1)'$PROMPT
 # KEY BINDINGS
 bindkey '^ ' autosuggest-accept
-bindkey "^x^o" copybuffer

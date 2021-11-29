@@ -18,7 +18,7 @@ find-in-file() {
       --preview "rg -i --pretty --context 2 {q} {}" | cut -d":" -f1,2
     )
 
-    [[ -n $selected ]] && vim $selected # open multiple files in editor
+    [[ -n $selected ]] && nvim $selected # open multiple files in editor
 }
 zle -N find-in-file
 bindkey '^xf' find-in-file
