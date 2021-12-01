@@ -78,6 +78,8 @@ fi
 # source plugins and add commands to the PATH
 zplug load
 
-PROMPT='$(kube_ps1)'$PROMPT
+if command -v kube_ps1 > /dev/null ; then
+    PROMPT='$(kube_ps1)'$PROMPT
+fi
 # KEY BINDINGS
 bindkey '^ ' autosuggest-accept
