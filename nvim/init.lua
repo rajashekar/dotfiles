@@ -2,10 +2,10 @@
 -- Neovim-specific configuration
 
 require("globals")
+require("plugins.init")
 require('lualine').setup{
 	options = { theme = 'onedark' }
 }
-require("plugins.init")
 require("plugins.fzf")
 require("plugins.gitsigns")
 require("plugins.treesitter")
