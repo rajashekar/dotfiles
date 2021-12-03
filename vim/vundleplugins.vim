@@ -106,6 +106,8 @@ Plugin 'justinmk/vim-sneak'
 Plugin 'liuchengxu/vim-which-key'
 " css colors
 Plugin 'ap/vim-css-color'
+" markdown toc
+Plugin 'mzlogin/vim-markdown-toc'
 
 "Encryption
 Plugin 'jamessan/vim-gnupg'

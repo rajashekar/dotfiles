@@ -79,6 +79,7 @@ return require('packer').startup(function(use)
   use 'nvim-treesitter/nvim-treesitter-textobjects'
   -- Markdown preview
   use 'iamcco/markdown-preview.nvim' 
+  use 'mzlogin/vim-markdown-toc'
   -- Toggle term
   use {
 	  "akinsho/toggleterm.nvim",

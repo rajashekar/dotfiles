@@ -29,10 +29,6 @@ zstyle ':completion:*' file-sort date
 zstyle :omz:plugins:keychain agents gpg,ssh
 zstyle :omz:plugins:keychain identities id_rsa 80DE15A80341233088142CFE134B443F329ED543
 
-# SOURCE oh-my-zsh after plugins 
-source $ZSH/oh-my-zsh.sh
-source ~/.profile
-
 # PLUGIN MANAGER
 # zplug
 # install zplug, plugin manager for zsh, https://github.com/zplug/zplug
@@ -60,10 +56,10 @@ zplug 'plugins/git', from:oh-my-zsh, if:'which git'
 zplug 'plugins/copybuffer', from:oh-my-zsh
 zplug 'plugins/docker', from:oh-my-zsh, if:'which docker'
 zplug 'plugins/fzf', from:oh-my-zsh, if:'which fzf'
-zplug 'plugins/keychain', from:oh-my-zsh, if:'which keychain'
 zplug 'plugins/kubectl', from:oh-my-zsh, if:'which kubectl'
 zplug 'plugins/kube-ps1', from:oh-my-zsh, if:'which kubectl'
 zplug 'plugins/gpg-agent', from:oh-my-zsh, if:'which gpg'
+zplug 'plugins/keychain', from:oh-my-zsh, if:'which keychain'
 zplug 'plugins/gcloud', from:oh-my-zsh, if:'which gcloud'
 zplug 'plugins/pass', from:oh-my-zsh, if:'which pass'
 zplug 'plugins/nvm', from:oh-my-zsh, if:'which nvm'
@@ -77,6 +73,10 @@ if ! zplug check; then
 fi
 # source plugins and add commands to the PATH
 zplug load
+
+# SOURCE oh-my-zsh after plugins 
+source $ZSH/oh-my-zsh.sh
+source ~/.profile
 
 if command -v kube_ps1 > /dev/null ; then
     PROMPT='$(kube_ps1)'$PROMPT
