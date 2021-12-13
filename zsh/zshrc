@@ -52,18 +52,6 @@ if [[ -d "${ZPLUG_HOME}" ]]; then
   source "${ZPLUG_HOME}/init.zsh"
 fi
 
-zplug 'plugins/git', from:oh-my-zsh, if:'which git'
-zplug 'plugins/copybuffer', from:oh-my-zsh
-zplug 'plugins/docker', from:oh-my-zsh, if:'which docker'
-zplug 'plugins/fzf', from:oh-my-zsh, if:'which fzf'
-zplug 'plugins/kubectl', from:oh-my-zsh, if:'which kubectl'
-zplug 'plugins/kube-ps1', from:oh-my-zsh, if:'which kubectl'
-zplug 'plugins/gpg-agent', from:oh-my-zsh, if:'which gpg'
-zplug 'plugins/keychain', from:oh-my-zsh, if:'which keychain'
-zplug 'plugins/gcloud', from:oh-my-zsh, if:'which gcloud'
-zplug 'plugins/pass', from:oh-my-zsh, if:'which pass'
-zplug 'plugins/nvm', from:oh-my-zsh, if:'which nvm'
-zplug 'plugins/tmux', from:oh-my-zsh, if:'which tmux'
 zplug "agkozak/zsh-z"
 zplug "zsh-users/zsh-autosuggestions"
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
@@ -73,6 +61,23 @@ if ! zplug check; then
 fi
 # source plugins and add commands to the PATH
 zplug load
+
+plugins=(
+	copybuffer
+	copyfile
+	docker
+	emacs
+	fzf
+	keychain
+	kubectl
+	kube-ps1
+	git 
+	gpg-agent
+	gcloud
+	pass
+	nvm
+	tmux
+)
 
 # SOURCE oh-my-zsh after plugins 
 source $ZSH/oh-my-zsh.sh

@@ -1,5 +1,5 @@
 #+TITLE: Emacs Configuration
-Most of this are from https://config.daviwil.com/emacs
+Most of these configuration are taken from https://config.daviwil.com/emacs
 * Startup Performance
 #+BEGIN_SRC emacs-lisp
   ;; Fix for Package cl is deprecated
