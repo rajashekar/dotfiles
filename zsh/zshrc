@@ -5,6 +5,8 @@ export EDITOR='vi'
 export PATH
 # rclone
 export RCLONE_PASSWORD_COMMAND="pass rc"
+# for pass
+export PASSWORD_STORE_GPG_OPTS='--no-throw-keyids'
 
 # ENV VARIABLES
 DEFAULT_USER=rchint1
